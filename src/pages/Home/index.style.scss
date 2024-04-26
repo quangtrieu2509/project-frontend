@@ -1,0 +1,15 @@
+.search-box-main {
+  box-shadow: 1px 2px 4px rgb(0 0 0 / 0.15);
+}
+
+.rcm-element:hover {
+  span {
+    padding-left: 0.25rem;
+  }
+}
+
+.category-home {
+  .ant-tabs-tab {
+    font-size: 1rem/* 16px */;
+  }
+}

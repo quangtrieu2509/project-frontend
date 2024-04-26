@@ -1,0 +1,46 @@
+.trip-creation {
+  height: 100%;
+  display: flex;
+  .ant-modal-content {
+    height: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-family: "Poppins", sans-serif;
+
+    .ant-modal-body {
+      height: calc(100% - 2rem - 2.375rem);
+
+      .ant-tabs-tab {
+        font-size: 0.875rem/* 14px */;
+        color: unset;
+      }
+    }
+
+    .ant-modal-footer {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ant-modal-header {
+      text-align: center;
+    }
+  }
+
+  .ant-form-item {
+    margin-bottom: 1.375rem;
+  }
+
+  .ant-form-item-label {
+    font-family: "Poppins", sans-serif;
+    padding-bottom: 0.25rem;
+    color: var(--extra-text-2);
+  }
+
+  .primary-form-button {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+
+}

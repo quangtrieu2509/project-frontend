@@ -1,0 +1,38 @@
+.profile-page {
+  padding-top: 6rem/* 96px */;
+}
+
+.tp-profile-wrapper {
+  // .profile-item {
+  //   margin-left: 4rem/* 64px */;
+  //   margin-right: 4rem/* 64px */;
+  // }
+
+  .interact-info-label {
+    margin-right: 1.25rem/* 20px */;
+  }
+
+  .interact-info-result {
+    font-weight: 600;
+  }
+
+  .ant-tabs-nav {
+    border: none;
+    border-bottom-left-radius: 0.5rem/* 8px */;
+    border-bottom-right-radius: 0.5rem/* 8px */;
+    background: white;
+  }
+  .ant-tabs-nav::before {
+    border: none;
+  }
+  .ant-tabs-nav-wrap {
+    padding: 1.5rem/* 24px */;
+    padding-bottom: 0;
+  }
+}
+
+.loading-profile-tab {
+  h3 {
+    margin: 0rem/* 12px */;
+  }
+}

@@ -1,0 +1,36 @@
+.dinings-browsing {
+  .ant-collapse {
+    color: var(--color-text-primary) !important;
+  }
+  .ant-collapse-header {
+    font-family: 'Poppins', sans-serif;
+    padding: 0 !important;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+  .ant-collapse-content-box {
+    font-family: 'Poppins', sans-serif;
+    padding: 0 !important;
+    color: var(--color-text-primary);
+  }
+
+  .ant-checkbox-wrapper {
+    margin-bottom: 0.5rem;
+    font-size: medium;
+    color: var(--color-extra-text-primary) !important;
+    font-weight: 400;
+  }
+  .ant-checkbox {
+    margin-right: 0.125rem;
+  }
+
+  .slick-prev::before, .slick-next::before {
+    color: black !important;
+  }
+  .react-slick-item {
+    .slick-slide > div {
+      margin-right: 0.5rem;
+      margin-left: 0.5rem;
+    }
+  }
+}

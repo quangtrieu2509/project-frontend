@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    // repeated from base config's "include" setting
+    "src",
+    "test",
+    // these are the eslint-only inclusions
+    "postcss.config.js",
+    ".eslintrc.js",
+    "tailwind.config.js"
+  ]
+}

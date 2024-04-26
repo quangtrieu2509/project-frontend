@@ -1,0 +1,36 @@
+.header-at-top {
+  padding-top: 0.5rem/* 8px */;
+  border-color: white;
+}
+
+.header-at-search {
+  padding-top: 0.5rem/* 8px */;
+  border-color: white;
+  background: white;
+}
+
+.header-normal {
+  border-style: solid;
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-color: var(--color-border-secondary);
+  background-color: white;
+}
+
+.header-box {
+  display: flex;
+  height: inherit;
+}
+
+.header-nav {
+  height: inherit;
+  width: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ant-dropdown-menu {
+  margin-top: 0.625rem !important;
+  padding: 0.5rem !important;
+}

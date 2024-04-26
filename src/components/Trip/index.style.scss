@@ -1,0 +1,20 @@
+.interact-btn, .active-interact-btn{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 0.5rem /* 8px */;
+  padding-bottom: 0.5rem /* 8px */;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.active-interact-btn {
+  color: var(--color-object-primary);
+}
+
+.interact-btn:hover, .active-interact-btn:hover {
+  cursor: pointer;
+  background-color: var(--color-hover-primary);
+}
+
