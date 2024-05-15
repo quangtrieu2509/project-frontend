@@ -1,29 +1,30 @@
 import "bootstrap-icons/font/bootstrap-icons.css"
+import { iconTypes } from "../../constants";
 export const categoryItems = [
   {
     key: 'all',
     label: `All`,
-    icon: <i className="bi bi-house text-lg"></i>
+    icon: <i className={`bi bi-${iconTypes.ALL} text-lg`}/>
   },
   {
     key: 'attractions',
     label: 'Attractions',
-    icon: <i className="bi bi-camera text-lg"></i>,
+    icon: <i className={`bi bi-${iconTypes.ATTRACTION} text-lg`}/>,
   },
   {
     key: 'accommodations',
     label: 'Accommodations',
-    icon: <i className="bi bi-building text-lg"></i>,
+    icon: <i className={`bi bi-${iconTypes.ACCOMM} text-lg`}/>,
   },
   {
     key: 'dinings',
     label: 'Dinings',
-    icon: <i className="bi bi-shop-window text-lg"></i>,
+    icon: <i className={`bi bi-${iconTypes.DINING} text-lg`}/>,
   },
   {
     key: 'activities',
     label: 'Activities',
-    icon: <i className="bi bi-ticket-perforated text-lg"></i>,
+    icon: <i className={`bi bi-${iconTypes.ACTIVITY} text-lg`}/>,
   },
 ];
 

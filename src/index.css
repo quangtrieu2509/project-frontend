@@ -303,10 +303,11 @@ code {
   --color-text-tertiary: var(--neutral-500);
 
   --color-extra-text-primary: var(--neutral-700);
+  --color-extra-text-secondary: var(--neutral-300);
 
   --color-button-primary: var(--neutral-750);
   --color-button-secondary: var(--neutral-200);
-  --color-button-tertiary: var(--yellow-500);
+  --color-button-tertiary: var(--yellow-400);
 
   --color-border-primary: var(--neutral-300);
   --color-border-secondary: var(--neutral-200);
@@ -378,6 +379,10 @@ label{
   transition: all 0.15s;
 }
 
+.primary-outlined-button:hover {
+  background-color: var(--color-hover-primary);
+}
+
 .ant-form-item {
   margin-bottom: 2rem/* 32px */;
 }
@@ -399,6 +404,13 @@ label{
   .ant-modal-title, .ant-drawer-title {
     color: var(--color-text-primary);
   }
+}
+
+/* Button */
+.ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  background: white;
 }
 
 /* Error modal */
@@ -524,4 +536,9 @@ label{
   white-space: nowrap; /* Keep the text on a single line */
   overflow: hidden; /* Hide the overflow content */
   text-overflow: ellipsis; /* Add ellipsis (...) for hidden overflow content */
+}
+
+/* Typo */
+.ant-typography {
+  margin-bottom: 0 !important;
 }

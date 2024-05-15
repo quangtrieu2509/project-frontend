@@ -1,43 +1,40 @@
 import { Collapse, CollapseProps } from "antd"
 import './index.style.scss'
-import ItemInTrip from "../../Item/ItemInTrip";
-
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
-
-const itemtests: CollapseProps['items'] = [
-  {
-    key: 'attractions',
-    label: 'Attractions & Destinations',
-    children: <ItemInTrip/>,
-  },
-  {
-    key: 'accommodations',
-    label: 'Accommodations',
-    children: <div className="mb-6">{text}</div>,
-  },
-  {
-    key: 'dinnings',
-    label: 'Dinnings',
-    children: <div className="mb-6">{text}</div>,
-  },
-  {
-    key: 'activities',
-    label: 'Activities',
-    children: <div className="mb-6">{text}</div>,
-  }
-]
+import SavedItem from "../../Item/SavedItem";
+import { categoryItems } from "../../../constants";
+import { JSX } from "react/jsx-runtime";
+import { useSelector } from "react-redux";
+import { getState } from "../../../redux/Trip";
 
 export default function SavesTab() {
-  const items = [1]
+  const savesList = useSelector(getState).savesList as any[]
+
+  type CategoryItem = {
+    key: string, 
+    label: string, 
+    type: string
+  }
+  const generateCollapseItem = (item: CategoryItem) => {
+    const results: JSX.Element[] = []
+    savesList.forEach((e, i) => {
+      if (e.item.type === item.type){
+        results.push(<SavedItem {...e} key={i}/>)
+      }
+    })
+    return { 
+      key: item.key, 
+      label: `${item.label} (${results.length})`, 
+      children: results 
+    }
+  }
+
+  const collapseItems: CollapseProps['items'] = categoryItems.map(e => generateCollapseItem(e))
+  
   return (
     <div className="trip-detail-saves-tab text-base mt-2">
       <div className="flex justify-between items-end">
         <div>
-          {`${items.length} items`}
+          {`${savesList.length} items`}
         </div>
         <div 
           className="primary-button"
@@ -49,7 +46,7 @@ export default function SavesTab() {
         </div>
       </div>
       {
-        items.length === 0
+        savesList.length === 0
         ? <div className="my-8 flex flex-col items-center">
           <div className="mt-8 mb-6 text-color-text-secondary">
             {"Nothing saved yet! When you save an item, you'll find it here."}
@@ -64,8 +61,8 @@ export default function SavesTab() {
         </div>
         : <div className="mt-8">
           <Collapse 
-            items={itemtests} 
-            defaultActiveKey={['attractions', 'accommodations', 'dinnings', 'activities']}
+            items={collapseItems}
+            defaultActiveKey={collapseItems.map(e => e.key as string)}
             expandIconPosition="end"
             ghost
             size="large"

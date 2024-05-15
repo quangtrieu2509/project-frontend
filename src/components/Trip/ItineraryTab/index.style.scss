@@ -1,0 +1,19 @@
+.trip-detail-itinerary-tab {
+  .ant-collapse {
+    color: var(--color-text-primary) !important;
+  }
+  .ant-collapse-header {
+    font-family: 'Poppins', sans-serif;
+    padding: 0 !important;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+  .ant-collapse-header:hover {
+    text-decoration: underline;
+  }
+  .ant-collapse-content-box {
+    font-family: 'Poppins', sans-serif;
+    padding: 0 !important;
+    color: var(--color-text-primary);
+  }
+}

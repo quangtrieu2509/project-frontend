@@ -12,6 +12,11 @@ import Tourism from "../pages/Tourism"
 import Search from "../pages/Search"
 import Dinings from "../pages/Dinings"
 import Detail from "../pages/Dinings/Detail"
+import Review from "../pages/Review"
+import { Spin } from "antd"
+import { useSelector } from "react-redux"
+import { getState } from "../redux/Loader"
+import Success from "../pages/Review/Success"
 
 export type RouteType = {
   path: ROUTES | string
@@ -62,12 +67,24 @@ const routes: RouteType[] = [
     element: Detail
   },
   {
+    path: ROUTES.REVIEW,
+    title: "Review",
+    element: Review
+  },
+  {
+    path: ROUTES.REVIEW_SUCCESS,
+    title: "Review Success",
+    element: Success
+  },
+  {
     path: "*",
     title: "Not Found",
     element: NotFoundPage
   }
 ]
 export default function AppRouter() {
+  const loaderState = useSelector(getState).state
+
   return (
     <Routes>
       {routes.map((route) => {
@@ -79,6 +96,7 @@ export default function AppRouter() {
             {...route}
             element={
               <RouteWrapper title={route.title}>
+                {loaderState && <Spin spinning fullscreen />}
                 <Component />
               </RouteWrapper>
             }

@@ -1,5 +1,5 @@
 import { Rate } from "antd"
-import "../ItemInTrip/index.style.scss"
+import "../SavedItem/index.style.scss"
 import { ROUTES } from "../../../constants"
 
 const item = {

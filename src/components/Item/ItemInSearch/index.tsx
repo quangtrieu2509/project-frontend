@@ -1,63 +1,84 @@
 import { Rate } from "antd"
-import "../ItemInTrip/index.style.scss"
+import "../SavedItem/index.style.scss"
+import { capitalize } from "../../../utils/Utils"
+import { ROUTES, itemTypes } from "../../../constants"
 
-const item = {
-  name: "Afternoon Grand SuperMarin",
-  review: {
-    rate: 4.5,
-    total: 200
-  },
-  type: "Tours",
-  location: {
-    name: "Hanoi",
-    detail: "Vietnam, Asia"
-  },
-  image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/80/93/a4/caption.jpg?w=800&h=-1&s=1"
+interface ItemInSearchProps {
+  id: string
+  ancestors: any[]
+  name: string
+  type: string
+  image: string
+  slug?: string
+  categories?: string[]
+  review?: {
+    rate: number
+    total: number
+  }
 }
 
-
-export default function ItemInSearch() {
+export default function ItemInSearch(props: ItemInSearchProps) {
+  const onNavigateItem = () => {
+    let navStr
+    switch(props.type) {
+      case itemTypes.LOCATION: {
+        navStr = ROUTES.TOURISM_BASE + props.slug
+        break
+      }
+      case itemTypes.DINING: {
+        navStr = ROUTES.DINING_BASE + props.id
+        break
+      }
+      default: {
+        navStr = "404NotFound"
+      }
+    }
+    window.open(navStr)
+  }
 
   return (
-    <div className="item-in-search w-full flex bg-white border border-solid border-color-border-secondary rounded-lg mb-2">
+    <div className="item-in-search w-full flex bg-white border border-solid border-color-border-secondary rounded-lg mb-3">
       <div className="relative flex w-64 min-w-[16rem] h-48">
-        {/* <div 
-          className="absolute top-0 left-0 py-2 px-3 m-1.5 bg-white rounded-full cursor-pointer shadow-lg hover-button"
-          onClick={() => alert("handle unsave")}  
-        >
-          <i className="bi bi-bookmarks text-2xl text-color-object-tertirary"/>
-        </div> */}
-        <img alt="#" src={item.image} className="image w-full h-full rounded-s-[7px] object-cover object-center" />
+        <img alt="#" 
+          src={props.image} 
+          className="image w-full h-full rounded-s-[7px] object-cover object-center cursor-pointer" 
+          onClick={onNavigateItem}  
+        />
       </div>
       <div className="px-6 py-3 w-full flex flex-col">
         <div className="text-sm w-fit font-medium px-2 py-0.5 mb-1.5 border border-solid border-color-secondary rounded-md">
-          Attraction
+          {capitalize(props.type)}
         </div>
         <div className="mb-1">
           <div className="mb-1">
-            <div className="text-lg font-semibold cursor-pointer hover:underline">
-              {item.name}
+            <div 
+              className="text-lg font-semibold cursor-pointer hover:underline"
+              onClick={onNavigateItem}
+            >
+              {props.name}
             </div>
-            <div className="flex items-center mb-1">
-              <Rate 
-                allowHalf 
-                disabled 
-                defaultValue={item.review.rate} 
-                className="text-color-primary text-base mr-4"
-              />
-              <span className="text-sm text-color-text-secondary">{item.review.total}</span>
-            </div>
-            <div className="text-sm text-color-text-secondary">
-              {item.type}
-            </div>
+            {
+              props.review && <div className="flex items-center mb-1">
+                <Rate 
+                  allowHalf 
+                  disabled 
+                  defaultValue={props.review.rate} 
+                  className="text-color-primary text-base mr-4"
+                />
+                <span className="text-sm text-color-text-secondary">{props.review.total}</span>
+              </div>
+            }
+            {
+              props.categories && <div className="text-sm text-color-text-secondary">
+                {props.categories.join("-")}
+              </div>
+            }
           </div>
           <div className="text-sm font-medium text-color-text-secondary">
-            {item.location.name}, {item.location.detail}
+            {props.ancestors.map(e => e.name).slice(0, 3).join(", ")}
           </div>
         </div>
-
       </div>
-
     </div>
   )
 }

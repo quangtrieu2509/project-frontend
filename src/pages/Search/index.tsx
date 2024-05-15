@@ -4,6 +4,7 @@ import { setIsAtSearch } from "../../redux/Header"
 import "./index.style.scss"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ItemInSearch from "../../components/Item/ItemInSearch";
+import { apiCaller, itemApi } from "../../api";
 
 const items = [
   {
@@ -11,23 +12,23 @@ const items = [
     label: 'All'
   },
   {
-    key: 'attractions',
+    key: 'attraction',
     label: 'Attractions'
   },
   {
-    key: 'accommodations',
+    key: 'accomm',
     label: 'Accommodations'
   },
   {
-    key: 'dinings',
+    key: 'dining',
     label: 'Dinings'
   },
   {
-    key: 'activities',
+    key: 'activity',
     label: 'Activities'
   },
   {
-    key: 'locations',
+    key: 'location',
     label: 'Locations'
   },
 ];
@@ -37,6 +38,7 @@ export default function Search() {
   const navigate = useNavigate()
   const [filterSelected, setFilterSelected] = useState<string>('all')
   const [q, setQ] = useState<string>("")
+  const [results, setResults] = useState<any[]>([])
   const [queries] = useSearchParams()
 
   useEffect(() => {
@@ -48,8 +50,20 @@ export default function Search() {
   }, [dispatch])
 
   useEffect(() => {
-    setQ(queries.get("q") ?? "")
-    setFilterSelected(queries.get("filter") ?? "all")
+    const query = queries.get("q") ?? ""
+    const filter = queries.get("filter") ?? "all"
+    setQ(query)
+    setFilterSelected(filter)
+
+    const getResults = async () => {
+      const res = await apiCaller(itemApi.searchItems(query, filter))
+
+      if(res !== null) {
+        setResults(res.data)
+      }
+    }
+
+    getResults()
   }, [queries])
 
   const handleChangeSearchParam = (key: string, value: any) => {
@@ -108,12 +122,13 @@ export default function Search() {
           </div>
 
           <div>
-            <ItemInSearch/>
-            <ItemInSearch/>
-            <ItemInSearch/>
-            <ItemInSearch/>
-            <ItemInSearch/>
-            <ItemInSearch/>
+            {
+              results.map((e, i) => {
+                return (
+                  <ItemInSearch key={i} {...e}/>
+                )
+              })
+            }
           </div>
 
         </div>

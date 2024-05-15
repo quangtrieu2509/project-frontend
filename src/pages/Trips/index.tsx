@@ -7,7 +7,7 @@ import { privacies } from "../../constants/privacies";
 import { Drawer, Form } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getState, setTripCreationState } from "../../redux/Trip";
-import NewTrip from "../../components/Trip/NewTrip";
+import NewTripForm from "../../components/Form/NewTripForm";
 import { formatDate } from "../../utils/Utils";
 import { ROUTES } from "../../constants";
 
@@ -25,13 +25,14 @@ export interface ITripHome {
   destination: {
     id: string
     name: string
-    detail?: string
-    type: string
-    image: string
+    details: string[]
+    level: number
+    slug: string
   }
   privacy: string
   tripLength: number
   startDate?: Date
+  image: string
 }
 
 export default function Trips() {
@@ -92,7 +93,7 @@ export default function Trips() {
                 >
                   <div className="flex w-full">
                     <div className="trip-image flex w-80 min-w-[20rem] h-48">
-                      <img alt="#" src={value.destination.image} className="image w-full h-full rounded-s-[5px] object-cover object-center" />
+                      <img alt="#" src={value.image} className="image w-full h-full rounded-s-[5px] object-cover object-center" />
                     </div>
                     <div className="w-full flex flex-col m-5 ml-8">
                       <div className="flex w-full">
@@ -157,7 +158,7 @@ export default function Trips() {
           },
         }}
         footer={
-          <div className="flex justify-between p-2">
+          <div className="flex justify-between p-3">
             <div className="secondary-button" onClick={handleOnClose}>
               Cancel
             </div>
@@ -171,7 +172,7 @@ export default function Trips() {
           </div>
         }
       >
-        <NewTrip form={form} event={handleUpdateTrips}/>
+        <NewTripForm form={form} event={handleUpdateTrips}/>
       </Drawer>
       
     </div>

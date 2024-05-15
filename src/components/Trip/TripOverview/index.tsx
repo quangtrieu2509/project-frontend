@@ -119,7 +119,7 @@ export default function TripOverview(
       {
         props.trip && 
         <div className="mb-3 h-80">
-          <img alt="#" src={props.trip.destination.image} 
+          <img alt="#" src={props.trip.image} 
             className="image w-full h-full object-cover object-center" 
           />
         </div>

@@ -1,19 +1,20 @@
 import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from "antd"
-import LocationSearch from "../LocationSearch"
+import LocationSearch from "../../Trip/LocationSearch"
 import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { setTripCreationState } from "../../../redux/Trip"
 
-interface NewTripProps {
+interface NewTripFormProps {
   form: any
   event: (trip: any) => void
 }
 
-export default function NewTrip(props: NewTripProps) {
+export default function NewTripForm(props: NewTripFormProps) {
   const dispatch = useDispatch()
 
   const handleOnFinish = async (value: any) => {
     value.destination = JSON.parse(value.destination)
+    value.image = value.destination.image
     
     const res = await apiCaller(tripApi.createTrip(value))
 
@@ -37,18 +38,19 @@ export default function NewTrip(props: NewTripProps) {
         <Form.Item
           name="privacy"
           label="Privacy"
-          rules={[{ required: true, message: 'Select privacy' }]}
+          // rules={[{ required: true, message: 'Select privacy' }]}
+          initialValue={"private"}
         >
           <Select
             style={{ width: "7rem" }}
             placeholder="Select"
             options={[
-              { value: 'public', label: 
+              { value: "public", label: 
                 <span className="text-color-text-primary">
                   <i className="bi bi-globe-americas mr-1"/> Public
                 </span> 
               },
-              { value: 'private', label: 
+              { value: "private", label: 
                 <span className="text-color-text-primary">
                   <i className="bi bi-lock mr-1"/> Private
                 </span> 
@@ -80,6 +82,7 @@ export default function NewTrip(props: NewTripProps) {
                   message: 'Enter a trip length',
                 },
               ]}
+              initialValue={1}
             >
               <InputNumber 
                 min={1} max={30} 

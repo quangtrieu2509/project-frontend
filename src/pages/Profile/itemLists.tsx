@@ -1,7 +1,6 @@
 import { ExclamationCircleOutlined, PictureOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons"
 import Label from "../../components/Label"
 import Activities from "./Activities"
-import Media from "./Media"
 import Trips from "./Trips"
 import Reviews from "./Reviews"
 import Empty from "./Empty"
@@ -22,11 +21,6 @@ export const profileTabItems = [
     label: "Reviews",
     key: "reviews",
     children: <Reviews/>,
-  },
-  {
-    label: "Media",
-    key: "media",
-    children: <Media/>,
   },
   {
     label: "Travel Map",

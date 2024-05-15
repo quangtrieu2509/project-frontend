@@ -1,13 +1,53 @@
 import { Flex, Rate } from "antd"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ReviewItem from "../ReviewItem"
+import { rateDetail } from "../../../constants"
+import { roundRate } from "../../../utils/Utils"
+import { apiCaller } from "../../../api"
+import { reviewApi } from "../../../api/review"
 
-export default function ReviewList() {
-  const [rateSelection, setRateSelection] = useState<string>("")
+interface ReviewListProps {
+  id: string
+}
 
-  const generateReviewDetail = (key: string, name: string, quant: number) => {
+export default function ReviewList(props: ReviewListProps) {
+  const [rateSelection, setRateSelection] = useState<string>(rateDetail[0].key)
+  const [rate, setRate] = useState<number>(0)
+  const [rateCounts, setRateCounts] = useState<number[]>(Array(7).fill(0))
+  const [reviews, setReviews] = useState<any[]>([])
+
+  useEffect(() => {
+    const getReviewsOfItem = async () => {
+      const res = await apiCaller(reviewApi.getOverviewRates(props.id))
+
+      if (res !== null) {
+        // console.log(res.data)
+        setRate(res.data.rate)
+        setRateCounts(res.data.rateCounts)
+      }
+    }
+
+    getReviewsOfItem()
+  }, [props.id])
+
+  useEffect(() => {
+    const getReviews = async () => {
+      const res = await apiCaller(reviewApi.getReviews(props.id, rateSelection))
+      
+      if (res !== null) {
+        console.log(res.data)
+        setReviews(res.data)
+      }
+    }
+
+    getReviews()
+  }, [props.id, rateSelection])
+
+
+  const generateRateDetail = (key: string, name: string, quant: number = 0) => {
     return (
       <div 
+        key={key}
         className={`h-fit py-1.5 px-3 rounded-md border border-solid bg-white hover:bg-color-hover-primary cursor-pointer 
           ${key === rateSelection ? "border-color-secondary font-medium" : "border-color-border-primary"}`}
         onClick={() => setRateSelection(key)}  
@@ -26,32 +66,30 @@ export default function ReviewList() {
         <div className="flex flex-col w-fit min-w-fit items-center px-4 mr-6">
           <div>
             <span className="text-2xl font-semibold mr-1">
-              {4.5}
+              {roundRate(rate)}
             </span>
             <span className="text-lg font-normal">/ 5</span>
           </div>
           <Rate 
             allowHalf 
             disabled 
-            value={5} 
+            value={roundRate(rate)} 
             className="text-color-primary text-lg"
           />
         </div>
         <Flex wrap="wrap" gap={12}>
-          {generateReviewDetail("", "All", 12)}
-          {generateReviewDetail("excellent", "Excellent", 3)}
-          {generateReviewDetail("good", "Good", 3)}
-          {generateReviewDetail("average", "Average", 0)}
-          {generateReviewDetail("poor", "Poor", 1)}
-          {generateReviewDetail("terrible", "Terrible", 2)}
-          {generateReviewDetail("image-included", "Image Included", 2)}
+          {
+            rateDetail.map((e, i) =>
+              generateRateDetail(e.key, e.name, rateCounts[i])
+            )
+          }
         </Flex>
       </div>
 
       <div className="h-full ml-[12.625rem]">
         {
-          Array.from({ length: 5 }, (_, i) => (
-            <ReviewItem key={i}/>
+          reviews.map((e, i) => (
+            <ReviewItem {...e} key={i}/>
           ))
         }
       </div>

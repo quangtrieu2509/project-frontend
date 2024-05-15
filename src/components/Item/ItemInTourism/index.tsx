@@ -1,5 +1,5 @@
 import { Rate } from "antd"
-import "../ItemInTrip/index.style.scss"
+import "../SavedItem/index.style.scss"
 
 const item = {
   name: "Afternoon Grand",

@@ -29,10 +29,11 @@ module.exports = {
         'color-text-tertiary': 'var(--neutral-500)',
 
         'color-extra-text-primary': 'var(--neutral-700)',
+        'color-extra-text-secondary': 'var(--neutral-300)',
 
         'color-button-primary': 'var(--neutral-700)',
         'color-button-secondary': 'var(--neutral-200)',
-        'color-button-tertiary': 'var(--yellow-500)',
+        'color-button-tertiary': 'var(--yellow-400)',
 
         'color-border-primary': 'var(--neutral-300)',
         'color-border-secondary': 'var(--neutral-200)',

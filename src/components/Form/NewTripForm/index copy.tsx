@@ -2,7 +2,7 @@ import { Button, DatePicker, Form, Input, Modal, Select, Tabs } from "antd";
 import "./index.style.scss"
 import TextArea from "antd/es/input/TextArea";
 import { privacyIcons } from "../../../constants/privacies";
-import Destinations, { Destination } from "../Destinations";
+import Destinations, { Destination } from "../../Trip/Destinations";
 import { getState, setAddedDest, setCreateDestinations, setCreatePrivacy, setDestInfo } from "../../../redux/Trip/index copy";
 import { useDispatch, useSelector } from "react-redux";
 import { MAPBOX_API_KEY } from "../../../configs";

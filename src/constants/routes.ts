@@ -9,6 +9,10 @@ export const enum ROUTES {
   TOURISM_BASE = "/tourism/",
   SEARCH = "/search",
   DININGS = "/tourism/:slug/dinings",
-  DINING_BASE = "/dinings/",
-  DINING_DETAIL = "/dinings/:id"
+  DINING_BASE = "/dining/",
+  DINING_DETAIL = "/dining/:id",
+  REVIEW = "/review/:id",
+  REVIEW_BASE = "/review/",
+  REVIEW_SUCCESS = "/review/:id/success",
+  BUSINESS = "/business"
 }

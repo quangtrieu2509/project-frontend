@@ -1,0 +1,23 @@
+.review-page {
+  .ant-form-item-label label{
+    font-size: x-large;
+    color: var(--color-text-primary) !important;
+  }
+  .ant-upload.ant-upload-select:not(.ant-upload-disabled):hover {
+    border-color: var(--color-primary) !important;
+  }
+
+  .ant-checkbox-wrapper {
+    display: flex;
+    align-items: start;
+
+    .ant-checkbox {
+      align-self: auto;
+      margin-top: 0.25rem;
+    }
+  }
+
+  label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    display: none !important;
+  }
+}

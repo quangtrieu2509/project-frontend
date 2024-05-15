@@ -1,10 +1,7 @@
-import SavesTab from "../../components/Trip/SavesTab";
-
-export const tripDetailTabItems = [
+export const tabItems = [
   {
     label: "Saves",
-    key: "saves",
-    children: <SavesTab/>
+    key: "saves"
   },
   {
     label: "Itinerary",

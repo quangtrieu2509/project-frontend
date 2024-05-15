@@ -62,7 +62,7 @@ export const featureItems = [
     items: [
       {
         key: "1",
-        label: <Label url={ROUTES.HOME} title={"Attrations"} />,
+        label: <Label url={ROUTES.HOME} title={"Attractions"} />,
       },
       {
         key: "2",
@@ -98,6 +98,10 @@ export const userItems = {
     },
     {
       key: "4",
+      label: <Label url={ROUTES.HOME} title="Bussiness" />,
+    },
+    {
+      key: "5",
       label: (
         <Label
           title="Sign out"

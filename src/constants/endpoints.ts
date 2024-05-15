@@ -6,9 +6,15 @@ export enum ENDPOINTS {
   USER = "/user",
   TRIP = "/trip",
   PROFILE_TRIP = "/trip/profile-trips",
+  DRAWER_TRIP = "/trip/drawer-trips",
   HOME_TRIP = "/trip/home-trips",
   SAVED_TRIP = "/trip/saved",
   INTERACT_TRIP = "/trip/interact",
   LOCATION = "/location",
-  LOCATION_SEARCH = "/location/search"
+  LOCATION_SEARCH = "/location/search",
+  ITEM = "/item",
+  ITEM_SEARCH = "/item/search",
+  REVIEW = "/review",
+  REVIEW_RATES = "/review/rate",
+  UPLOAD = "/upload"
 }
