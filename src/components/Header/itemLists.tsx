@@ -34,7 +34,7 @@ export const featureItems = [
       },
       {
         key: "3",
-        label: <Label url={ROUTES.HOME} title="Add a place" />,
+        label: <Label url={ROUTES.NEW_ITEM} title="Add a place" />,
       },
       {
         key: "4",
@@ -86,7 +86,46 @@ export const userItems = {
   items: [
     {
       key: "1",
-      label: <Label url={ROUTES.HOME} title="Notifications" />,
+      label: <Label url={ROUTES.PROFILE_BASE + getLocalStorage("id")} title="Profile" />,
+    },
+    {
+      key: "2",
+      label: <Label url={ROUTES.TRIPS_HOME} title="Trips" />,
+    },
+    {
+      key: "3",
+      label: <Label url={ROUTES.BOOKINGS} title="Bookings" />,
+    },
+    {
+      key: "4",
+      label: <Label url={ROUTES.BUSINESS} title="Business" />,
+    },
+    {
+      key: "5",
+      label: <Label url={ROUTES.HOME} title="Settings" />,
+    },
+    {
+      key: "6",
+      label: (
+        <Label
+          title="Sign out"
+          event={() => {
+            console.log("logout")
+            localStorage.removeItem("token")
+            window.location.href = "/"
+          }}
+        />
+      ),
+    },
+  ],
+}
+
+export const businessUserItems = {
+  name: "User",
+  items: [
+    {
+      key: "1",
+      label: <Label url={ROUTES.HOME} title="Trips" />,
     },
     {
       key: "2",
@@ -95,10 +134,6 @@ export const userItems = {
     {
       key: "3",
       label: <Label url={ROUTES.HOME} title="Settings" />,
-    },
-    {
-      key: "4",
-      label: <Label url={ROUTES.HOME} title="Bussiness" />,
     },
     {
       key: "5",

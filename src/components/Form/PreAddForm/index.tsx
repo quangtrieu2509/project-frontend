@@ -22,7 +22,7 @@ export default function PreAddForm(props: PreAddFormProps) {
     apiCaller(
       tripApi.addItineraryItem(props.savedItem.tripId, value)
     ).then(res => {
-      if (res !== null) {
+      if (res !== undefined) {
         alert("Add successfully")
         dispatch(
           setItineraryList(
@@ -42,7 +42,7 @@ export default function PreAddForm(props: PreAddFormProps) {
     <div>
       <div className="flex mb-6 p-3 border border-solid border-color-border-primary rounded-lg">
         <div className="relative flex w-[7.5rem] min-w-[7.5rem] h-[7.5rem]">
-          <img alt="#" src={props.savedItem.item.image} className="image w-full h-full rounded-[7px] object-cover object-center" />
+          <img alt="#" src={props.savedItem.item.image.url} className="image w-full h-full rounded-[7px] object-cover object-center" />
         </div>
         <div className="ml-4 w-full flex flex-col justify-between overflow-hidden">
           <div className="mb-2">

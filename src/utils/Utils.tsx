@@ -1,5 +1,6 @@
 import { LabeledValue } from "antd/es/select"
 import { iconTypes, itemTypes } from "../constants"
+import { days } from "../constants/days"
 
 export const getMonth = (time: any): string => {
   const rDate = new Date(time)
@@ -65,6 +66,17 @@ export const generateTimeList = () => {
   })
 }
 
+export const generateTimeList2 = () => {
+  const hours = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  const minutes = ["00", "15", "30", "45"]
+  return Array.from({ length: 96 }).map((_, i) => {
+    let hour = hours[Math.trunc(i/4 < 12 ? i/4 : (i/4 - 12))]
+    let minute = minutes[i%4]
+    let period = i/4 < 12 ? "AM" : "PM"
+    return `${hour}:${minute} ${period}`
+  })
+}
+
 export const generateIconType = (type: string) => {
   switch (type) {
     case itemTypes.ACCOMM: {
@@ -81,4 +93,37 @@ export const generateIconType = (type: string) => {
     }
     default: return ""
   }
+}
+
+export const compareFileChanges = (newList: any[]) => {
+  let uploads: any[] = []
+  let remains: any[] = []
+  newList.forEach(ne => {
+    if (ne.uid?.includes("rc-upload")) uploads.push(ne)
+    else remains.push(ne)
+  })
+  return { uploads, remains }
+}
+
+export const filterFields = (input: string[], data: Record<string, any>) => {
+  return input.map(e => {
+    if (data[e]) {
+      return e
+    } else return data[e]
+  }).filter(e => e)
+}
+
+export const generateHoursPreview = (hours: any[]) => {
+  return days.map((e, i) => (
+    <div key={i} className="flex mb-1">
+      <div className="w-40">{e.name}</div>
+      <div>{hours[i] ? `${hours[i]?.open} - ${hours[i]?.close}` : "Close all day"}</div>
+    </div>
+  ))
+}
+
+export const locationToAncestors = (loc: string) => {
+  const { ancestors, ...rest } = JSON.parse(loc)
+  delete rest.image
+  return [{ ...rest }, ...ancestors]
 }

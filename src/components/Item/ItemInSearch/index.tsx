@@ -8,7 +8,10 @@ interface ItemInSearchProps {
   ancestors: any[]
   name: string
   type: string
-  image: string
+  image: {
+    name: string
+    url: string
+  }
   slug?: string
   categories?: string[]
   review?: {
@@ -39,8 +42,7 @@ export default function ItemInSearch(props: ItemInSearchProps) {
   return (
     <div className="item-in-search w-full flex bg-white border border-solid border-color-border-secondary rounded-lg mb-3">
       <div className="relative flex w-64 min-w-[16rem] h-48">
-        <img alt="#" 
-          src={props.image} 
+        <img alt={props.image.name} src={props.image.url} 
           className="image w-full h-full rounded-s-[7px] object-cover object-center cursor-pointer" 
           onClick={onNavigateItem}  
         />

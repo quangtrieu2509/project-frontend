@@ -1,0 +1,20 @@
+.newitem-page {
+  .ant-tabs-tab {
+    font-size: 1rem/* 16px */;
+    cursor: auto;
+    pointer-events: none;
+  }
+  .ant-tabs-tab:hover {
+    color: var(--color-text-secondary) !important;
+  }
+  label::after,
+  label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    display: none !important;
+  }
+  label {
+    margin-right: 0.75rem;
+  }
+  .ant-tabs-nav{
+    margin-bottom: 2rem;
+  }
+}

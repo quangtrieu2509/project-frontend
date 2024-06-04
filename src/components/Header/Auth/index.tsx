@@ -2,13 +2,17 @@ import { useEffect, useState } from "react"
 import { Modal } from "antd"
 import { useDispatch, useSelector } from "react-redux"
 
-import { userItems } from "../itemLists"
 import { getState, setView, setState } from "../../../redux/Auth"
 import { AuthView } from "../../../redux/Auth/types"
 import { getLocalStorage } from "../../../utils/Auth"
 import Dropdown from "../Dropdown"
+import { ItemType } from "antd/es/menu/hooks/useItems"
 
-export default function Auth() {
+interface AuthProps {
+  itemsList: ItemType[]
+}
+
+export default function Auth(props: AuthProps) {
   const [hasUser, setHasUser] = useState(false)
   const currentState = useSelector(getState).state
   const currentView = useSelector(getState).view
@@ -72,7 +76,7 @@ export default function Auth() {
       ) : (
         <div>
           <Dropdown 
-            menuItems={userItems.items}
+            menuItems={props.itemsList}
             name="User"
             customChild={
               <div className="header-item flex h-11 min-w-[2.75rem] ml-1 rounded-full cursor-pointer">

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { apiCaller, itemApi } from "../../../api"
 import { messages } from "../../../constants/message"
-import NotFound from "../../NotFound"
+import NotFound from "../../Static/NotFound"
 import { generateAddress, roundRate } from "../../../utils/Utils"
 import { useDispatch, useSelector } from "react-redux"
 import { getState, setDrawerTripsList, setTripCreationState, setTripListState } from "../../../redux/Trip"
@@ -21,7 +21,10 @@ interface DiningDetail {
   coordinates: number[]
   address: string[]
   description: string
-  images: string[]
+  images: Array<{
+    name: string
+    url: string
+  }>
   contacts: {
     phoneNumber: string
     website?: string
@@ -65,7 +68,7 @@ export default function Detail() {
         }
     )
 
-      if (res !== null) {
+      if (res !== undefined) {
         console.log(res.data)
         setItem(res.data)
       }
@@ -257,7 +260,7 @@ export default function Detail() {
                 {
                   item.images.map((e, i) => (
                     <div key={i}>
-                      <img alt="#" src={e} 
+                      <img alt={e.name} src={e.url} 
                         className="image w-full h-full max-h-96 object-cover object-center rounded-b-[7px]" 
                       />
                     </div>

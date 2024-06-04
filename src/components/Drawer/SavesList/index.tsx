@@ -75,7 +75,7 @@ export default function SavesList (props: SavesListProps) {
                 onClick={() => handleOpenPreAdd(e)}
               >
                 <div className="relative flex w-[7.5rem] min-w-[7.5rem] h-[7.5rem]">
-                  <img alt="#" src={e.item.image} className="image w-full h-full rounded-[7px] object-cover object-center" />
+                  <img alt="#" src={e.item.image.url} className="image w-full h-full rounded-[7px] object-cover object-center" />
                 </div>
                 <div className="ml-4 w-full flex flex-col justify-between overflow-hidden">
                   <div className="mb-2">

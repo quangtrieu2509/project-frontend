@@ -40,6 +40,7 @@ axiosClient.interceptors.response.use(
     const { status, data } = error.response
     if (status >= 500) {
       // TODO: Show server error message
+      alert("Something went wrong!")
     } else if (400 <= status && status < 500) {
       switch ((data as RRError).ec) {
         case messages.EMAIL_EXISTED.ec: {

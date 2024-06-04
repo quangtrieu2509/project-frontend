@@ -14,5 +14,25 @@ export const itemApi = {
   getItemDetail:
     (id: string) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.get(ENDPOINTS.ITEM + `/${id}/detail`)
-    }
+    },
+  createItem:
+    (data: any) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.post(ENDPOINTS.ITEM, data)
+    },
+  updateItem:
+    (id: string, data: any) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.put(ENDPOINTS.ITEM + `/${id}`, data)
+    },
+  getItemForBusinessSearch:
+    () => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.ITEM + `?fields=id,name,ancestors,address,type`)
+    },
+  getOverviewItem:
+    (id: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,name,ancestors,coordinates,address,description,images,type`)
+    },
+  getDetailsItem:
+    (id: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,type,categories,features,price,contacts,hours`)
+    },
 }

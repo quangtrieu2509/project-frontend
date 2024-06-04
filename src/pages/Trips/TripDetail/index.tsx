@@ -36,7 +36,10 @@ export interface ITripDetail {
   startDate?: Date
   saves?: object[]
   itinerary?: object[]
-  image: string
+  image: {
+    name: string
+    url: string
+  }
 }
 
 
@@ -52,7 +55,7 @@ export default function TripDetail() {
     const getTrip = async () => {
       const res = await apiCaller(tripApi.getTripDetail(params.id ?? ""))
 
-      if (res !== null) {
+      if (res !== undefined) {
         console.log(res.data)
         setTrip(res.data)
       }
@@ -66,7 +69,7 @@ export default function TripDetail() {
     const getItems = async () => {
       const res = await apiCaller(tripApi.getSavedItems(params.id ?? ""))
 
-      if (res !== null) {
+      if (res !== undefined) {
         console.log(res.data)
         dispatch(setSavesList(res.data))
       }
@@ -90,7 +93,7 @@ export default function TripDetail() {
         trip && <div className="tp-wrapper">
           <div className="trip-detail-header relative flex flex-col w-full h-80 text-white mb-6">
             <div className="trip-detail-image absolute w-full h-full">
-              <img alt="#" src={trip.image} 
+              <img alt={trip.image.name} src={trip.image.url} 
                 className="image w-full h-full object-cover object-center rounded-lg" 
               />
             </div>

@@ -16,5 +16,7 @@ export enum ENDPOINTS {
   ITEM_SEARCH = "/item/search",
   REVIEW = "/review",
   REVIEW_RATES = "/review/rate",
-  UPLOAD = "/upload"
+  UPLOAD = "/upload",
+  BOOKING = "/booking",
+  BOOKING_BUSINESS = "/booking/business"
 }

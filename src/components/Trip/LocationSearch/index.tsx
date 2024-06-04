@@ -1,14 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Select } from 'antd'
 import { apiCaller, locationApi } from '../../../api'
 
 interface ILocationOverview {
   id: string
   name: string
-  details: string[]
-  level: number
-  image: string
-  slug: string
+  ancestors: any[]
+  image: any
 }
 
 interface ISearchData {
@@ -18,16 +16,16 @@ interface ISearchData {
 }
 
 interface LocationSearchProps {
-  value?: string;
-  onChange?: (value: string) => void;
+  value?: string
+  onChange?: (value: string) => void
+  placeholder?:string
 }
 
 const convert = (data: ILocationOverview[]): ISearchData[] => {
-  console.log(data)
   return data.map((e) => ({
     value: JSON.stringify(e),
     label: e.name,
-    detail: e.details.slice(0, 1).join(", ")
+    detail: e.ancestors.map(anc => anc.name).slice(0, 1).join(", ")
   })) as ISearchData[]
 } 
 
@@ -35,10 +33,20 @@ export default function LocationSearch(props: LocationSearchProps) {
   const [data, setData] = useState<ISearchData[]>([])
   const [currentValue, setCurrentValue] = useState<string>()
 
+  useEffect(() => {
+    if (props.value) {
+      setData(convert([JSON.parse(props.value)]))
+      setCurrentValue(props.value)
+    } else {
+      setData([])
+      setCurrentValue(undefined)
+    }
+  }, [props.value])
+
   const handleSearch = async(newSearch: string) => {
     const res = await apiCaller(locationApi.searchLocations(newSearch))
   
-    if (res !== null) {
+    if (res !== undefined) {
       setData(convert(res.data))
     }
   }
@@ -52,7 +60,7 @@ export default function LocationSearch(props: LocationSearchProps) {
     <Select
       showSearch
       value={currentValue}
-      placeholder={"Where to?"}
+      placeholder={props.placeholder ?? "Where to?"}
       defaultActiveFirstOption={false}
       filterOption={false}
       onSearch={handleSearch}

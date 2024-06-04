@@ -13,6 +13,12 @@ export const enum ROUTES {
   DINING_DETAIL = "/dining/:id",
   REVIEW = "/review/:id",
   REVIEW_BASE = "/review/",
-  REVIEW_SUCCESS = "/review/:id/success",
-  BUSINESS = "/business"
+  BOOKINGS = "/bookings",
+  BOOKING = "/booking/:id",
+  BOOKING_BASE = "/booking/",
+  SUCCESS = "/success",
+  BUSINESS = "/business",
+  BUSINESS_BASE = "/business/",
+  BUSINESS_DETAIL = "/business/:id",
+  NEW_ITEM = "/new-item"
 }

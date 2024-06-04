@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom"
 
 import PrivateRoute from "../components/PrivateRoute"
-import PublicRoute from "../components/PublicRoute"
+import { PublicRoute, BusinessRoute } from "../components/PublicRoute"
 import { ROUTES } from "../constants"
 import HomePage from "../pages/Home"
-import NotFoundPage from "..//pages/NotFound"
+import NotFoundPage from "../pages/Static/NotFound"
 import ProfilePage from "../pages/Profile"
 import TripsHome from "../pages/Trips"
 import TripDetail from "../pages/Trips/TripDetail"
@@ -16,12 +16,17 @@ import Review from "../pages/Review"
 import { Spin } from "antd"
 import { useSelector } from "react-redux"
 import { getState } from "../redux/Loader"
-import Success from "../pages/Review/Success"
+import Success from "../pages/Static/Success"
+import Business from "../pages/Business"
+import Booking from "../pages/Booking"
+import Bookings from "../pages/Bookings"
+import NewItem from "../pages/NewItem"
 
 export type RouteType = {
   path: ROUTES | string
   title?: string
   isPrivate?: boolean
+  type?: string
   element: () => JSX.Element
 }
 
@@ -72,9 +77,36 @@ const routes: RouteType[] = [
     element: Review
   },
   {
-    path: ROUTES.REVIEW_SUCCESS,
-    title: "Review Success",
+    path: ROUTES.BOOKING,
+    title: "Booking",
+    element: Booking
+  },
+  {
+    path: ROUTES.BOOKINGS,
+    title: "Bookings",
+    element: Bookings
+  },
+  {
+    path: ROUTES.SUCCESS,
+    title: "Success",
     element: Success
+  },  
+  {
+    path: ROUTES.BUSINESS,
+    title: "Trippie Business",
+    element: Business,
+    type: "business"
+  },
+  {
+    path: ROUTES.BUSINESS_DETAIL,
+    title: "Trippie Business",
+    element: Business,
+    type: "business"
+  },
+  {
+    path: ROUTES.NEW_ITEM,
+    title: "Add a place",
+    element: NewItem
   },
   {
     path: "*",
@@ -88,8 +120,11 @@ export default function AppRouter() {
   return (
     <Routes>
       {routes.map((route) => {
-        const { isPrivate, element: Component } = route
-        const RouteWrapper = isPrivate ? PrivateRoute : PublicRoute
+        const { type, isPrivate, element: Component } = route
+        let RouteWrapper
+        if (isPrivate) RouteWrapper = PrivateRoute
+        else if (type === "business") RouteWrapper = BusinessRoute
+        else RouteWrapper = PublicRoute
         return (
           <Route
             key={route.path}

@@ -61,7 +61,7 @@ export default function Profile() {
     const getUser = async () => {
       const res = await apiCaller(userApi.getUser(params.id ?? ""))
       
-      if (res !== null) {
+      if (res !== undefined) {
         console.log("Profile data: ", res.data) 
         const userId = getLocalStorage("id")
         if (res.data.id !== userId) {
@@ -95,7 +95,7 @@ export default function Profile() {
     const res: any = await apiCaller(userApi.getFollowers(user?.id ?? "")) 
     // dispatch(setLoaderState(false))
     
-    if (res !== null) {
+    if (res !== undefined) {
       setInteractTitle("Followers")
       setInteractUserList(res.data)
       dispatch(setInteractModalState(true))
@@ -107,7 +107,7 @@ export default function Profile() {
     const res: any = await apiCaller(userApi.getFollowings(user?.id ?? "")) 
     // dispatch(setLoaderState(false))
     
-    if (res !== null) {
+    if (res !== undefined) {
       setInteractTitle("Followings")
       setInteractUserList(res.data)
       dispatch(setInteractModalState(true))

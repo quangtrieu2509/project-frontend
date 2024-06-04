@@ -14,6 +14,7 @@ import { ROUTES } from "../../constants";
 export interface ITripHome {
   id: string
   ownerId: string
+  locationId: string
   interact?: {
     likes: number
     saves: number
@@ -25,14 +26,17 @@ export interface ITripHome {
   destination: {
     id: string
     name: string
-    details: string[]
+    ancestors: any[]
     level: number
     slug: string
   }
   privacy: string
   tripLength: number
   startDate?: Date
-  image: string
+  image: {
+    name: string
+    url: string
+  }
 }
 
 export default function Trips() {
@@ -45,7 +49,7 @@ export default function Trips() {
     const getTrips = async () => {
       const res = await apiCaller(tripApi.getHomeTrips())
       
-      if (res !== null) {
+      if (res !== undefined) {
         console.log(res)
         setTrips(res.data)
       }
@@ -93,7 +97,9 @@ export default function Trips() {
                 >
                   <div className="flex w-full">
                     <div className="trip-image flex w-80 min-w-[20rem] h-48">
-                      <img alt="#" src={value.image} className="image w-full h-full rounded-s-[5px] object-cover object-center" />
+                      <img alt={value.image.name} src={value.image.url} 
+                        className="image w-full h-full rounded-s-[5px] object-cover object-center"
+                      />
                     </div>
                     <div className="w-full flex flex-col m-5 ml-8">
                       <div className="flex w-full">

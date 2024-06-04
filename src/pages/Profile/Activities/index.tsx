@@ -15,7 +15,7 @@ export default function Activities() {
     const getTrips = async () => {
       const res = await apiCaller(tripApi.getProfileTrips(params.id ?? ""))
       
-      if (res !== null) {
+      if (res !== undefined) {
         console.log("Activitis data: ", res.data)
         setResults(res.data)
       }

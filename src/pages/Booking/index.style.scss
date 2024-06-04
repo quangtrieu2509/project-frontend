@@ -1,0 +1,10 @@
+.booking-page {
+  .ant-form-item-label label{
+    font-size: large;
+    color: var(--color-text-primary) !important;
+  }
+
+  label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+    display: none !important;
+  }
+}

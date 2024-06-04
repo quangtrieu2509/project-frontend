@@ -20,7 +20,10 @@ export interface DrawerTrip {
   startDate?: Date
   tripLength: number
   isSaved: boolean
-  image: string
+  image: {
+    name: string
+    url: string
+  }
   saves: Array<{
     id: string
     itemId: string
@@ -37,7 +40,7 @@ export default function TripList (props: TripListProps) {
   const getList = async () => {
     const res = await apiCaller(tripApi.getDrawerTrips(props.itemId))
 
-    if (res !== null) {
+    if (res !== undefined) {
       console.log(res.data)
       const trips: any[] = []
       for (const trip of (res.data as DrawerTrip[])) {
@@ -103,7 +106,9 @@ export default function TripList (props: TripListProps) {
                       <i className="bi bi-bookmarks-fill text-lg text-color-object-tertirary"/>
                     </div>
                   }
-                  <img alt="#" src={value.image} className="image w-full h-full rounded-s-[5px] object-cover object-center" />
+                  <img alt={value.image.name} src={value.image.url} 
+                    className="image w-full h-full rounded-s-[5px] object-cover object-center" 
+                  />
                 </div>
                 <div className="w-full flex flex-col p-1 pl-4">
                   <div className="text-lg font-semibold mb-1 ellipsis">

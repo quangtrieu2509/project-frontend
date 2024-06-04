@@ -20,7 +20,7 @@ export default function ReviewList(props: ReviewListProps) {
     const getReviewsOfItem = async () => {
       const res = await apiCaller(reviewApi.getOverviewRates(props.id))
 
-      if (res !== null) {
+      if (res !== undefined) {
         // console.log(res.data)
         setRate(res.data.rate)
         setRateCounts(res.data.rateCounts)
@@ -34,7 +34,7 @@ export default function ReviewList(props: ReviewListProps) {
     const getReviews = async () => {
       const res = await apiCaller(reviewApi.getReviews(props.id, rateSelection))
       
-      if (res !== null) {
+      if (res !== undefined) {
         console.log(res.data)
         setReviews(res.data)
       }

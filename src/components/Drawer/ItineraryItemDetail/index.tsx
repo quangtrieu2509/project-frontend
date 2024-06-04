@@ -24,7 +24,7 @@ export default function ItineraryItemDetail(props: ItineraryItemDetailProps) {
       <div className="relative flex w-full h-48 cursor-pointer"
         onClick={() => {}}
       >
-        <img alt="#" src={props.itineraryItem.item.image} className="image w-full h-full object-cover object-center" />
+        <img alt="#" src={props.itineraryItem.item.image.url} className="image w-full h-full object-cover object-center" />
       </div>
       <div className="my-4">
         <div className="text-2xl font-bold cursor-pointer hover:underline mb-1"

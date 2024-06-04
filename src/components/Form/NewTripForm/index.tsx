@@ -15,13 +15,15 @@ export default function NewTripForm(props: NewTripFormProps) {
   const handleOnFinish = async (value: any) => {
     value.destination = JSON.parse(value.destination)
     value.image = value.destination.image
+    value.locationId = value.destination.id
     
     const res = await apiCaller(tripApi.createTrip(value))
 
-    if (res !== null) {
+    if (res !== undefined) {
       dispatch(setTripCreationState(false))
       alert("Create successfully!")
-      props.event(res.data)
+      value.id = res.data.id
+      props.event(value)
       props.form.resetFields()
     }
   }

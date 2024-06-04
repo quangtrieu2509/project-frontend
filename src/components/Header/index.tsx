@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 import "./index.style.scss"
 import { IMAGE_PATH } from "../../constants"
-import { featureItems } from "./itemLists"
+import { featureItems, userItems } from "./itemLists"
 import Dropdown from "./Dropdown"
 import Auth from "./Auth"
 import { SearchOutlined } from "@ant-design/icons"
@@ -77,10 +77,10 @@ export default function Header() {
             ))}
           </div>
           <div className="header-item flex justify-end w-52">
-            <span className="text-base font-medium text-color-text-primary px-5 py-2.5 mx-px rounded-full bg-transparent hover:bg-color-hover-primary cursor-pointer">
-              EN | USD
+            <span className="text-base font-medium text-color-text-primary px-5 py-2 mx-px rounded-full bg-transparent hover:bg-color-hover-primary cursor-pointer">
+              <i className="bi bi-bell text-xl"/>
             </span>
-            <Auth />
+            <Auth itemsList={userItems.items}/>
           </div>
         </nav>
       </div>

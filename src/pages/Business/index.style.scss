@@ -1,0 +1,16 @@
+.business-page {
+  padding-top: 5.75rem;
+  .ant-tabs-tab {
+    font-size: 1rem/* 16px */;
+  }
+
+  .business-overview, .business-details {
+    label::after,
+    label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+      display: none !important;
+    }
+    label {
+      margin-right: 0.75rem;
+    }
+  }
+}

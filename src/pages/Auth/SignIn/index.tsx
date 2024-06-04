@@ -24,7 +24,7 @@ export default function SignIn() {
       const res = await apiCaller(authApi.signInByGoogle(GoogleToken))
       console.log(res)
 
-      if (res !== null) {
+      if (res !== undefined) {
         const apiResponse = res as APIResponse
 
         if (apiResponse.ec === messages.CONNECT_GOOGLE_ACCOUNT.ec) {

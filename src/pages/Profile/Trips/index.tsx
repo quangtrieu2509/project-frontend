@@ -18,7 +18,7 @@ export default function Trips() {
     const getTrips = async () => {
       const res = await apiCaller(tripApi.getProfileTrips(params.id ?? ""))
       
-      if (res !== null) {
+      if (res !== undefined) {
         setResults(res.data)
       }
     }

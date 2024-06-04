@@ -5,6 +5,8 @@ import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { removeSavedItem, updateSavesList } from "../../../redux/Trip"
 import { ExclamationCircleFilled } from "@ant-design/icons"
+import { useNavigate } from "react-router-dom"
+import { ROUTES } from "../../../constants"
 
 export interface SavedItemProps {
   id: string
@@ -20,7 +22,10 @@ export interface SavedItemProps {
       total: number
     }
     type: string
-    image: string
+    image: {
+      name: string
+      url: string
+    }
   }
   note?: string
 }
@@ -45,7 +50,7 @@ export default function SavedItem(props: SavedItemProps) {
         tripApi.updateSavedItem(props.id, { note: value.note })
       )
   
-      if (res !== null) {
+      if (res !== undefined) {
         dispatch(updateSavesList({ ...props, note: value.note }))
       }
     }
@@ -66,7 +71,7 @@ export default function SavedItem(props: SavedItemProps) {
         const handleRemove = async () => {
           const res = await apiCaller(tripApi.removeItemFromTrip(props.id))
 
-          if (res !== null) {
+          if (res !== undefined) {
             alert("Removed Item")
             dispatch(removeSavedItem(props.id))
           }
@@ -87,7 +92,7 @@ export default function SavedItem(props: SavedItemProps) {
         >
           <i className="bi bi-bookmarks-fill text-2xl text-color-object-tertirary"/>
         </div>
-        <img alt="#" src={props.item.image} className="image w-full h-full rounded-lg object-cover object-center" />
+        <img alt="#" src={props.item.image.url} className="image w-full h-full rounded-lg object-cover object-center" />
       </div>
       <div className="ml-4 w-full flex flex-col justify-between">
         <div className="mb-2">
@@ -111,6 +116,7 @@ export default function SavedItem(props: SavedItemProps) {
             </div>
             <div className="secondary-button absolute bottom-0 right-0"
               style={{ borderRadius: "999px", background: "var(--color-button-tertiary)" }}
+              onClick={() => window.open(ROUTES.BOOKING_BASE + props.item.id)}
             >
               Reserve
             </div>

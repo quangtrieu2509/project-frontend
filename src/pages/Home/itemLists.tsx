@@ -7,22 +7,22 @@ export const categoryItems = [
     icon: <i className={`bi bi-${iconTypes.ALL} text-lg`}/>
   },
   {
-    key: 'attractions',
+    key: 'attraction',
     label: 'Attractions',
     icon: <i className={`bi bi-${iconTypes.ATTRACTION} text-lg`}/>,
   },
   {
-    key: 'accommodations',
+    key: 'accomm',
     label: 'Accommodations',
     icon: <i className={`bi bi-${iconTypes.ACCOMM} text-lg`}/>,
   },
   {
-    key: 'dinings',
+    key: 'dining',
     label: 'Dinings',
     icon: <i className={`bi bi-${iconTypes.DINING} text-lg`}/>,
   },
   {
-    key: 'activities',
+    key: 'activity',
     label: 'Activities',
     icon: <i className={`bi bi-${iconTypes.ACTIVITY} text-lg`}/>,
   },
@@ -53,10 +53,10 @@ export const categoryPhrases: {title: string, placeHolder: string}[] = [
 
 export const getCatPhrases = (key: string) => {
   switch (key) {
-    case '5': return categoryPhrases[4]
-    case '4': return categoryPhrases[3]
-    case '3': return categoryPhrases[2]
-    case '2': return categoryPhrases[1]
+    case categoryItems[4].key: return categoryPhrases[4]
+    case categoryItems[3].key: return categoryPhrases[3]
+    case categoryItems[2].key: return categoryPhrases[2]
+    case categoryItems[1].key: return categoryPhrases[1]
     default: return categoryPhrases[0]
   }
 }

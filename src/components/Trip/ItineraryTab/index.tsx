@@ -46,7 +46,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
     const getItems = async () => {
       const res = await apiCaller(tripApi.getItineraryItems(params.id ?? ""))
 
-      if (res !== null) {
+      if (res !== undefined) {
         console.log(separateItemsByDay(res.data, props.tripLength))
         dispatch(
           setItineraryList(separateItemsByDay(res.data, props.tripLength))
@@ -115,7 +115,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
               <div className="relative flex w-36 min-w-[9rem] h-36 cursor-pointer"
                 onClick={() => onItemDetailOpen(e.day, i)}
               >
-                <img alt="#" src={e.item.image} className="image w-full h-full rounded-[7px] object-cover object-center" />
+                <img alt="#" src={e.item.image.url} className="image w-full h-full rounded-[7px] object-cover object-center" />
               </div>
               <div className="relative ml-4 w-full flex flex-col justify-between overflow-hidden">
                 {e.hasBooked && <i className="bi bi-calendar2-check text-base absolute top-0 right-0 text-color-primary"/>}

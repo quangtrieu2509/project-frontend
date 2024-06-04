@@ -9,7 +9,10 @@ export const uploadApi = {
       files.forEach(file => {
         data.append("files", file)
       })
-     
       return axiosClient.post(ENDPOINTS.UPLOAD, data, { headers: { "Content-Type": "multipart/form-data" } })
     },
+  removeData:
+    (files: any[]) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.put(ENDPOINTS.UPLOAD, { files })
+    }
 }

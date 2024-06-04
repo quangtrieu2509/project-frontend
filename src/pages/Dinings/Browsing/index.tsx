@@ -50,9 +50,9 @@ export default function Browsing() {
       key: 'types',
       label: 'Types',
       children: <Checkbox.Group
-        options={diningTypes.map((e) => {
+        options={Object.entries(diningTypes).map(([key, value]) => {
           return {
-            label: e.value, value: e.key
+            label: value, value: key
           }
         })}
         className="flex flex-col mb-2"
@@ -64,9 +64,9 @@ export default function Browsing() {
       key: 'mealTypes',
       label: 'Meals',
       children: <Checkbox.Group
-        options={diningMeals.map((e) => {
+        options={Object.entries(diningMeals).map(([key, value]) => {
           return {
-            label: e.value, value: e.key
+            label: value, value: key
           }
         })}
         className="flex flex-col mb-2"
@@ -78,9 +78,9 @@ export default function Browsing() {
       key: 'prices',
       label: 'Prices',
       children: <Checkbox.Group
-        options={diningPrices.map((e) => {
+        options={Object.entries(diningPrices).map(([key, value]) => {
           return {
-            label: `${e.value} - ${e.key}`, value: e.key
+            label: `${value} - ${key}`, value: key
           }
         })}
         className="flex flex-col mb-2"
@@ -115,9 +115,9 @@ export default function Browsing() {
       key: 'features',
       label: 'Features',
       children: <Checkbox.Group
-        options={diningFeatures.map((e) => {
+        options={Object.entries(diningFeatures).map(([key, value]) => {
           return {
-            label: e.value, value: e.key
+            label: value, value: key
           }
         })}    
         className="flex flex-col"

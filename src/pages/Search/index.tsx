@@ -58,7 +58,7 @@ export default function Search() {
     const getResults = async () => {
       const res = await apiCaller(itemApi.searchItems(query, filter))
 
-      if(res !== null) {
+      if(res !== undefined) {
         setResults(res.data)
       }
     }

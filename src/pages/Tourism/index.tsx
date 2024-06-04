@@ -6,7 +6,7 @@ import Slider from "react-slick"
 import ItemInTourism from "../../components/Item/ItemInTourism"
 import { apiCaller, locationApi } from "../../api"
 import { messages } from "../../constants/message"
-import NotFound from "../NotFound"
+import NotFound from "../Static/NotFound"
 import { ROUTES } from "../../constants"
 
 const settings = {
@@ -29,7 +29,10 @@ interface Location {
   coordinates: number[]
   name: string
   description: string
-  images: string[]
+  images: Array<{
+    name: string
+    url: string
+  }>
   level: number
   slug: string
 }
@@ -52,7 +55,7 @@ export default function Tourism() {
           }
         )
         
-        if (res !== null) {
+        if (res !== undefined) {
           setLocation(res.data)
         }
     }
@@ -85,11 +88,11 @@ export default function Tourism() {
     return items
   }
 
-  const generateCarouselImg = (images: string[]) => {
-    return images.map((link, index) => {
+  const generateCarouselImg = (images: any[]) => {
+    return images.map((image, index) => {
       return (
         <div key={index}>
-          <img alt="#" src={link} 
+          <img alt={image.name} src={image.url} 
             className="image w-full h-full max-h-96 object-cover object-center rounded-lg" 
           />
         </div>

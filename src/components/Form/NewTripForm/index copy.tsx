@@ -80,7 +80,7 @@ export default function TripCreation2(props: Props) {
     const data = { ...value, privacy, destinations: dests }
     const res = await apiCaller(tripApi.createTrip(data))
 
-    if (res !== null) {
+    if (res !== undefined) {
       alert("Done!")
       props.onChangeState(false)
     }

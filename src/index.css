@@ -483,6 +483,24 @@ label{
   height: 7rem !important;
 }
 
+/* Upload */
+.ant-upload.ant-upload-select:not(.ant-upload-disabled):hover {
+  border-color: var(--color-primary) !important;
+}
+
+/* Menu */
+.ant-menu-item {
+  margin-left: 0 !important;
+  font-size: medium;
+}
+.ant-menu-item-selected {
+  background-color: var(--color-background-secondary) !important;
+  color: var(--color-text-primary) !important;
+  font-weight: 500;
+}
+.ant-menu-item:not(.ant-menu-item-selected):active {
+  background-color: var(--color-background-secondary) !important;
+}
 
 .ant-picker-active-bar {
   background: var(--main) !important;

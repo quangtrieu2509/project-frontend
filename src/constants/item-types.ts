@@ -6,26 +6,67 @@ export const itemTypes = {
   LOCATION: 'location'
 }
 
+const singularItemLabels = {
+  ATTRACTION: 'Attraction',
+  ACCOMM: 'Accommodation',
+  DINING: 'Dining',
+  ACTIVITY: 'Activity',
+  LOCATION: 'Location'
+}
+
+const pluralItemLabels = {
+  ATTRACTION: 'Attractions',
+  ACCOMM: 'Accommodations',
+  DINING: 'Dinings',
+  ACTIVITY: 'Activities',
+  LOCATION: 'Locations'
+}
+
+const keyTypes = {
+  ATTRACTION: 'attractions',
+  ACCOMM: 'accommodations',
+  DINING: 'dinings',
+  ACTIVITY: 'activities',
+  LOCATION: 'locations'
+}
+
+export const iconTypes = {
+  ALL: "house",
+  ATTRACTION: "camera",
+  ACCOMM: "building",
+  DINING: "shop-window",
+  ACTIVITY: "ticket-perforated",
+  LOCATION: 'geo-alt'
+}
+
 export const categoryItems = [
   {
-    type: "attraction",
+    type: itemTypes.ATTRACTION,
     key: "attractions",
-    label: "Attractions"
+    label: pluralItemLabels.ATTRACTION,
+    singularLabel: singularItemLabels.ATTRACTION,
+    icon: iconTypes.ATTRACTION
   },
   {
-    type: "accomm",
+    type: itemTypes.ACCOMM,
     key: "accommodations",
-    label: "Accommodations"
+    label: pluralItemLabels.ACCOMM,
+    singularLabel: singularItemLabels.ACCOMM,
+    icon: iconTypes.ACCOMM
   },
   {
-    type: "dining",
+    type: itemTypes.DINING,
     key: "dinings",
-    label: "Dinings"
+    label: pluralItemLabels.DINING,
+    singularLabel: singularItemLabels.DINING,
+    icon: iconTypes.DINING
   },
   {
-    type: "activity",
+    type: itemTypes.ACTIVITY,
     key: "activities",
-    label: "Activities"
+    label: pluralItemLabels.ACTIVITY,
+    singularLabel: singularItemLabels.ACTIVITY,
+    icon: iconTypes.ACTIVITY
   }
 ]
 
@@ -36,31 +77,23 @@ export const filterItems = [
     label: "All"
   },
   {
-    type: "attraction",
-    key: "attractions",
-    label: "Attractions"
+    type: itemTypes.ATTRACTION,
+    key: keyTypes.ATTRACTION,
+    label: pluralItemLabels.ATTRACTION
   },
   {
-    type: "accomm",
-    key: "accommodations",
+    type: itemTypes.ACCOMM,
+    key: keyTypes.ACCOMM,
     label: "Accomms"
   },
   {
-    type: "dining",
-    key: "dinings",
-    label: "Dinings"
+    type: itemTypes.DINING,
+    key: keyTypes.DINING,
+    label: pluralItemLabels.DINING
   },
   {
-    type: "activity",
-    key: "activities",
-    label: "Activities"
+    type: itemTypes.ACTIVITY,
+    key: keyTypes.ACTIVITY,
+    label: pluralItemLabels.ACTIVITY
   }
 ]
-
-export const iconTypes = {
-  ALL: "house",
-  ATTRACTION: "camera",
-  ACCOMM: "building",
-  DINING: "shop-window",
-  ACTIVITY: "ticket-perforated"
-}

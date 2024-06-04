@@ -32,7 +32,7 @@ export default function SingUp() {
     dispatch(setLoaderState(false))
     console.log(res)
 
-    if (res !== null) {
+    if (res !== undefined) {
       Modal.info({
         title: "Info",
         content: "Signed up completely. Please check your email.",

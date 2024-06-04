@@ -3,7 +3,7 @@ import { ROUTES } from "../../constants";
 import Browsing from "./Browsing";
 import Selecting from "./Selecting";
 import { useEffect, useState } from "react";
-import NotFound from "../NotFound";
+import NotFound from "../Static/NotFound";
 import { useParams } from "react-router-dom";
 import { apiCaller, locationApi } from "../../api";
 import { messages } from "../../constants/message";
@@ -31,7 +31,7 @@ export default function Dinings() {
           }
         )
         
-        if (res !== null) {
+        if (res !== undefined) {
           setBcItems(res.data)
         }
     }

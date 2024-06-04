@@ -2,15 +2,16 @@ import { Checkbox, Form, GetProp, Image, Input, Rate, Select, Upload, UploadFile
 import { useEffect, useState } from "react"
 import "./index.style.scss"
 import { PlusOutlined } from "@ant-design/icons"
-import { generateAddress, generateLast12Months } from "../../utils/Utils"
-import NotFound from "../NotFound"
+import { generateLast12Months } from "../../utils/Utils"
+import NotFound from "../Static/NotFound"
 import { useNavigate, useParams } from "react-router-dom"
 import { apiCaller, itemApi, uploadApi } from "../../api"
 import { messages } from "../../constants/message"
 import { reviewApi } from "../../api/review"
 import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../redux/Loader"
-import { rateLevelArr, rateLevelObj } from "../../constants"
+import { ROUTES, rateLevelArr, rateLevelObj } from "../../constants"
+import CardItem, { CardItemProps } from "../../components/Item/CardItem"
 
 const agreement = "I certify that this review is based on my own experience" + 
   " and is my genuine opinion of this place, and that I have no personal or" + 
@@ -37,15 +38,6 @@ const tripTypeOpts = [
   { value: 'business', label: "Business" }
 ]
 
-interface Item {
-  id: string
-  name: string
-  ancestors: Array<{}>
-  address: string[]
-  images: string[]
-  type: string
-}
-
 export default function Review() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -54,7 +46,7 @@ export default function Review() {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [item, setItem] = useState<Item>()
+  const [item, setItem] = useState<CardItemProps>()
   const [form] = Form.useForm()
   const { id } = useParams()
 
@@ -69,7 +61,7 @@ export default function Review() {
         }
       )
       
-      if (res !== null) {
+      if (res !== undefined) {
         console.log(res.data)
         setItem(res.data)
       }
@@ -104,23 +96,24 @@ export default function Review() {
       dispatch(setLoaderState(true))
       const { images, ...rest } = value
       let res
-      res = await apiCaller(uploadApi.upLoadData(images))
-      if (res !== null) {
+      if (images.length !== 0)
+        res = await apiCaller(uploadApi.upLoadData(images))
+      else res = { data: [] }
+      if (res !== undefined) {
         res = await apiCaller(
           reviewApi.createReview(id, { images: res.data, ...rest })
         )
         dispatch(setLoaderState(false))
-        if (res !== null) {
-          navigate("success")
+        if (res !== undefined) {
+          navigate(ROUTES.SUCCESS, { 
+            state: { 
+              action: "sharing", 
+              statement: "Your review helps other travelers and that's pretty awesome" } 
+          })
         }
       }
     }
-  }
-
-  const handleNavigate = () => {
-    navigate(`/${item?.type}/${item?.id}`)
-  }
-    
+  } 
 
   const uploadButton = (
     <div className="bg-transparent border-0 cursor-pointer">
@@ -136,29 +129,7 @@ export default function Review() {
       <div className="tp-wrapper flex mt-10 mb-5">
         <div className="w-1/3 min-w-[22rem] border-0 border-r border-solid border-color-border-secondary h-fit sticky top-24">
           <h1 className="mt-0 text-4xl">Tell us, how was your visit?</h1>
-          {
-            item && <div className="w-fit h-fit p-4 border border-solid border-color-border-primary rounded">
-              <div 
-                className="flex w-56 min-w-[14rem] h-40 cursor-pointer"
-                onClick={handleNavigate}
-              >
-                <img alt="#" src={item.images[0] ?? ""} 
-                className="image w-full h-full rounded object-cover object-center" />
-              </div>
-              <div 
-                className="max-w-[14rem] mt-4 font-semibold cursor-pointer hover:underline"
-                onClick={handleNavigate}
-              >
-                {item.name}
-              </div>
-              <div className="flex text-sm text-color-extra-text-primary max-w-[14rem] mt-2">
-                <i className="bi bi-geo-alt mr-1.5"/>
-                <div>
-                  {generateAddress(item.ancestors, item.address)}
-                </div>
-              </div>
-            </div>
-          }
+          {item && <CardItem {...item}/>}
         </div>
         <div className="w-2/3 pl-10">
           <Form 

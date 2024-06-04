@@ -33,7 +33,7 @@ export default function EmailSignIn() {
     dispatch(setLoaderState(false))
     // console.log(res)
 
-    if (res !== null) {
+    if (res !== undefined) {
       if (res.ec === messages.ACTIVATE_EMAIL.ec) {
         Modal.info({
           title: "Info",
