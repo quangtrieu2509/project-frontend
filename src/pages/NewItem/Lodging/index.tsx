@@ -1,22 +1,20 @@
 import { Form, FormInstance, Input, InputNumber, Select } from "antd"
-import { diningFeatures, diningMeals, diningPrices, diningTypes, itemTypes } from "../../../../constants"
 import { useState } from "react"
-import HoursConfig, { Hour } from "../../../../components/Item/HoursConfig"
-import { onSubmit } from "../.."
+import { lodgingPrices, lodgingTypes, itemTypes, lodgingAmenities, lodgingRoomFeatures } from "../../../constants"
+import { onSubmit } from ".."
 
 const formItemLayout = {
-  labelCol: { span: 5 },
+  labelCol: { span: 6 },
   wrapperCol: { span: 30 }
 }
 
-interface DiningProps {
+interface LodgingProps {
   overviewForm: FormInstance
   onBack: (step: number) => void
 }
 
-export default function Dining(props: DiningProps) {
+export default function Lodging(props: LodgingProps) {
   const [form] = Form.useForm()
-  const [hours, setHours] = useState<Hour[]>(Array(7).fill(null))
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
 
   const handleGoBack = () => {
@@ -25,10 +23,10 @@ export default function Dining(props: DiningProps) {
 
   const onFinish = (values: any) => {
     const { 
-      features, meals, priceLevel, 
+      amenities, features, priceLevel, 
       phoneNumber, email, website, ...rest
     } = values
-    rest.features = [...features, ...meals]
+    rest.amenities = [...amenities, ...features]
     rest.price = {
       level: priceLevel,
       range: priceRange
@@ -36,8 +34,7 @@ export default function Dining(props: DiningProps) {
     rest.contacts = {
       phoneNumber, email, website
     }
-    rest.hours = hours
-    rest.type = itemTypes.DINING
+    rest.type = itemTypes.LODGING
     onSubmit(props.overviewForm.getFieldsValue(), rest)
   }
 
@@ -58,7 +55,7 @@ export default function Dining(props: DiningProps) {
           <Select
             mode="multiple"
             placeholder="Select"
-            options={Object.entries(diningTypes).map(([key, value]) => {
+            options={Object.entries(lodgingTypes).map(([key, value]) => {
               return {
                 value: key, label: value
               }
@@ -66,46 +63,54 @@ export default function Dining(props: DiningProps) {
           />
         </Form.Item>
         <Form.Item
-          name="meals"
-          label="Meals"
+          name="amenities"
+          label="Property Amenities"
           rules={[{ required: true, message: 'Select at least one' }]}
         >
           <Select
             mode="multiple"
             placeholder="Select"
-            options={Object.entries(diningMeals).map(([key, value]) => {
+            options={Object.entries(lodgingAmenities).map(([key, value]) => {
               return {
-                value: key, label: value
+                value: key, 
+                label: <div className="flex">
+                  <i className={`bi bi-${value.icon} mr-2`}/>
+                  <div>{value.label}</div>
+                </div>
               }
             })}
           />
         </Form.Item>
         <Form.Item
           name="features"
-          label="Features"
+          label="Room Features"
           rules={[{ required: true, message: 'Select at least one' }]}
         >
           <Select
             mode="multiple"
             placeholder="Select"
-            options={Object.entries(diningFeatures).map(([key, value]) => {
+            options={Object.entries(lodgingRoomFeatures).map(([key, value]) => {
               return {
-                value: key, label: value
+                value: key, 
+                label: <div className="flex">
+                  <i className={`bi bi-${value.icon} mr-2`}/>
+                  <div>{value.label}</div>
+                </div>
               }
             })}
           />
         </Form.Item>
         <Form.Item
           name="priceLevel"
-          label="Price Level"
+          label="Hotel Class"
           rules={[{ required: true, message: 'This field cannot be empty' }]}
         >
           <Select
             placeholder="Select"
             style={{ width: "10rem" }}
-            options={Object.entries(diningPrices).map(([key, value]) => {
+            options={Object.entries(lodgingPrices).map(([key, value]) => {
               return {
-                value: key, label: `${key} ${value}`
+                value: key, label: value
               }
             })}
           />
@@ -127,6 +132,28 @@ export default function Dining(props: DiningProps) {
             } value={priceRange[1]}
           />
           <span className=" text-color-text-tertiary ml-3">(optional)</span>
+        </Form.Item>
+        <Form.Item
+          name="isReservable"
+          label="Is Reservable?"
+          rules={[{ required: true, message: 'This field cannot be empty' }]}
+        >
+          <Select
+            style={{ width: "6rem" }}
+            placeholder="Select"
+            options={[
+              { value: false, label: 
+                <span className="text-color-text-primary">
+                  <i className="bi bi-x-lg mr-1"/> No
+                </span> 
+              },
+              { value: true, label: 
+                <span className="text-color-text-primary">
+                  <i className="bi bi-check-lg mr-1"/> Yes
+                </span> 
+              }
+            ]}
+          />
         </Form.Item>
         <div className=" text-color-text-primary font-semibold text-lg mb-2">
           Contacts
@@ -177,9 +204,6 @@ export default function Dining(props: DiningProps) {
           </div>
         </Form.Item>
       </Form>
-      <div className="w-full max-w-[24rem]">
-        <HoursConfig hours={hours} onChange={(e) => setHours(e)}/>
-      </div>
     </div>
   )
 }

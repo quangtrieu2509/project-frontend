@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../redux/Loader"
 import CardItem, { CardItemProps } from "../../components/Item/CardItem"
 import dayjs from "dayjs"
+import { ROUTES } from "../../constants"
 
 
 const timeList = generateTimeList().map(e => ({ label: e, value: e }))
@@ -52,7 +53,7 @@ export default function Booking() {
       )
       dispatch(setLoaderState(false))
       if (res !== undefined) {
-        navigate("success")
+        navigate(ROUTES.BOOKINGS)
       }
     }
   } 

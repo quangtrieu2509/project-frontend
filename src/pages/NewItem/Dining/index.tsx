@@ -1,20 +1,20 @@
 import { Form, FormInstance, Input, InputNumber, Select } from "antd"
-import { itemTypes } from "../../../../constants"
+import { diningFeatures, diningMeals, diningPrices, diningTypes, itemTypes } from "../../../constants"
 import { useState } from "react"
-import HoursConfig, { Hour } from "../../../../components/Item/HoursConfig"
-import { onSubmit } from "../.."
+import HoursConfig, { Hour } from "../../../components/Item/HoursConfig"
+import { onSubmit } from ".."
 
 const formItemLayout = {
   labelCol: { span: 5 },
   wrapperCol: { span: 30 }
 }
 
-interface AttractionProps {
+interface DiningProps {
   overviewForm: FormInstance
   onBack: (step: number) => void
 }
 
-export default function Attraction(props: AttractionProps) {
+export default function Dining(props: DiningProps) {
   const [form] = Form.useForm()
   const [hours, setHours] = useState<Hour[]>(Array(7).fill(null))
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
@@ -25,14 +25,19 @@ export default function Attraction(props: AttractionProps) {
 
   const onFinish = (values: any) => {
     const { 
+      features, meals, priceLevel, 
       phoneNumber, email, website, ...rest
     } = values
-    rest.ticketPrice = priceRange
+    rest.features = [...features, ...meals]
+    rest.price = {
+      level: priceLevel,
+      range: priceRange
+    }
     rest.contacts = {
       phoneNumber, email, website
     }
     rest.hours = hours
-    rest.type = itemTypes.ATTRACTION
+    rest.type = itemTypes.DINING
     onSubmit(props.overviewForm.getFieldsValue(), rest)
   }
 
@@ -53,7 +58,7 @@ export default function Attraction(props: AttractionProps) {
           <Select
             mode="multiple"
             placeholder="Select"
-            options={Object.entries([]).map(([key, value]) => {
+            options={Object.entries(diningTypes).map(([key, value]) => {
               return {
                 value: key, label: value
               }
@@ -61,7 +66,52 @@ export default function Attraction(props: AttractionProps) {
           />
         </Form.Item>
         <Form.Item
-          label="Ticket Price"
+          name="meals"
+          label="Meals"
+          rules={[{ required: true, message: 'Select at least one' }]}
+        >
+          <Select
+            mode="multiple"
+            placeholder="Select"
+            options={Object.entries(diningMeals).map(([key, value]) => {
+              return {
+                value: key, label: value
+              }
+            })}
+          />
+        </Form.Item>
+        <Form.Item
+          name="features"
+          label="Features"
+          rules={[{ required: true, message: 'Select at least one' }]}
+        >
+          <Select
+            mode="multiple"
+            placeholder="Select"
+            options={Object.entries(diningFeatures).map(([key, value]) => {
+              return {
+                value: key, label: value
+              }
+            })}
+          />
+        </Form.Item>
+        <Form.Item
+          name="priceLevel"
+          label="Price Level"
+          rules={[{ required: true, message: 'This field cannot be empty' }]}
+        >
+          <Select
+            placeholder="Select"
+            style={{ width: "10rem" }}
+            options={Object.entries(diningPrices).map(([key, value]) => {
+              return {
+                value: key, label: `${key} ${value}`
+              }
+            })}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Price Range"
         >
           <InputNumber
             min={0} max={priceRange[1]} placeholder="Min" addonBefore="$" className="w-28"
@@ -77,6 +127,28 @@ export default function Attraction(props: AttractionProps) {
             } value={priceRange[1]}
           />
           <span className=" text-color-text-tertiary ml-3">(optional)</span>
+        </Form.Item>
+        <Form.Item
+          name="isReservable"
+          label="Is Reservable?"
+          rules={[{ required: true, message: 'This field cannot be empty' }]}
+        >
+          <Select
+            style={{ width: "6rem" }}
+            placeholder="Select"
+            options={[
+              { value: false, label: 
+                <span className="text-color-text-primary">
+                  <i className="bi bi-x-lg mr-1"/> No
+                </span> 
+              },
+              { value: true, label: 
+                <span className="text-color-text-primary">
+                  <i className="bi bi-check-lg mr-1"/> Yes
+                </span> 
+              }
+            ]}
+          />
         </Form.Item>
         <div className=" text-color-text-primary font-semibold text-lg mb-2">
           Contacts

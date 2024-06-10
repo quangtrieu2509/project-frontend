@@ -33,6 +33,6 @@ export const itemApi = {
     },
   getDetailsItem:
     (id: string) => (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,type,categories,features,price,contacts,hours`)
+      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,type,categories,features,price,contacts,hours,isReservable`)
     },
 }

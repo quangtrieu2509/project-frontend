@@ -29,7 +29,24 @@ export const getYear = (time: any): number => {
 
 export const formatDate = (date: any): string => {
   const rDate = new Date(date)
-  return `${getMonth(rDate)}  ${rDate.getDay()}, ${getYear(rDate)}`
+  return `${getMonth(rDate)}  ${rDate.getDate()}, ${getYear(rDate)}`
+}
+
+export const formatTime = (date: any): string => {
+  const rDate = new Date(date)
+  const timeArr = rDate.toLocaleTimeString().split(" ")
+  return `${timeArr[0].slice(0, -3)} ${timeArr[1]}`
+}
+
+export const formatDateTime = (date: any, hasTime: boolean = true): string => {
+  const rDate = new Date(date)
+  const rTime = hasTime ? formatTime(rDate) : ""
+  const now = new Date()
+  if (rDate.getDay() === now.getDay() )
+    return formatTime(rDate)
+  else if (getYear(rDate) === getYear(now))
+    return `${getMonth(rDate)}  ${rDate.getDate()} ${rTime}`
+  else return `${formatDate(rDate)} ${rTime}`
 }
 
 export const generateLast12Months = (): LabeledValue[] => {
@@ -79,8 +96,8 @@ export const generateTimeList2 = () => {
 
 export const generateIconType = (type: string) => {
   switch (type) {
-    case itemTypes.ACCOMM: {
-      return iconTypes.ACCOMM
+    case itemTypes.LODGING: {
+      return iconTypes.LODGING
     }
     case itemTypes.ATTRACTION: {
       return iconTypes.ATTRACTION

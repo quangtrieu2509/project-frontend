@@ -1,33 +1,72 @@
-import { Form, FormInstance, Input, InputNumber, Select } from "antd"
-import { itemTypes } from "../../../../constants"
-import { useState } from "react"
+import { Form, Input, InputNumber, Modal, Select } from "antd"
+import { useEffect, useState } from "react"
+import { ExclamationCircleFilled } from "@ant-design/icons"
+import { apiCaller, itemApi } from "../../../../api"
+import { useForm } from "antd/es/form/Form"
+import { filterFields } from "../../../../utils/Utils"
+import { useDispatch } from "react-redux"
+import { setLoaderState } from "../../../../redux/Loader"
+import { diningFeatures, diningMeals, diningPrices, diningTypes } from "../../../../constants"
 import HoursConfig, { Hour } from "../../../../components/Item/HoursConfig"
-import { onSubmit } from "../.."
+
+interface DiningProps {
+  id: string
+  ownerId: string
+  contacts: {
+    phoneNumber: string
+    website?: string
+    email?: string
+  }
+  type: string
+  isReservable: boolean
+  categories: string[]
+  price: {
+    level: string
+    range?: number[]
+  }
+  hours: Array<{
+    open: string
+    close: string
+  } | null>
+  features: string[]
+}
 
 const formItemLayout = {
   labelCol: { span: 5 },
   wrapperCol: { span: 30 }
 }
 
-interface ActivityProps {
-  overviewForm: FormInstance
-  onBack: (step: number) => void
-}
-
-export default function Activity(props: ActivityProps) {
-  const [form] = Form.useForm()
+export default function Dining(props: DiningProps) {
   const [hours, setHours] = useState<Hour[]>(Array(7).fill(null))
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
+  const dispatch = useDispatch()
+  const [form] = useForm()
 
-  const handleGoBack = () => {
-    props.onBack(1)
+  useEffect(() => {
+    setInitialValues()
+  }, [props])
+
+  const setInitialValues = () => {
+    setHours(props.hours ?? Array(7).fill(null))
+    setPriceRange(props.price?.range ?? [0, 0])
+
+    form.setFieldsValue({
+      categories: props.categories,
+      meals: filterFields(props.features, diningMeals), 
+      features: filterFields(props.features, diningFeatures), 
+      priceLevel: props.price.level,
+      isReservable: props.isReservable,
+      phoneNumber: props.contacts.phoneNumber,
+      email: props.contacts.email,
+      website: props.contacts.website
+    })
   }
 
-  const onFinish = (values: any) => {
+  const onFinish = (value: any) => {
     const { 
       features, meals, priceLevel, 
       phoneNumber, email, website, ...rest
-    } = values
+    } = value
     rest.features = [...features, ...meals]
     rest.price = {
       level: priceLevel,
@@ -37,14 +76,34 @@ export default function Activity(props: ActivityProps) {
       phoneNumber, email, website
     }
     rest.hours = hours
-    rest.type = itemTypes.ACTIVITY
-    onSubmit(props.overviewForm.getFieldsValue(), rest)
+    Modal.confirm({
+      title: 'Are you sure update this item?',
+      icon: <ExclamationCircleFilled />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk () {
+        const handleUpdate = async () => {
+          dispatch(setLoaderState(true))
+          const res = await apiCaller(
+            itemApi.updateItem(props.id, rest)
+          )          
+          dispatch(setLoaderState(false))
+
+          if (res !== undefined) {
+            alert("Update successfully")
+          }
+        }
+        
+        handleUpdate()
+      }
+    })
   }
 
   return (
-    <div className="flex">
+    <div className="flex justify-between">
       <Form {...formItemLayout} form={form} 
-        variant="filled" className="w-[36rem] mr-14 poppins-font"
+        variant="filled" className="min-w-[36rem] mr-14 poppins-font"
         onFinish={onFinish}
       >
         <div className=" text-color-text-primary font-semibold text-lg mb-2">
@@ -58,14 +117,14 @@ export default function Activity(props: ActivityProps) {
           <Select
             mode="multiple"
             placeholder="Select"
-            options={Object.entries([]).map(([key, value]) => {
+            options={Object.entries(diningTypes).map(([key, value]) => {
               return {
                 value: key, label: value
               }
             })}
           />
         </Form.Item>
-        {/* <Form.Item
+        <Form.Item
           name="meals"
           label="Meals"
           rules={[{ required: true, message: 'Select at least one' }]}
@@ -79,8 +138,8 @@ export default function Activity(props: ActivityProps) {
               }
             })}
           />
-        </Form.Item> */}
-        {/* <Form.Item
+        </Form.Item>
+        <Form.Item
           name="features"
           label="Features"
           rules={[{ required: true, message: 'Select at least one' }]}
@@ -94,8 +153,8 @@ export default function Activity(props: ActivityProps) {
               }
             })}
           />
-        </Form.Item> */}
-        {/* <Form.Item
+        </Form.Item>
+        <Form.Item
           name="priceLevel"
           label="Price Level"
           rules={[{ required: true, message: 'This field cannot be empty' }]}
@@ -109,11 +168,11 @@ export default function Activity(props: ActivityProps) {
               }
             })}
           />
-        </Form.Item> */}
+        </Form.Item>
         <Form.Item
           label="Price Range"
         >
-          <InputNumber
+          <InputNumber 
             min={0} max={priceRange[1]} placeholder="Min" addonBefore="$" className="w-28"
             onChange={
               (e) => setPriceRange([e ?? 0, priceRange[1]])
@@ -128,6 +187,28 @@ export default function Activity(props: ActivityProps) {
           />
           <span className=" text-color-text-tertiary ml-3">(optional)</span>
         </Form.Item>
+        <Form.Item
+          name="isReservable"
+          label="Is Reservable?"
+          rules={[{ required: true, message: 'This field cannot be empty' }]}
+        >
+          <Select
+            style={{ width: "6rem" }}
+            placeholder="Select"
+            options={[
+              { value: false, label: 
+                <span className="text-color-text-primary">
+                  <i className="bi bi-x-lg mr-1"/> No
+                </span> 
+              },
+              { value: true, label: 
+                <span className="text-color-text-primary">
+                  <i className="bi bi-check-lg mr-1"/> Yes
+                </span> 
+              }
+            ]}
+          />
+        </Form.Item>
         <div className=" text-color-text-primary font-semibold text-lg mb-2">
           Contacts
         </div>
@@ -135,7 +216,7 @@ export default function Activity(props: ActivityProps) {
           label="Phone Number" name="phoneNumber"
           rules={[{ required: true, message: 'This field cannot be empty' }]}
         >
-          <Input placeholder="Enter a phone number"/>
+          <Input type="tel" placeholder="Enter a phone number"/>
         </Form.Item>
         <Form.Item 
           label="Email" name="email"
@@ -163,21 +244,21 @@ export default function Activity(props: ActivityProps) {
           label=" "
         >
           <div className="flex">
-            <div 
-              className="secondary-button mr-5"
-              onClick={handleGoBack}
-            >
-              Back
-            </div>  
-            <div className="primary-button" 
+            <div className="primary-button mr-5" 
               onClick={() => form.submit()}
             >
-              Submit
+              Update
             </div>
+            <div 
+              className="secondary-button"
+              onClick={setInitialValues}
+            >
+              Cancel
+            </div>  
           </div>
         </Form.Item>
       </Form>
-      <div className="w-full max-w-[24rem]">
+      <div className="w-full">
         <HoursConfig hours={hours} onChange={(e) => setHours(e)}/>
       </div>
     </div>

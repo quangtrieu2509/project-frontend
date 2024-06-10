@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react"
 
 import "./index.style.scss"
-import { IMAGE_PATH } from "../../constants"
+import { IMAGE_PATH, ROUTES } from "../../constants"
 import { featureItems, userItems } from "./itemLists"
 import Dropdown from "./Dropdown"
 import Auth from "./Auth"
 import { SearchOutlined } from "@ant-design/icons"
 import { getState } from "../../redux/Header"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { Badge, Drawer } from "antd"
+import Notis from "../Drawer/Notis"
+import { apiCaller, notiApi } from "../../api"
+import { readAllNotis } from "../../redux/Noti"
 
 export default function Header() {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [isAtTop, setIsAtTop] = useState<boolean>(true)
   const [hasSearchBox, setHasSearchBox] = useState<boolean>(false)
   const { isAtHome, isAtSearch } = useSelector(getState)
+  const [searchValue, setSearchValue] = useState<string>("")
+  const [notiState, setNotiState] = useState<boolean>(false)
 
   const handleScrollAtHome = () => {
     if (window.scrollY === 0) {
@@ -45,6 +52,21 @@ export default function Header() {
     return "header-normal"
   }
 
+  const handleSearch = () => {
+    if (searchValue !== "") {
+      navigate(ROUTES.SEARCH + `?q=${searchValue}`)
+    }
+  }
+
+  const handleReadAll = async () => {
+    const res = await apiCaller(notiApi.readAllNotis())
+    
+    if (res !== undefined) {
+      dispatch(readAllNotis())
+      alert("Read all notifications")
+    }
+  }
+
   return (
     <header
       className={`h-16 flex justify-center bg-transparent smooth-trans ${configHeader()}`}
@@ -66,8 +88,16 @@ export default function Header() {
               className="h-auto w-full p-1 pl-4 text-base text-color-text-primary border-none rounded-full focus:outline-none"
               style={{ fontFamily: "Poppins" }}
               placeholder="Where to?"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearch()
+              }}
             />
-            <span className="flex items-center font-semibold text-xl text-color-text-primary px-3.5 py-2.5 rounded-e-full bg-white hover:bg-color-hover-primary cursor-pointer">
+            <span 
+              className="flex items-center font-semibold text-xl text-color-text-primary px-3.5 py-2.5 rounded-e-full bg-white hover:bg-color-hover-primary cursor-pointer"
+              onClick={handleSearch}
+            >
               <SearchOutlined/>
             </span>
           </div>
@@ -77,13 +107,39 @@ export default function Header() {
             ))}
           </div>
           <div className="header-item flex justify-end w-52">
-            <span className="text-base font-medium text-color-text-primary px-5 py-2 mx-px rounded-full bg-transparent hover:bg-color-hover-primary cursor-pointer">
-              <i className="bi bi-bell text-xl"/>
+            <span 
+              className="text-base font-medium text-color-text-primary px-5 py-2 mx-px rounded-full bg-transparent hover:bg-color-hover-primary cursor-pointer"
+              onClick={() => setNotiState(true)}
+            >
+              <Badge count={9} overflowCount={20} offset={[4, -2]}>
+                <i className="bi bi-bell text-xl"/>
+              </Badge>
             </span>
             <Auth itemsList={userItems.items}/>
           </div>
         </nav>
       </div>
+      <Drawer
+        title={<div className="flex justify-between items-center">
+          <div>Notifications</div>
+          <div 
+            className=" text-sm font-normal underline cursor-pointer hover:text-color-extra-text-primary"
+            onClick={handleReadAll}
+          >
+            Mark all as read
+          </div>
+        </div>}
+        onClose={() => setNotiState(false)}
+        open={notiState} destroyOnClose
+        width={450}
+        styles={{
+          body: {
+            paddingTop: "0.75rem",
+          }
+        }}
+      >
+        <Notis/>
+      </Drawer>
     </header>
   )
 }

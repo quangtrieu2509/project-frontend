@@ -11,7 +11,8 @@ import TripDetail from "../pages/Trips/TripDetail"
 import Tourism from "../pages/Tourism"
 import Search from "../pages/Search"
 import Dinings from "../pages/Dinings"
-import Detail from "../pages/Dinings/Detail"
+import DiningDetail from "../pages/Dinings/Detail"
+import LodgingDetail from "../pages/Lodgings/Detail"
 import Review from "../pages/Review"
 import { Spin } from "antd"
 import { useSelector } from "react-redux"
@@ -69,7 +70,12 @@ const routes: RouteType[] = [
   {
     path: ROUTES.DINING_DETAIL,
     title: "Dining Detail",
-    element: Detail
+    element: DiningDetail
+  },
+  {
+    path: ROUTES.LODGING_DETAIL,
+    title: "Lodging Detail",
+    element: LodgingDetail
   },
   {
     path: ROUTES.REVIEW,

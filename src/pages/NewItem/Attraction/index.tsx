@@ -1,20 +1,22 @@
 import { Form, FormInstance, Input, InputNumber, Select } from "antd"
+import { itemTypes } from "../../../constants"
 import { useState } from "react"
-import { accommPrices, accommTypes, itemTypes, propertyAmenities, roomFeatures } from "../../../../constants"
-import { onSubmit } from "../.."
+import HoursConfig, { Hour } from "../../../components/Item/HoursConfig"
+import { onSubmit } from ".."
 
 const formItemLayout = {
-  labelCol: { span: 6 },
+  labelCol: { span: 5 },
   wrapperCol: { span: 30 }
 }
 
-interface AccommProps {
+interface AttractionProps {
   overviewForm: FormInstance
   onBack: (step: number) => void
 }
 
-export default function Accomm(props: AccommProps) {
+export default function Attraction(props: AttractionProps) {
   const [form] = Form.useForm()
+  const [hours, setHours] = useState<Hour[]>(Array(7).fill(null))
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
 
   const handleGoBack = () => {
@@ -23,18 +25,14 @@ export default function Accomm(props: AccommProps) {
 
   const onFinish = (values: any) => {
     const { 
-      amenities, features, priceLevel, 
       phoneNumber, email, website, ...rest
     } = values
-    rest.amenities = [...amenities, ...features]
-    rest.price = {
-      level: priceLevel,
-      range: priceRange
-    }
+    rest.ticketPrice = priceRange
     rest.contacts = {
       phoneNumber, email, website
     }
-    rest.type = itemTypes.ACCOMM
+    rest.hours = hours
+    rest.type = itemTypes.ATTRACTION
     onSubmit(props.overviewForm.getFieldsValue(), rest)
   }
 
@@ -55,7 +53,7 @@ export default function Accomm(props: AccommProps) {
           <Select
             mode="multiple"
             placeholder="Select"
-            options={Object.entries(accommTypes).map(([key, value]) => {
+            options={Object.entries([]).map(([key, value]) => {
               return {
                 value: key, label: value
               }
@@ -63,60 +61,7 @@ export default function Accomm(props: AccommProps) {
           />
         </Form.Item>
         <Form.Item
-          name="amenities"
-          label="Property Amenities"
-          rules={[{ required: true, message: 'Select at least one' }]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Select"
-            options={Object.entries(propertyAmenities).map(([key, value]) => {
-              return {
-                value: key, 
-                label: <div className="flex">
-                  <i className={`bi bi-${value.icon} mr-2`}/>
-                  <div>{value.label}</div>
-                </div>
-              }
-            })}
-          />
-        </Form.Item>
-        <Form.Item
-          name="features"
-          label="Room Features"
-          rules={[{ required: true, message: 'Select at least one' }]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Select"
-            options={Object.entries(roomFeatures).map(([key, value]) => {
-              return {
-                value: key, 
-                label: <div className="flex">
-                  <i className={`bi bi-${value.icon} mr-2`}/>
-                  <div>{value.label}</div>
-                </div>
-              }
-            })}
-          />
-        </Form.Item>
-        <Form.Item
-          name="priceLevel"
-          label="Price Level"
-          rules={[{ required: true, message: 'This field cannot be empty' }]}
-        >
-          <Select
-            placeholder="Select"
-            style={{ width: "10rem" }}
-            options={Object.entries(accommPrices).map(([key, value]) => {
-              return {
-                value: key, label: value
-              }
-            })}
-          />
-        </Form.Item>
-        <Form.Item
-          label="Price Range"
+          label="Ticket Price"
         >
           <InputNumber
             min={0} max={priceRange[1]} placeholder="Min" addonBefore="$" className="w-28"
@@ -182,6 +127,9 @@ export default function Accomm(props: AccommProps) {
           </div>
         </Form.Item>
       </Form>
+      <div className="w-full max-w-[24rem]">
+        <HoursConfig hours={hours} onChange={(e) => setHours(e)}/>
+      </div>
     </div>
   )
 }

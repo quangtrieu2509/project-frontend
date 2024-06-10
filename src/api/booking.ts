@@ -1,5 +1,4 @@
 import { ENDPOINTS } from "../constants"
-import { bookingStates } from "../constants/booking-states"
 import axiosClient from "./axiosClient"
 import type { AxiosResponse } from "axios"
 

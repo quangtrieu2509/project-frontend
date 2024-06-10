@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { bookingStateLabels as states } from "../../../constants/booking-states"
 import { apiCaller, bookingApi } from "../../../api"
-import { Drawer } from "antd"
 import BookingCard from "../../../components/Business/BookingCard"
 import { useDispatch, useSelector } from "react-redux"
 import { getState, setBookingList } from "../../../redux/Business"
+import NoResult from "../../../components/Profile/NoResult"
 
 export interface Booking {
   id: string
@@ -34,8 +34,6 @@ export default function Bookings() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<string>("1")
   const items = useSelector(getState).bookingList as Booking[]
-  const [selected, setSelected] = useState<Booking>()
-  const [detailState, setDetailState] = useState<boolean>(false)
   const params = useParams()
 
   useEffect(() => {
@@ -64,12 +62,6 @@ export default function Bookings() {
     navigate(`?${queries.toString()}`)
   }
 
-  const onDetailClose = () => {
-    setSelected(undefined)
-    setDetailState(false)
-  }
-
-
   const generateTabButton = (key: string, label: string) => {
     return (
       <div 
@@ -91,32 +83,12 @@ export default function Bookings() {
       }
       </div>
       <div>
-        {items.map((e, i) => <BookingCard key={i} booking={e}/>)}
+        {
+          items.length 
+          ? items.map((e, i) => <BookingCard key={i} booking={e}/>) 
+          : <NoResult/>
+        }
       </div>
-      <Drawer
-        title="Booking Detail"
-        destroyOnClose
-        onClose={onDetailClose}
-        open={detailState}
-        width={550}
-        styles={{
-          body: {
-            paddingBottom: 36,
-          },
-        }}
-        // footer={
-        //   selected?.state === "pending" && <div className="flex justify-end p-3">
-        //     <div className="primary-button"
-        //       style={{ backgroundColor: "var(--color-object-primary)" }}
-        //       onClick={handleCancelBooking}
-        //     >
-        //       Cancel Booking
-        //     </div>
-        //   </div>
-        // }
-      >
-        {selected && <></>}
-      </Drawer>
     </div>
   )
 }

@@ -9,7 +9,6 @@ export enum ENDPOINTS {
   DRAWER_TRIP = "/trip/drawer-trips",
   HOME_TRIP = "/trip/home-trips",
   SAVED_TRIP = "/trip/saved",
-  INTERACT_TRIP = "/trip/interact",
   LOCATION = "/location",
   LOCATION_SEARCH = "/location/search",
   ITEM = "/item",
@@ -18,5 +17,6 @@ export enum ENDPOINTS {
   REVIEW_RATES = "/review/rate",
   UPLOAD = "/upload",
   BOOKING = "/booking",
-  BOOKING_BUSINESS = "/booking/business"
+  BOOKING_BUSINESS = "/booking/business",
+  NOTI = "/noti"
 }

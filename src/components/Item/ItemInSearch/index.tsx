@@ -32,6 +32,10 @@ export default function ItemInSearch(props: ItemInSearchProps) {
         navStr = ROUTES.DINING_BASE + props.id
         break
       }
+      case itemTypes.LODGING: {
+        navStr = ROUTES.LODGING_BASE + props.id
+        break
+      }
       default: {
         navStr = "404NotFound"
       }

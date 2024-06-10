@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import TripHeader from "./TripHeader"
 import { apiCaller } from "../../../api"
 import { tripApi } from "../../../api/trip"
-import { ROUTES, interactTypes } from "../../../constants"
+import { ROUTES } from "../../../constants"
 import { formatDate } from "../../../utils/Utils"
 
 // interface ITripOverview {
@@ -49,11 +49,7 @@ export default function TripOverview(
   const handleLike = async () => {
     const { liked, likes } = interact
     await apiCaller(
-      tripApi.interactTrip(
-        props.trip?.id as string,
-        interactTypes.LIKE,
-        !liked,
-      )
+      tripApi.interactTrip(props.trip?.id as string, !liked)
     )
 
     liked

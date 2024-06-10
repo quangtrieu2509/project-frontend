@@ -7,7 +7,7 @@ import ItemInTourism from "../../components/Item/ItemInTourism"
 import { apiCaller, locationApi } from "../../api"
 import { messages } from "../../constants/message"
 import NotFound from "../Static/NotFound"
-import { ROUTES } from "../../constants"
+import { ROUTES, categoryItems } from "../../constants"
 
 const settings = {
   dots: false,
@@ -142,18 +142,13 @@ export default function Tourism() {
         <div className="mb-12">
           <h2 className="mb-4">Looking for</h2>
           <Row gutter={[16, 16]}>
-            <Col span={12}>
-              {CategoryButton("Attractions", "camera", "attractions")}
-            </Col>
-            <Col span={12}>
-              {CategoryButton("Accommodations", "building", "accommodations")}
-            </Col>
-            <Col span={12}>
-              {CategoryButton("Dinings", "shop-window", "dinings")}
-            </Col>
-            <Col span={12}>
-              {CategoryButton("Activities", "ticket-perforated", "activities")}
-            </Col>
+            {
+              categoryItems.map(e => (
+                <Col span={12} key={e.key}>
+                  {CategoryButton(e.label, e.icon, e.key)}
+                </Col>
+              ))
+            }
           </Row>
         </div>
 

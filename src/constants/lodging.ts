@@ -1,6 +1,6 @@
 type Item = Record<string, any>
 
-export const accommPrices: Item = {
+export const lodgingPrices: Item = {
   "1": "1 star",
   "2": "2 stars",
   "3": "3 stars",
@@ -9,7 +9,7 @@ export const accommPrices: Item = {
   "N": "No rating"
 }
 
-export const accommTypes: Item = {
+export const lodgingTypes: Item = {
   "hotel": "Hotel",
   "small-hotel": "Small Hotel",
   "motel": "Motel",
@@ -20,7 +20,7 @@ export const accommTypes: Item = {
   "sleep-box": "Sleep Box"
 }
 
-export const propertyAmenities: Item = {
+export const lodgingAmenities: Item = {
   "free-parking": {
     icon: "p-circle",
     label: "Free parking"
@@ -75,7 +75,7 @@ export const propertyAmenities: Item = {
   }
 }
 
-export const roomFeatures: Item = {
+export const lodgingRoomFeatures: Item = {
   "air-condition": {
     icon: "snow",
     label: "Air condition"

@@ -1,22 +1,16 @@
+import { capitalize } from "../utils/Utils"
+
 export const itemTypes = {
   ATTRACTION: 'attraction',
-  ACCOMM: 'accomm',
+  LODGING: 'lodging',
   DINING: 'dining',
   ACTIVITY: 'activity',
   LOCATION: 'location'
 }
 
-const singularItemLabels = {
-  ATTRACTION: 'Attraction',
-  ACCOMM: 'Accommodation',
-  DINING: 'Dining',
-  ACTIVITY: 'Activity',
-  LOCATION: 'Location'
-}
-
-const pluralItemLabels = {
+export const pluralItemLabels = {
   ATTRACTION: 'Attractions',
-  ACCOMM: 'Accommodations',
+  LODGING: 'Lodgings',
   DINING: 'Dinings',
   ACTIVITY: 'Activities',
   LOCATION: 'Locations'
@@ -24,7 +18,7 @@ const pluralItemLabels = {
 
 const keyTypes = {
   ATTRACTION: 'attractions',
-  ACCOMM: 'accommodations',
+  LODGING: 'lodgings',
   DINING: 'dinings',
   ACTIVITY: 'activities',
   LOCATION: 'locations'
@@ -33,7 +27,7 @@ const keyTypes = {
 export const iconTypes = {
   ALL: "house",
   ATTRACTION: "camera",
-  ACCOMM: "building",
+  LODGING: "building",
   DINING: "shop-window",
   ACTIVITY: "ticket-perforated",
   LOCATION: 'geo-alt'
@@ -44,28 +38,28 @@ export const categoryItems = [
     type: itemTypes.ATTRACTION,
     key: "attractions",
     label: pluralItemLabels.ATTRACTION,
-    singularLabel: singularItemLabels.ATTRACTION,
+    singularLabel: capitalize(itemTypes.ATTRACTION),
     icon: iconTypes.ATTRACTION
   },
   {
-    type: itemTypes.ACCOMM,
-    key: "accommodations",
-    label: pluralItemLabels.ACCOMM,
-    singularLabel: singularItemLabels.ACCOMM,
-    icon: iconTypes.ACCOMM
+    type: itemTypes.LODGING,
+    key: "lodgings",
+    label: pluralItemLabels.LODGING,
+    singularLabel: capitalize(itemTypes.LODGING),
+    icon: iconTypes.LODGING
   },
   {
     type: itemTypes.DINING,
     key: "dinings",
     label: pluralItemLabels.DINING,
-    singularLabel: singularItemLabels.DINING,
+    singularLabel: capitalize(itemTypes.DINING),
     icon: iconTypes.DINING
   },
   {
     type: itemTypes.ACTIVITY,
     key: "activities",
     label: pluralItemLabels.ACTIVITY,
-    singularLabel: singularItemLabels.ACTIVITY,
+    singularLabel: capitalize(itemTypes.ACTIVITY),
     icon: iconTypes.ACTIVITY
   }
 ]
@@ -82,9 +76,9 @@ export const filterItems = [
     label: pluralItemLabels.ATTRACTION
   },
   {
-    type: itemTypes.ACCOMM,
-    key: keyTypes.ACCOMM,
-    label: "Accomms"
+    type: itemTypes.LODGING,
+    key: keyTypes.LODGING,
+    label: pluralItemLabels.LODGING
   },
   {
     type: itemTypes.DINING,

@@ -95,7 +95,10 @@ export default function Home() {
             placeholder={getCatPhrases(categoryKey).placeHolder}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-          ></input>
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch()
+            }}
+          />
           <span 
             className="flex items-center font-semibold text-base text-color-primary px-5 py-2.5 border-solid border border-color-primary rounded-full bg-white hover:bg-color-hover-primary cursor-pointer"
             onClick={handleSearch}

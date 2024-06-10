@@ -5,10 +5,10 @@ import { useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
 import { ROUTES, categoryItems, itemTypes } from "../../constants";
-import Dining from "./Form/Dining";
-import Attraction from "./Form/Attraction";
-import Accomm from "./Form/Accomm";
-import Activity from "./Form/Activity";
+import Dining from "./Dining";
+import Attraction from "./Attraction";
+import Lodging from "./Lodging";
+import Activity from "./Activity";
 import { locationToAncestors } from "../../utils/Utils";
 import { apiCaller, itemApi, uploadApi } from "../../api";
 import store from "../../redux/store"
@@ -123,8 +123,8 @@ export default function NewItem() {
     switch (category) {
       case itemTypes.ATTRACTION: 
         return <Attraction overviewForm={form} onBack={(e) => setActiveTab(e)}/>
-      case itemTypes.ACCOMM:
-        return <Accomm overviewForm={form} onBack={(e) => setActiveTab(e)}/>
+      case itemTypes.LODGING:
+        return <Lodging overviewForm={form} onBack={(e) => setActiveTab(e)}/>
       case itemTypes.DINING:
         return <Dining overviewForm={form} onBack={(e) => setActiveTab(e)}/>
       case itemTypes.ACTIVITY:

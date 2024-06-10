@@ -20,12 +20,8 @@ export const tripApi = {
       return axiosClient.get(ENDPOINTS.SAVED_TRIP)
     },
   interactTrip:
-    (tripId: string, type: string, value: any, content: string = "") =>
-    (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.post(
-        ENDPOINTS.INTERACT_TRIP + `/${tripId}`,
-        { type, value, content }
-      )
+    (tripId: string, like: boolean) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.post(ENDPOINTS.TRIP + `/${tripId}`, { like })
     },
   createTrip:
     (data: any) => (): Promise<AxiosResponse<any, any>> => {

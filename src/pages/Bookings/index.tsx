@@ -10,6 +10,7 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { setLoaderState } from "../../redux/Loader";
 import { bookingStateLabels as states } from "../../constants/booking-states";
+import NoResult from "../../components/Profile/NoResult";
 
 export interface Booking {
   id: string
@@ -166,7 +167,7 @@ export default function Bookings() {
 
   const tabs = states.map(state => ({
     ...state,
-    children: items.map(e => generateItem(e))
+    children: items.length ? items.map(e => generateItem(e)) : <NoResult/>
   }))
   
   return (

@@ -33,11 +33,12 @@ export default function SavesList (props: SavesListProps) {
   useEffect(() => {
     if (filter === filterItems[0].type) setList(savesList)
     else {
-      const newList: SavedItemProps[] = []
-      savesList.forEach((e) => {
-        if (e.item.type === filter) newList.push(e)
-      })
-      setList(newList)
+      // const newList: SavedItemProps[] = []
+      // savesList.forEach((e) => {
+      //   if (e.item.type === filter) newList.push(e)
+      // })
+      console.log(savesList.filter(e => e.item.type === filter))
+      setList(savesList.filter(e => e.item.type === filter))
     }
   }, [filter, savesList])
 
@@ -65,12 +66,12 @@ export default function SavesList (props: SavesListProps) {
         {generateFilter()}
       </div>
       {
-        list.length === 0
+        !list.length
         ? <NoResult/>
         : <div>
           {
-            list.map((e, i) => (
-              <div key={i} 
+            list.map((e) => (
+              <div key={e.id} 
                 className="flex mb-6 p-3 border border-solid border-color-border-primary rounded-lg cursor-pointer hover:bg-color-hover-primary"
                 onClick={() => handleOpenPreAdd(e)}
               >

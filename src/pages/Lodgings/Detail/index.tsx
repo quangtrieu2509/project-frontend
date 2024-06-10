@@ -1,5 +1,5 @@
 import { Breadcrumb, Carousel, Progress, Rate, Typography } from "antd"
-import { ROUTES, pluralItemLabels, rateLevelArr } from "../../../constants"
+import { ROUTES, lodgingAmenities, lodgingPrices, lodgingRoomFeatures, lodgingTypes, pluralItemLabels, rateLevelArr } from "../../../constants"
 import ReviewList from "../../../components/Review/ReviewList"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux"
 import { setTripListState } from "../../../redux/Trip"
 import TripListDrawer from "../../../components/Drawer/TripListDrawer"
 
-interface DiningDetail {
+interface LodgingDetail {
   id: string
   ancestors: any[]
   name: string
@@ -34,11 +34,7 @@ interface DiningDetail {
     level: string
     range?: number[]
   }
-  hours: Array<{
-    open: string
-    close: string
-  } | null>
-  features?: string[]
+  amenities?: string[]
   review: {
     rate: number
     total: number
@@ -52,7 +48,7 @@ export default function Detail() {
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const [paraExpanded, setParaExpanded] = useState<boolean>(false)
   const { id } = useParams()
-  const [item, setItem] = useState<DiningDetail>()
+  const [item, setItem] = useState<LodgingDetail>()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -86,8 +82,8 @@ export default function Detail() {
     })
   
     items.push({
-      title: `${ancestors[0].name} ${pluralItemLabels.DINING}`,
-      href: ROUTES.TOURISM_BASE + `${ancestors[0].slug}/dinings`
+      title: `${ancestors[0].name} ${pluralItemLabels.LODGING}`,
+      href: ROUTES.TOURISM_BASE + `${ancestors[0].slug}/lodgings`
     })
   
     items.push({
@@ -115,10 +111,49 @@ export default function Detail() {
     )
   }
 
+  const generateAttribute =  (
+    name: string, labelObj: any, valueList: any[]
+  ) => {
+    valueList = valueList.filter(e => labelObj[e])
+    const leftList = valueList.filter((_, i) => !(i%2))
+    const rightList = valueList.filter((_, i) => i%2) 
+    const genLabel = (e: any, i: number) => (
+      <div key={i} className="flex mb-1">
+        <i className={`bi bi-${labelObj[e].icon} mr-2`}/>
+        <div>{labelObj[e].label}</div>
+      </div>
+    )
+    return (
+      <div key={name} className="mb-3">
+        <div className="font-medium mb-1">{name}</div>
+        <div className="grid grid-cols-2 gap-x-6 text-sm">
+          <div>
+            {leftList.map((e, i) => genLabel(e, i))}
+          </div>
+          <div>
+            {rightList.map((e, i) => genLabel(e, i))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const generateHotelClass = (value: string) => {
+    if (lodgingPrices[value] === lodgingPrices.N) {
+      return <div><i>{lodgingPrices.N}</i></div>
+    } 
+    else {
+      return <Rate
+        value={+value}
+        disabled
+        className="text-color-text-secondary"
+      />
+    }
+  }
+
   const onTripListOpen = () => {
     dispatch(setTripListState(true))
   }
-
   return (
     has404Error 
     ? <NotFound/> 
@@ -225,26 +260,6 @@ export default function Detail() {
                 </div>
               </div>
             </div>
-
-            <div className="break-words w-3/5 mb-5">
-              <i className="bi bi-quote mr-1 text-2xl"/>
-              <Typography.Paragraph
-                ellipsis={{
-                  rows: 3,
-                  expanded: paraExpanded
-                }}
-                className="text-base text-color-extra-text-primary poppins-font"
-                onClick={() => setParaExpanded((e) => !e)}
-              >
-                {item.description}
-              </Typography.Paragraph>
-              <span 
-                className="font-semibold underline text-color-text-secondary cursor-pointer hover:text-color-text-tertiary"
-                onClick={() => setParaExpanded((e) => !e)}
-              >
-                {paraExpanded ? "Read less" : "Read more"}
-              </span>
-            </div>
           </div>
 
           <div>
@@ -261,119 +276,143 @@ export default function Detail() {
             </Carousel>
           </div>
         </div>
+        
+        <div className="bg-white rounded-lg border border-solid border-color-border-secondary mb-5">
+          <div className="px-6 py-4">
+            <div className="text-lg font-semibold mb-3">
+              About
+            </div>
+            <div className="grid grid-cols-2 gap-x-7">
+              <div>
+                <div className="break-words w-full mb-5">
+                  <i className="bi bi-quote mr-1 text-2xl"/>
+                  <Typography.Paragraph
+                    ellipsis={{
+                      rows: 3,
+                      expanded: paraExpanded
+                    }}
+                    className="text-base text-color-extra-text-primary poppins-font"
+                    onClick={() => setParaExpanded((e) => !e)}
+                  >
+                    {item.description}
+                  </Typography.Paragraph>
+                  <span 
+                    className="font-semibold underline text-color-text-secondary cursor-pointer hover:text-color-text-tertiary"
+                    onClick={() => setParaExpanded((e) => !e)}
+                  >
+                    {paraExpanded ? "Read less" : "Read more"}
+                  </span>
+                </div>
+                <div className="h-px my-4 bg-color-border-primary"/>
+                <div>
+                  <div className="flex items-center mb-4">
+                    <span className="text-2xl font-semibold">
+                      {roundRate(item.review.rate)}
+                    </span>
+                    <Rate 
+                      allowHalf 
+                      disabled 
+                      value={roundRate(roundRate(item.review.rate))} 
+                      className="text-color-primary text-lg mx-4"
+                    />
+                    <span className="text-sm text-color-text-secondary font-semibold">
+                      {item.review.total} reviews
+                    </span>
+                  </div>
+                  <div className="font-medium mb-1">
+                    Details
+                  </div>
+                  <div className="mb-4">
+                    {
+                      rateLevels.map((e, i) =>
+                        generateRatingDetail(
+                          e, 
+                          rateLevels.length - i, 
+                          item.reviewCounts[rateLevels.length - i]
+                        )
+                      )
+                    }
+                  </div>
+                  <div className=" pl-20">
+                    <div className="primary-button w-fit"
+                      style={{ borderRadius: 9999, fontWeight: 500 }}
+                      onClick={onNavigateToReview}
+                    >
+                      Write a review
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="mb-3">
+                  <div className="font-medium mb-1">Types</div>
+                  <div className="text-sm">
+                    {item.categories.map(e => lodgingTypes[e]).join(", ")}
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="font-medium mb-1">Price</div>
+                  <div className="grid grid-cols-2 gap-x-6 text-sm">
+                    <div>
+                      <div>HOTEL CLASS</div>
+                      {generateHotelClass(item.price.level)}
+                    </div>
+                    {item.price.range && <div>
+                      <div>PRICE RANGE</div>
+                      <div className="font-medium">
+                        {`$${item.price.range[0]} - $${item.price.range[1]}`}
+                      </div>
+                    </div>}
+                  </div>
+                </div>
+                {generateAttribute("Property Amenities", lodgingAmenities, item.amenities ?? [])}
+                {generateAttribute("Room Features", lodgingRoomFeatures, item.amenities ?? [])}
 
-        <div className="grid grid-cols-3 gap-x-7 mb-5">
-          <div className="w-full bg-white rounded-lg border border-solid border-color-border-secondary">
-            <div className="px-6 py-4">
-              <div className="text-lg font-semibold mb-2">
-                Ratings & Reviews
               </div>
-              <div className="flex items-center mb-4">
-                <span className="text-2xl font-semibold">
-                  {roundRate(item.review.rate)}
-                </span>
-                <Rate 
-                  allowHalf 
-                  disabled 
-                  value={roundRate(roundRate(item.review.rate))} 
-                  className="text-color-primary text-lg mx-4"
-                />
-                <span className="text-sm text-color-text-secondary font-semibold">
-                  {item.review.total} reviews
-                </span>
-              </div>
-              <div className="font-medium mb-1">
-                Details
-              </div>
-              <div className="mb-4">
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg border border-solid border-color-border-secondary mb-5">
+          <div className="px-6 py-4">
+            <div className="text-lg font-semibold mb-3">
+              Location & Contacts
+            </div>
+            <div className="grid grid-cols-2 gap-x-7">
+              <div>
+                <div className="flex mb-2">
+                  <i className="bi bi-geo-alt mr-2"/>
+                  <div>
+                    {generateAddress(item.ancestors, item.address)}
+                  </div>
+                </div>
+                <div className="flex mb-2">
+                  <i className="bi bi-telephone mr-2"/>
+                  <div>
+                    {item.contacts.phoneNumber}
+                  </div>
+                </div>
                 {
-                  rateLevels.map((e, i) =>
-                    generateRatingDetail(
-                      e, 
-                      rateLevels.length - i, 
-                      item.reviewCounts[rateLevels.length - i]
-                    )
-                  )
+                  item.contacts.website && <div className="flex mb-2">
+                    <i className="bi bi-globe mr-2"/>
+                    <div>
+                      {item.contacts.website}
+                    </div>
+                  </div>
+                }
+                {
+                  item.contacts.email && <div className="flex mb-2">
+                    <i className="bi bi-envelope mr-2"/>
+                    <div>
+                      {item.contacts.email}
+                    </div>
+                  </div>
                 }
               </div>
-              <div className="h-px my-4 bg-color-border-primary"/>
-              <div className="flex justify-center">
-                <div className="primary-button w-fit"
-                  style={{ borderRadius: 9999, fontWeight: 500 }}
-                  onClick={onNavigateToReview}
-                >
-                  Write a review
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="w-full bg-white rounded-lg border border-solid border-color-border-secondary">
-            <div className="px-6 py-4">
-              <div className="text-lg font-semibold mb-2">
-                Details
-              </div>
-              <div className="font-medium mb-1">
-                Types
-              </div>
-              <div className="text-sm mb-2">
-                {item.categories.join(", ")}
-              </div>
-              <div className="font-medium mb-1">
-                Meals
-              </div>
-              <div className="text-sm mb-2">
-                {item.features?.join(", ")}
-              </div>
-              <div className="font-medium mb-1">
-                Price
-              </div>
-              <div className="text-sm mb-2">
-                Mid-range - $$
-              </div>
-              <div className="font-medium mb-1">
-                Features
-              </div>
-              <div className="text-sm mb-2">
-                {item.features?.join(", ")}
-              </div>
-            </div>
-          </div>
-          <div className="w-full bg-white rounded-lg border border-solid border-color-border-secondary">
-            <div className="px-6 py-4 text-sm">
-              <div className="text-lg font-semibold mb-3">
-                Location & Contacts
-              </div>
-              <div className=" h-32 bg-color-primary mb-4">
+              
+              <div className=" h-80 bg-color-primary">
                 This is map here
               </div>
-              <div className="flex mb-3">
-                <i className="bi bi-geo-alt mr-2"/>
-                <div>
-                  {generateAddress(item.ancestors, item.address)}
-                </div>
-              </div>
-              <div className="flex mb-3">
-                <i className="bi bi-telephone mr-2"/>
-                <div>
-                  {item.contacts.phoneNumber}
-                </div>
-              </div>
-              {
-                item.contacts.website && <div className="flex mb-3">
-                  <i className="bi bi-globe mr-2"/>
-                  <div>
-                    {item.contacts.website}
-                  </div>
-                </div>
-              }
-              {
-                item.contacts.email && <div className="flex mb-3">
-                  <i className="bi bi-envelope mr-2"/>
-                  <div>
-                    {item.contacts.email}
-                  </div>
-                </div>
-              }
             </div>
           </div>
         </div>

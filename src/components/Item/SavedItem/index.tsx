@@ -5,7 +5,6 @@ import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { removeSavedItem, updateSavesList } from "../../../redux/Trip"
 import { ExclamationCircleFilled } from "@ant-design/icons"
-import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../constants"
 
 export interface SavedItemProps {
@@ -22,6 +21,7 @@ export interface SavedItemProps {
       total: number
     }
     type: string
+    isReservable: boolean
     image: {
       name: string
       url: string
@@ -114,12 +114,12 @@ export default function SavedItem(props: SavedItemProps) {
             <div className="text-sm font-semibold text-color-extra-primary bg-color-extra-secondary w-fit px-2 py-0.5 rounded-md">
               {props.item.ancestors.map(e => e.name).slice(0, 2).join(", ")}
             </div>
-            <div className="secondary-button absolute bottom-0 right-0"
+            {props.item.isReservable && <div className="secondary-button absolute bottom-0 right-0"
               style={{ borderRadius: "999px", background: "var(--color-button-tertiary)" }}
               onClick={() => window.open(ROUTES.BOOKING_BASE + props.item.id)}
             >
               Reserve
-            </div>
+            </div>}
           </div>
           <div className="text-sm text-color-text-secondary">
             {props.item.categories.join("-")}

@@ -1,5 +1,5 @@
 import "bootstrap-icons/font/bootstrap-icons.css"
-import { iconTypes } from "../../constants";
+import { iconTypes, itemTypes, pluralItemLabels } from "../../constants";
 export const categoryItems = [
   {
     key: 'all',
@@ -7,23 +7,23 @@ export const categoryItems = [
     icon: <i className={`bi bi-${iconTypes.ALL} text-lg`}/>
   },
   {
-    key: 'attraction',
-    label: 'Attractions',
+    key: itemTypes.ATTRACTION,
+    label: pluralItemLabels.ATTRACTION,
     icon: <i className={`bi bi-${iconTypes.ATTRACTION} text-lg`}/>,
   },
   {
-    key: 'accomm',
-    label: 'Accommodations',
-    icon: <i className={`bi bi-${iconTypes.ACCOMM} text-lg`}/>,
+    key: itemTypes.LODGING,
+    label: pluralItemLabels.LODGING,
+    icon: <i className={`bi bi-${iconTypes.LODGING} text-lg`}/>,
   },
   {
-    key: 'dining',
-    label: 'Dinings',
+    key: itemTypes.DINING,
+    label: pluralItemLabels.DINING,
     icon: <i className={`bi bi-${iconTypes.DINING} text-lg`}/>,
   },
   {
-    key: 'activity',
-    label: 'Activities',
+    key: itemTypes.ACTIVITY,
+    label: pluralItemLabels.ACTIVITY,
     icon: <i className={`bi bi-${iconTypes.ACTIVITY} text-lg`}/>,
   },
 ];

@@ -27,8 +27,8 @@ const convert = (data: Item[]): SearchData[] => {
   return data.map((e) => {
     const getIconType = (type: string) => {
       switch (type) {
-        case itemTypes.ACCOMM: {
-          return iconTypes.ACCOMM
+        case itemTypes.LODGING: {
+          return iconTypes.LODGING
         }
         case itemTypes.DINING: {
           return iconTypes.DINING

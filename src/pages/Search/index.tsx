@@ -5,6 +5,8 @@ import "./index.style.scss"
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ItemInSearch from "../../components/Item/ItemInSearch";
 import { apiCaller, itemApi } from "../../api";
+import { itemTypes, pluralItemLabels } from "../../constants";
+import NoResult from "../../components/Profile/NoResult";
 
 const items = [
   {
@@ -12,24 +14,24 @@ const items = [
     label: 'All'
   },
   {
-    key: 'attraction',
-    label: 'Attractions'
+    key: itemTypes.ATTRACTION,
+    label: pluralItemLabels.ATTRACTION
   },
   {
-    key: 'accomm',
-    label: 'Accommodations'
+    key: itemTypes.LODGING,
+    label: pluralItemLabels.LODGING
   },
   {
-    key: 'dining',
-    label: 'Dinings'
+    key: itemTypes.DINING,
+    label: pluralItemLabels.DINING
   },
   {
-    key: 'activity',
-    label: 'Activities'
+    key: itemTypes.ACTIVITY,
+    label: pluralItemLabels.ACTIVITY
   },
   {
-    key: 'location',
-    label: 'Locations'
+    key: itemTypes.LOCATION,
+    label: pluralItemLabels.LOCATION
   },
 ];
 
@@ -123,9 +125,11 @@ export default function Search() {
 
           <div>
             {
-              results.map((e, i) => {
+              !results.length
+              ? <NoResult/>
+              : results.map(e => {
                 return (
-                  <ItemInSearch key={i} {...e}/>
+                  <ItemInSearch key={e.id} {...e}/>
                 )
               })
             }
