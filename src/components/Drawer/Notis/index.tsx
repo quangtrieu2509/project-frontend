@@ -6,23 +6,14 @@ import { notiIcons } from "../../../constants/noti-types"
 import { formatDateTime } from "../../../utils/Utils"
 import parser from "html-react-parser"
 import { apiCaller, notiApi } from "../../../api"
-
-export interface Noti {
-  id: string
-  userId: string
-  type: string
-  content: string
-  url: string
-  isSeen: boolean
-  createdAt: Date
-}
+import { INoti } from "../../Header/Noti"
 
 const filters = ["all", "unread"]
 
 export default function Notis() {
   const dispatch = useDispatch()
   const [filter, setFilter] = useState<string>(filters[0])
-  const notisList: Noti[] = useSelector(getState).notisList 
+  const notisList: INoti[] = useSelector(getState).notisList 
 
   useEffect(() => {
     const getNotisList = async () => {
@@ -39,7 +30,7 @@ export default function Notis() {
     getNotisList()
   }, [filter])
 
-  const handleClickNoti = (noti: Noti) => {
+  const handleClickNoti = (noti: INoti) => {
     dispatch(readNoti(noti.id))
     apiCaller(notiApi.readNoti(noti.id))
     // handle to url

@@ -1,13 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { Noti } from "../../components/Drawer/Notis"
+import { INoti } from "../../components/Header/Noti"
 
 // Define a type for the slice state
 interface NotiState {
-  notisList: Noti[]
+  count: number
+  notisList: INoti[]
 }
 
 // Define the initial state using that type
 const initialState: NotiState = {
+  count: 0,
   notisList: []
 }
 
@@ -16,14 +18,21 @@ export const notiSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setNotisList: (state, action: PayloadAction<Noti[]>) => {
+    setCount: (state, action: PayloadAction<number>) => {
+      state.count = action.payload
+    },
+    setNotisList: (state, action: PayloadAction<INoti[]>) => {
       state.notisList = action.payload
     },
     readAllNotis: (state, _action: PayloadAction<void>) => {
       state.notisList = state.notisList.map(e => ({ ...e, isSeen: true }))
     },
-    addNoti: (state, action: PayloadAction<Noti>) => {
-      state.notisList = [action.payload, ...state.notisList]
+    addNoti: (state, action: PayloadAction<INoti>) => {
+      const newNoti = action.payload
+      state.notisList = [
+        newNoti, 
+        ...state.notisList.filter(e => e.id !== newNoti.id)
+      ]
     },
     readNoti: (state, action: PayloadAction<string>) => {
       const id = action.payload
@@ -35,6 +44,7 @@ export const notiSlice = createSlice({
 })
 
 export const { 
+  setCount,
   setNotisList, 
   readAllNotis, 
   addNoti, 

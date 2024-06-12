@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import BaseLayout from "../BaseLayout"
-import useDocumentTitle from "../../hooks"
+import { useDocumentTitle } from "../../hooks"
 import { useSelector } from "react-redux"
 import { Button, Result } from "antd"
 import { useNavigate } from "react-router-dom"

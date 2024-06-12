@@ -4,13 +4,16 @@ import { GoogleOAuthProvider } from "@react-oauth/google"
 
 import AppRouter from "./router"
 import { GG_CLIENT_ID } from "./configs"
+import SocketProvider from "./hooks/SocketContex"
 
 const App: React.FC = () => {
   return (
     <GoogleOAuthProvider clientId={GG_CLIENT_ID}>
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
+      <SocketProvider>
+        <BrowserRouter>
+          <AppRouter />
+        </BrowserRouter>
+      </SocketProvider>
     </GoogleOAuthProvider>
   )
 }

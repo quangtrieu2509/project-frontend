@@ -48,11 +48,11 @@ export const featureItems = [
     items: [
       {
         key: "1",
-        label: <Label url={ROUTES.HOME} title={"Make a trip"} />,
+        label: <Label url={ROUTES.TRIPS_HOME} title={"Make a trip"} />,
       },
       {
         key: "2",
-        label: <Label url={ROUTES.HOME} title="Guide" />,
+        label: <Label url={ROUTES.TRIPS_HOME} title="My trips" />,
       },
     ],
     route: "trips",
@@ -111,7 +111,7 @@ export const userItems = {
           title="Sign out"
           event={() => {
             console.log("logout")
-            localStorage.removeItem("token")
+            localStorage.clear()
             window.location.href = "/"
           }}
         />

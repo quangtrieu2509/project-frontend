@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import BaseLayout from "../BaseLayout"
-import useDocumentTitle from "../../hooks"
+import { useDocumentTitle } from "../../hooks"
 import Header from "../Header/Business"
 
 type PublicRouteProps = {

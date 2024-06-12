@@ -15,14 +15,6 @@ export const setLocalStorage = (
   }
 }
 
-export const removeLocalStorage = () => {
-  localStorage.removeItem("id")
-  localStorage.removeItem("token")
-  localStorage.removeItem("familyName")
-  localStorage.removeItem("givenName")
-  localStorage.removeItem("profileImage")
-}
-
 export const getLocalStorage = (...keys: Array<string>) => {
   if (keys.length === 1) {
     return localStorage.getItem(keys[0])

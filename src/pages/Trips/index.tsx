@@ -90,13 +90,20 @@ export default function Trips() {
           {
             trips.length === 0
             ? <NoResult/>
-            : trips.map((value, index) => {
+            : trips.map(value => {
               return (
-                <div key={index} 
+                <div key={value.id} 
                   className="flex w-full mb-6 border border-solid border-color-border-primary rounded-md"
                 >
                   <div className="flex w-full">
-                    <div className="trip-image flex w-80 min-w-[20rem] h-48">
+                    <div 
+                      className="trip-image flex w-80 min-w-[20rem] h-48 cursor-pointer"
+                      onClick={
+                        () => window.open(
+                          ROUTES.TOURISM_BASE + value.destination.slug
+                        )
+                      }  
+                    >
                       <img alt={value.image.name} src={value.image.url} 
                         className="image w-full h-full rounded-s-[5px] object-cover object-center"
                       />

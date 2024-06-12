@@ -7,6 +7,7 @@ import { Select } from "antd"
 import { generateAddress } from "../../../utils/Utils"
 import { useEffect, useState } from "react"
 import { apiCaller, itemApi } from "../../../api"
+import Noti from "../Noti"
 
 interface Item {
   id: string
@@ -110,9 +111,7 @@ export default function Header() {
             />
           </div>
           <div className="header-item flex justify-end w-52">
-            <span className="text-base font-medium text-color-text-primary px-5 py-2 mx-px rounded-full bg-transparent hover:bg-color-hover-primary cursor-pointer">
-              <i className="bi bi-bell text-xl"/>
-            </span>
+            <Noti/>
             <Auth itemsList={businessUserItems.items}/>
           </div>
         </nav>
