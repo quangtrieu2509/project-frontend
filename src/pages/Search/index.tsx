@@ -120,7 +120,7 @@ export default function Search() {
         
         <div className="w-full">
           <div className="text-2xl font-semibold mb-5">
-            {`${getFilterLabel()} matching "${queries.get("q")}"`}
+            {`${getFilterLabel()} matching "${queries.get("q") ?? ""}"`}
           </div>
 
           <div>

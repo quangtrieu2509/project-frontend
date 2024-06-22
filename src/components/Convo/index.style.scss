@@ -1,0 +1,32 @@
+.convo-float-button {
+  .ant-float-btn {
+    background-color: var(--color-primary) !important;
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+  .ant-float-btn-icon {
+    color: white !important;
+    font-size: x-large !important;
+    width: fit-content !important;
+  }
+  .ant-float-btn-content {
+    height: 100%;
+    margin-bottom: 4px;
+  }
+  .ant-float-btn-body {
+    background-color: transparent;
+  }
+}
+
+.ant-drawer-bottom {
+  .ant-drawer-content-wrapper {
+    height: 26rem !important;
+    min-width: 20rem;
+    inset-inline-start: unset !important;
+    inset-inline-end: 1rem !important;
+    box-shadow: 0 0 9px 0 rgba(0,0,0,.122) !important;
+  }
+  .ant-drawer-header {
+    padding: 0.75rem 1.25rem !important;
+  }
+}

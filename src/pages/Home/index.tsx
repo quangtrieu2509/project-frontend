@@ -129,23 +129,22 @@ export default function Home() {
           style={{ width: "100%", height: "600px",  }}
           mapStyle="mapbox://styles/mapbox/streets-v9"
           attributionControl={false}
-          interactive={false}
+          // interactive={false}
           
         > 
         
-        <NavigationControl position="bottom-right"/>
-        <GeolocateControl
-          positionOptions={{ enableHighAccuracy: true }}
-          trackUserLocation={true}
-          position="bottom-right"
-        />
-        <Layer {...parkLayer} />
-        <Marker longitude={105} latitude={21} style={{ cursor: "pointer" }} onClick={(evt) => console.log(evt)}>
-        </Marker>
-        <Source id="my-data" type="geojson" data={geojson}>
-          <Layer {...layerStyle} />
-        </Source>
-        <GeocoderControl mapboxAccessToken={MAPBOX_API_KEY} position="top-left" />
+          <NavigationControl position="bottom-right"/>
+          <GeolocateControl
+            positionOptions={{ enableHighAccuracy: true }}
+            trackUserLocation={true}
+            position="bottom-right"
+          />
+          {/* <Layer {...parkLayer} /> */}
+          <Marker longitude={105} latitude={21} style={{ cursor: "pointer" }} onClick={(evt) => console.log(evt)} />
+          {/* <Source id="my-data" type="geojson" data={geojson}>
+            <Layer {...layerStyle} />
+          </Source> */}
+          {/* <GeocoderControl mapboxAccessToken={MAPBOX_API_KEY} position="top-left" /> */}
               
         </Map>
       </div>

@@ -10,7 +10,7 @@ import { INoti } from "../../Header/Noti"
 
 const filters = ["all", "unread"]
 
-export default function Notis() {
+export default function NotisList() {
   const dispatch = useDispatch()
   const [filter, setFilter] = useState<string>(filters[0])
   const notisList: INoti[] = useSelector(getState).notisList 
@@ -38,7 +38,7 @@ export default function Notis() {
 
   return (
     <div>
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 py-4 sticky top-0 bg-white">
         <div 
           className="primary-outlined-button"
           style={{ 

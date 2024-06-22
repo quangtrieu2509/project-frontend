@@ -1,8 +1,8 @@
 import { ReactElement, useState } from "react"
 import { useControl, Marker, MarkerProps, ControlPosition } from "react-map-gl"
 import MapboxGeocoder, { GeocoderOptions } from "@mapbox/mapbox-gl-geocoder"
-import { useDispatch } from "react-redux"
-import { setDestInfo } from "../../redux/Trip/index copy"
+// import { useDispatch } from "react-redux"
+// import { setDestInfo } from "../../redux/Trip/index copy"
 
 type GeocoderControlProps = Omit<
   GeocoderOptions,
@@ -32,7 +32,7 @@ GeocoderControl.defaultProps = {
 /* eslint-disable complexity,max-statements */
 export default function GeocoderControl(props: GeocoderControlProps) {
   const [marker, setMarker] = useState<ReactElement | null>(null)
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   useControl<MapboxGeocoder>(
     () => {
@@ -58,16 +58,16 @@ export default function GeocoderControl(props: GeocoderControlProps) {
               longitude={location[0]}
               latitude={location[1]}
               style={{ cursor: "pointer" }}
-              onClick={e => {
-                // If we let the click event propagates to the map, it will immediately close the popup
-                // with `closeOnClick: true`
-                e.originalEvent.stopPropagation();
-                dispatch(setDestInfo({
-                  text: result.text,
-                  placeName: result.place_name,
-                  coordinates: result.geometry.coordinates
-                }))
-              }}
+              // onClick={e => {
+              //   // If we let the click event propagates to the map, it will immediately close the popup
+              //   // with `closeOnClick: true`
+              //   e.originalEvent.stopPropagation();
+              //   dispatch(setDestInfo({
+              //     text: result.text,
+              //     placeName: result.place_name,
+              //     coordinates: result.geometry.coordinates
+              //   }))
+              // }}
             />
           )
         } else {

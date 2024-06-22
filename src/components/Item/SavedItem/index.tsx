@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux"
 import { removeSavedItem, updateSavesList } from "../../../redux/Trip"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { ROUTES } from "../../../constants"
+import { setPopupContent, setViewState } from "../../../redux/Map"
 
 export interface SavedItemProps {
   id: string
@@ -14,6 +15,8 @@ export interface SavedItemProps {
     id: string
     name: string
     ancestors: any[]
+    coordinates: number[]
+    address: string[]
     categories: string[]
     description: string
     review: {
@@ -82,9 +85,20 @@ export default function SavedItem(props: SavedItemProps) {
     })
   }
 
+  const handleOnMouseEnter = () => {
+    props.item.coordinates.length && dispatch(setPopupContent(props.item))
+  }
+
+  const handleOnMouseLeave = () => {
+    props.item.coordinates.length && dispatch(setPopupContent(undefined))
+  }
+
   return (
     <>
-    <div className="item-in-trip flex mb-7">
+    <div className="item-in-trip flex mb-7"
+      onMouseEnter={handleOnMouseEnter}
+      onMouseLeave={handleOnMouseLeave}
+    >
       <div className="relative flex w-[11.5rem] min-w-[11.5rem] h-[11.5rem]">
         <div 
           className="absolute top-0 left-0 py-2 px-3 m-1.5 bg-white rounded-full cursor-pointer shadow-lg hover-button"

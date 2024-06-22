@@ -10,6 +10,7 @@ import { getState } from "../../redux/Header"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import Noti from "./Noti"
+import { getLocalStorage } from "../../utils/Auth"
 
 export default function Header() {
   const navigate = useNavigate()
@@ -17,6 +18,7 @@ export default function Header() {
   const [hasSearchBox, setHasSearchBox] = useState<boolean>(false)
   const { isAtHome, isAtSearch } = useSelector(getState)
   const [searchValue, setSearchValue] = useState<string>("")
+  const token = getLocalStorage("token")
 
   const handleScrollAtHome = () => {
     if (window.scrollY === 0) {
@@ -93,7 +95,7 @@ export default function Header() {
             ))}
           </div>
           <div className="header-item flex justify-end w-52">
-            <Noti/>
+            {token && <Noti/>}
             <Auth itemsList={userItems.items}/>
           </div>
         </nav>

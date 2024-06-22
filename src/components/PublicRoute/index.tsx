@@ -21,7 +21,6 @@ const BusinessRoute = (props: PublicRouteProps) => {
     <div className="flex flex-col min-h-[100vh]">
       <Header/>
       {props.children}
-      {/* <ScrollToTopButton /> */}
     </div>
   )
 }

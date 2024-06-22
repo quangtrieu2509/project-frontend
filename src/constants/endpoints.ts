@@ -18,5 +18,6 @@ export enum ENDPOINTS {
   UPLOAD = "/upload",
   BOOKING = "/booking",
   BOOKING_BUSINESS = "/booking/business",
-  NOTI = "/noti"
+  NOTI = "/noti",
+  CHAT = "/chat"
 }

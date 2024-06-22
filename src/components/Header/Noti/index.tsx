@@ -1,5 +1,5 @@
 import { Badge, Drawer } from "antd";
-import Notis from "../../Drawer/Notis";
+import NotisList from "../../Drawer/NotisList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLocalStorage, setLocalStorage } from "../../../utils/Auth";
@@ -101,11 +101,11 @@ export default function Noti() {
         width={450}
         styles={{
           body: {
-            paddingTop: "0.75rem",
+            paddingTop: 0
           }
         }}
       >
-        <Notis/>
+        <NotisList/>
       </Drawer>
     </>
   )

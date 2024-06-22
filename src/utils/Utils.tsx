@@ -2,22 +2,22 @@ import { LabeledValue } from "antd/es/select"
 import { iconTypes, itemTypes } from "../constants"
 import { days } from "../constants/days"
 
-export const getMonth = (time: any): string => {
+export const getMonth = (time: any, short: boolean = false): string => {
   const rDate = new Date(time)
   const month = rDate.getMonth()
   switch (month) {
-    case 0: return "January"
-    case 1: return "February"
-    case 2: return "March"
-    case 3: return "April"
+    case 0: return short ? "Jan" : "January"
+    case 1: return short ? "Feb": "February"
+    case 2: return short ? "Mar": "March"
+    case 3: return short ? "Apr": "April"
     case 4: return "May"
-    case 5: return "June"
-    case 6: return "July"
-    case 7: return "August"
-    case 8: return "September"
-    case 9: return "October"
-    case 10: return "November"
-    case 11: return "December"
+    case 5: return short ? "Jun": "June"
+    case 6: return short ? "Jul": "July"
+    case 7: return short ? "Aug": "August"
+    case 8: return short ? "Sep": "September"
+    case 9: return short ? "Oct": "October"
+    case 10: return short ? "Nov": "November"
+    case 11: return short ? "Dec": "December"
     default: return ""
   }
 }
@@ -27,9 +27,9 @@ export const getYear = (time: any): number => {
   return rDate.getFullYear()
 }
 
-export const formatDate = (date: any): string => {
+export const formatDate = (date: any, short: boolean = false): string => {
   const rDate = new Date(date)
-  return `${getMonth(rDate)}  ${rDate.getDate()}, ${getYear(rDate)}`
+  return `${getMonth(rDate, short)}  ${rDate.getDate()}, ${getYear(rDate)}`
 }
 
 export const formatTime = (date: any): string => {
@@ -38,15 +38,17 @@ export const formatTime = (date: any): string => {
   return `${timeArr[0].slice(0, -3)} ${timeArr[1]}`
 }
 
-export const formatDateTime = (date: any, hasTime: boolean = true): string => {
+export const formatDateTime = (
+  date: any, hasTime: boolean = true, short: boolean = false
+): string => {
   const rDate = new Date(date)
   const rTime = hasTime ? formatTime(rDate) : ""
   const now = new Date()
   if (rDate.getDay() === now.getDay() )
     return formatTime(rDate)
   else if (getYear(rDate) === getYear(now))
-    return `${getMonth(rDate)}  ${rDate.getDate()} ${rTime}`
-  else return `${formatDate(rDate)} ${rTime}`
+    return `${getMonth(rDate, short)}  ${rDate.getDate()} ${rTime}`
+  else return `${formatDate(rDate, short)} ${rTime}`
 }
 
 export const generateLast12Months = (): LabeledValue[] => {
@@ -65,7 +67,8 @@ export const generateLast12Months = (): LabeledValue[] => {
 }
 
 export const generateAddress = (ancestors: any[], address: string[]) => {
-  const detail = address.join(", ")
+  const tmp = [...address]
+  const detail = tmp.reverse().join(", ")
   return `${detail}, ${ancestors.map(item => item.name).slice(0, 2).join(", ")}`
 }
 
@@ -143,4 +146,12 @@ export const locationToAncestors = (loc: string) => {
   const { ancestors, ...rest } = JSON.parse(loc)
   delete rest.image
   return [{ ...rest }, ...ancestors]
+}
+
+export const coorsToViewState = (coors: number[], level: number = 2) => {
+  return {
+    latitude: coors[0],
+    longitude: coors[1],
+    zoom: level * 2 + 1
+  }
 }

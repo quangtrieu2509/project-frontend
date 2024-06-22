@@ -6,6 +6,8 @@ import { profileSlice } from "./Profile"
 import { loaderSlice } from "./Loader"
 import { businessSlice } from "./Business"
 import { notiSlice } from "./Noti"
+import { chatSlice } from "./Chat"
+import { mapSlice } from "./Map"
 
 
 export default configureStore({
@@ -16,7 +18,8 @@ export default configureStore({
     tripReducer: tripSlice.reducer,
     loaderReducer: loaderSlice.reducer,
     businessReducer: businessSlice.reducer,
-    notiReducer: notiSlice.reducer
-
+    notiReducer: notiSlice.reducer,
+    chatReducer: chatSlice.reducer,
+    mapReducer: mapSlice.reducer
   }
 })

@@ -13,6 +13,11 @@ import { locationToAncestors } from "../../utils/Utils";
 import { apiCaller, itemApi, uploadApi } from "../../api";
 import store from "../../redux/store"
 import { setLoaderState } from "../../redux/Loader";
+import { Map, Marker, MarkerDragEvent, NavigationControl } from "react-map-gl";
+import { MAPBOX_API_KEY } from "../../configs";
+import { defaultMap } from "../../redux/Map";
+import Pin from "../../utils/Map";
+import GeocoderControl from "../../components/GeocoderControl";
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -94,6 +99,8 @@ export default function NewItem() {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [activeTab, setActiveTab] = useState<number>(steps.OVERVIEW)
+  const [coors, setCoors] = 
+    useState<{longitude: number, latitude: number}>(defaultMap)
   const [form] = useForm()
 
   const handleFilePreview = async (file: UploadFile) => {
@@ -111,12 +118,43 @@ export default function NewItem() {
   }
 
   const handleContinue = () => {
+    console.log(form.getFieldsValue())
     setActiveTab(steps.DETAILS)
   }
 
   const setInitialValues = () => {
     form.resetFields()
     setFileList([])
+  }
+
+  const handleOnDragEnd = (evt: MarkerDragEvent) => {
+    const newCoors = {
+      longitude: evt.lngLat.lng,
+      latitude: evt.lngLat.lat
+    }
+    setCoors(newCoors)
+    form.setFieldValue('coordinates', [coors.latitude, coors.longitude])
+  }
+
+  const getCoordinates = () => {
+    const co = form.getFieldValue("coordinates")
+    return (
+      <>
+        <div className="mt-2 mb-1 text-sm font-medium text-red-500">
+          Drag the pin to set your location!
+        </div>
+        {co && <div className="my-1 text-sm font-medium">
+          <div>
+            <span className="font-semibold mr-2">Longitude:</span>
+            <span>{co[1]}</span>
+          </div>
+          <div>
+            <span className="font-semibold mr-2">Latitude:</span>
+            <span>{co[0]}</span>
+          </div>
+        </div>}
+      </>
+    )
   }
  
   const generateTab = (category: string) => {
@@ -216,6 +254,7 @@ export default function NewItem() {
           </Form.Item>
           <Form.Item
             label=" "
+            name="coordinates"
           >
             <div className="flex">
               <div 
@@ -232,8 +271,27 @@ export default function NewItem() {
             </div>
           </Form.Item>
         </Form>
-        <div className="h-96 bg-color-primary w-full max-w-[24rem]">
-          This is map
+        <div className="w-full max-w-[24rem]">
+          <div className="h-[70vh] w-full bg-color-background-primary rounded-lg">
+            <Map
+              mapboxAccessToken={MAPBOX_API_KEY}
+              initialViewState={defaultMap}
+              style={{ width: "100%", height: "100%", borderRadius: "0.5rem" }}
+              mapStyle="mapbox://styles/mapbox/streets-v9"
+              attributionControl={false} 
+            > 
+              <GeocoderControl mapboxAccessToken={MAPBOX_API_KEY} position="top-left" />
+              <NavigationControl position="bottom-right"/>
+              <Marker {...coors} draggable offset={[0, -15]}
+                onDragEnd={handleOnDragEnd}
+              >
+                <Pin/>
+              </Marker>
+            </Map>
+          </div>
+          <div>
+            {getCoordinates()}
+          </div>
         </div>
       </div>
     },

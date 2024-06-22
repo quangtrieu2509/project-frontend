@@ -2,13 +2,18 @@ import { useEffect, useState } from "react"
 import "./index.style.scss"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { apiCaller, tripApi } from "../../../api"
-import { formatDate } from "../../../utils/Utils"
+import { coorsToViewState, formatDate } from "../../../utils/Utils"
 import { Tabs } from "antd"
 import SavesTab from "../../../components/Trip/SavesTab"
 import ItineraryTab from "../../../components/Trip/ItineraryTab"
 import { tabItems } from "../itemLists"
-import { useDispatch } from "react-redux"
-import { setSavesList } from "../../../redux/Trip"
+import { useDispatch, useSelector } from "react-redux"
+import { getState as tripState, setSavesList } from "../../../redux/Trip"
+import { Map, Marker, NavigationControl, Popup } from "react-map-gl"
+import { MAPBOX_API_KEY } from "../../../configs"
+import Pin from "../../../utils/Map"
+import { getState as mapState, setPopupContent, setViewState } from "../../../redux/Map"
+import MapPopupItem from "../../../components/Item/MapPopupItem"
 
 export interface ITripDetail {
   id: string
@@ -28,7 +33,9 @@ export interface ITripDetail {
   destination: {
     id: string
     name: string
-    details: string[]
+    coordinates: number[]
+    slug: string
+    ancestors: any[]
     level: number
   }
   privacy: string
@@ -50,6 +57,8 @@ export default function TripDetail() {
   const [activeTab, setActiveTab] = useState<string>("1")
   const params = useParams()
   const [queries] = useSearchParams()
+  const savesList = useSelector(tripState).savesList as any[]
+  const { viewState, popupContent } = useSelector(mapState)
 
   useEffect(() => {
     const getTrip = async () => {
@@ -58,6 +67,10 @@ export default function TripDetail() {
       if (res !== undefined) {
         console.log(res.data)
         setTrip(res.data)
+        const { coordinates, level } = res.data.destination
+        dispatch(
+          setViewState(coorsToViewState(coordinates, level))
+        )
       }
     }
 
@@ -85,14 +98,35 @@ export default function TripDetail() {
   const handleOnChange = (activeKey: string) => {
     if (activeKey === tabItems[0].key) navigate("")
     else navigate(`?tab=${activeKey}`, { replace: true })
-  } 
+  }
+
+  const pins = () =>
+      savesList.map(e => (
+        !e.item.coordinates.length
+        ? <></>
+        : <Marker
+          key={e.id}
+          longitude={e.item.coordinates[1]}
+          latitude={e.item.coordinates[0]}
+          offset={[0, -15]}
+          onClick={ev => {
+            // If we let the click event propagates to the map, it will immediately close the popup
+            // with `closeOnClick: true`
+            ev.originalEvent.stopPropagation()
+            console.log(e.item)
+            dispatch(setPopupContent(e.item))
+          }}
+        >
+          <Pin type={e.item.type}/>
+        </Marker>
+      ))
 
   return (
     <div className="tp-page trips-page bg-white">
       {
         trip && <div className="tp-wrapper">
-          <div className="trip-detail-header relative flex flex-col w-full h-80 text-white mb-6">
-            <div className="trip-detail-image absolute w-full h-full">
+          <div className="relative flex flex-col w-full h-80 text-white mb-6">
+            <div className="absolute w-full h-full">
               <img alt={trip.image.name} src={trip.image.url} 
                 className="image w-full h-full object-cover object-center rounded-lg" 
               />
@@ -131,8 +165,8 @@ export default function TripDetail() {
               </div>
             </div>
           </div>
-          <div className="trip-detail-content flex">
-            <div className="trip-detail-info h-fit w-[65%] mr-6">
+          <div className="flex">
+            <div className="h-fit w-[65%] mr-6">
             {
               trip.description && <div className=" font-medium break-words shadow-lg p-2 pt-1 rounded-lg mb-3">
                 <i className="bi bi-quote mr-1 text-xl"/>{trip.description}
@@ -157,8 +191,26 @@ export default function TripDetail() {
             />
 
             </div>
-            <div className="trip-detail-map h-[600px] max-h-[80vh] w-[35%] bg-color-primary sticky top-20 bottom-12 rounded-lg">
-                This is map here
+            <div className="h-[85vh] w-[35%] bg-color-background-primary sticky top-20 bottom-12 rounded-lg">
+              <Map
+                mapboxAccessToken={MAPBOX_API_KEY}
+                initialViewState={viewState}
+                style={{ width: "100%", height: "100%", borderRadius: "0.5rem" }}
+                mapStyle="mapbox://styles/mapbox/streets-v9"
+                attributionControl={false} 
+              > 
+                <NavigationControl position="bottom-right"/>
+                {pins()}
+                {popupContent && <Popup
+                  className="poppins-font"
+                  anchor="top"
+                  longitude={popupContent.coordinates[1]}
+                  latitude={popupContent.coordinates[0]}
+                  onClose={() => dispatch(setPopupContent(undefined))}
+                >
+                  <MapPopupItem {...popupContent}/>
+                </Popup>}
+              </Map>
             </div>
           </div>
         </div>

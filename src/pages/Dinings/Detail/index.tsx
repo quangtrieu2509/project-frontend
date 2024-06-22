@@ -10,6 +10,9 @@ import { generateAddress, roundRate } from "../../../utils/Utils"
 import { useDispatch } from "react-redux"
 import { setTripListState } from "../../../redux/Trip"
 import TripListDrawer from "../../../components/Drawer/TripListDrawer"
+import { Map, Marker, NavigationControl } from "react-map-gl"
+import { MAPBOX_API_KEY } from "../../../configs"
+import Pin from "../../../utils/Map"
 
 interface DiningDetail {
   id: string
@@ -343,8 +346,26 @@ export default function Detail() {
               <div className="text-lg font-semibold mb-3">
                 Location & Contacts
               </div>
-              <div className=" h-32 bg-color-primary mb-4">
-                This is map here
+              <div className="h-32 bg-color-primary mb-4">
+                <Map
+                  mapboxAccessToken={MAPBOX_API_KEY}
+                  initialViewState={{
+                    longitude: item.coordinates[1],
+                    latitude: item.coordinates[0],
+                    zoom: 8
+                  }}
+                  style={{ width: "100%", height: "100%" }}
+                  mapStyle="mapbox://styles/mapbox/streets-v9"
+                  attributionControl={false} 
+                > 
+                  <NavigationControl position="bottom-right"/>
+                  <Marker draggable offset={[0, -15]}
+                    longitude={item.coordinates[1]} 
+                    latitude={item.coordinates[0]}
+                  >
+                    <Pin type={item.type}/>
+                  </Marker>
+                </Map>
               </div>
               <div className="flex mb-3">
                 <i className="bi bi-geo-alt mr-2"/>

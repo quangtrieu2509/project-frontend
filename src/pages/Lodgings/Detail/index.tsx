@@ -10,6 +10,9 @@ import { generateAddress, roundRate } from "../../../utils/Utils"
 import { useDispatch } from "react-redux"
 import { setTripListState } from "../../../redux/Trip"
 import TripListDrawer from "../../../components/Drawer/TripListDrawer"
+import { Map, Marker, NavigationControl } from "react-map-gl"
+import { MAPBOX_API_KEY } from "../../../configs"
+import Pin from "../../../utils/Map"
 
 interface LodgingDetail {
   id: string
@@ -214,7 +217,7 @@ export default function Detail() {
             <div className="flex items-center text-sm text-color-extra-text-primary mb-5">
               <div className="flex">
                 <i className="bi bi-geo-alt mr-1.5"/>
-                <div className="max-w-[22rem] ellipsis">
+                <div className="max-w-[24rem] ellipsis">
                   {generateAddress(item.ancestors, item.address)}
                 </div>
               </div>
@@ -243,22 +246,12 @@ export default function Detail() {
                   <div className="w-px h-5 mx-2.5 bg-color-border-primary"/>
                   <div className="flex">
                     <i className="bi bi-envelope mr-1.5"/>
-                    <div className="max-w-[12.5rem] ellipsis">
+                    <div className="max-w-[14rem] ellipsis">
                       {item.contacts.email}
                     </div>
                   </div>
                 </>
               }
-              <div className="w-px h-5 mx-2.5 bg-color-border-primary"/>
-              <div className="flex font-medium items-center">
-                <i className="bi bi-clock mr-1.5"/>
-                <div className="mr-1.5">
-                  {"Open now"}
-                </div>
-                <div className="font-normal text-xs underline cursor-pointer hover-button">
-                  {"See all hours"}
-                </div>
-              </div>
             </div>
           </div>
 
@@ -410,8 +403,26 @@ export default function Detail() {
                 }
               </div>
               
-              <div className=" h-80 bg-color-primary">
-                This is map here
+              <div className="h-80 bg-color-primary">
+                <Map
+                  mapboxAccessToken={MAPBOX_API_KEY}
+                  initialViewState={{
+                    longitude: item.coordinates[1],
+                    latitude: item.coordinates[0],
+                    zoom: 12
+                  }}
+                  style={{ width: "100%", height: "100%" }}
+                  mapStyle="mapbox://styles/mapbox/streets-v9"
+                  attributionControl={false} 
+                > 
+                  <NavigationControl position="bottom-right"/>
+                  <Marker draggable offset={[0, -15]}
+                    longitude={item.coordinates[1]} 
+                    latitude={item.coordinates[0]}
+                  >
+                    <Pin type={item.type}/>
+                  </Marker>
+                </Map>
               </div>
             </div>
           </div>

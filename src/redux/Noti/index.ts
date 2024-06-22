@@ -3,13 +3,11 @@ import { INoti } from "../../components/Header/Noti"
 
 // Define a type for the slice state
 interface NotiState {
-  count: number
   notisList: INoti[]
 }
 
 // Define the initial state using that type
 const initialState: NotiState = {
-  count: 0,
   notisList: []
 }
 
@@ -18,9 +16,6 @@ export const notiSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setCount: (state, action: PayloadAction<number>) => {
-      state.count = action.payload
-    },
     setNotisList: (state, action: PayloadAction<INoti[]>) => {
       state.notisList = action.payload
     },
@@ -43,8 +38,7 @@ export const notiSlice = createSlice({
   }
 })
 
-export const { 
-  setCount,
+export const {
   setNotisList, 
   readAllNotis, 
   addNoti, 

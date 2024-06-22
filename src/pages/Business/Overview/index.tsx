@@ -8,6 +8,10 @@ import { useForm } from "antd/es/form/Form"
 import { compareFileChanges, locationToAncestors } from "../../../utils/Utils"
 import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../../redux/Loader"
+import { Map, Marker, MarkerDragEvent, NavigationControl } from "react-map-gl"
+import { MAPBOX_API_KEY } from "../../../configs"
+import GeocoderControl from "../../../components/GeocoderControl"
+import Pin from "../../../utils/Map"
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
@@ -36,6 +40,8 @@ export default function Overview() {
   const [previewImage, setPreviewImage] = useState('')
   const [item, setItem] = useState<OverviewItem>()
   const [removedFiles, setRemovedFiles] = useState<any[]>([])
+  const [coors, setCoors] = useState<{longitude: number, latitude: number}>()
+  const [viewState, setViewState] = useState<any>()
   const dispatch = useDispatch()
   const params = useParams()
   const [form] = useForm()
@@ -57,20 +63,29 @@ export default function Overview() {
 
   const setInitialValues = () => {
     if (item) {
-      const { name, address, description, ancestors, images } = item
+      const { address, ancestors, images, coordinates, ...rest } = item
       const location = JSON.stringify({ 
         ...ancestors[0], ancestors: ancestors.slice(1) 
       })
       setFileList(images)
+      const newCoors = {
+        longitude: coordinates[1],
+        latitude: coordinates[0]
+      }
+      setCoors(newCoors)
       form.setFieldsValue({
-        name,
+        location,
         address: address[0], 
         extraAddress: address[1], 
-        description, 
-        location,
-        images
+        images, coordinates,       
+        ...rest
       })
       setRemovedFiles([])
+      setViewState({
+        longitude: coordinates[1],
+        latitude: coordinates[0],
+        zoom: 12
+      })
     }
   }
 
@@ -93,7 +108,40 @@ export default function Overview() {
       setRemovedFiles([...removedFiles, file])
   }
 
+  const handleOnDragEnd = (evt: MarkerDragEvent) => {
+    const newCoors = {
+      longitude: evt.lngLat.lng,
+      latitude: evt.lngLat.lat
+    }
+    setCoors(newCoors)
+  }
+
+  useEffect(() => {
+    coors && form.setFieldValue('coordinates', [coors.latitude, coors.longitude])
+  }, [coors])
+
+  const getCoordinates = () => {
+    return (
+      <>
+        <div className="mt-2 mb-1 text-sm font-medium text-red-500">
+          Drag the pin to set your location!
+        </div>
+        {coors && <div className="my-1 text-sm font-medium">
+          <div>
+            <span className="font-semibold mr-2">Longitude:</span>
+            <span>{coors.longitude}</span>
+          </div>
+          <div>
+            <span className="font-semibold mr-2">Latitude:</span>
+            <span>{coors.latitude}</span>
+          </div>
+        </div>}
+      </>
+    )
+  }
+
   const onFinish = (value: any) => {
+    console.log(value.coordinates)
     const { images, location, address, extraAddress, ...rest } = value
     rest.ancestors = locationToAncestors(location)
     rest.address = extraAddress ? [address, extraAddress ] : [address]
@@ -213,7 +261,7 @@ export default function Overview() {
             </Upload>
           </Form.Item>
           <Form.Item
-            label=" "
+            label=" " name="coordinates"
           >
             <div className="flex">
               <div className="primary-button mr-5" 
@@ -230,8 +278,28 @@ export default function Overview() {
             </div>
           </Form.Item>
         </Form>
-        <div className="h-96 bg-color-primary w-full">
-          This is map
+        <div className="h-96 w-full">
+          <div className="h-[70vh] w-full bg-color-background-primary rounded-lg">
+            <Map
+              mapboxAccessToken={MAPBOX_API_KEY}
+              {...viewState}
+              onMove={e => setViewState(e.viewState)}
+              style={{ width: "100%", height: "100%", borderRadius: "0.5rem" }}
+              mapStyle="mapbox://styles/mapbox/streets-v9"
+              attributionControl={false} 
+            > 
+              <GeocoderControl mapboxAccessToken={MAPBOX_API_KEY} position="top-left" />
+              <NavigationControl position="bottom-right"/>
+              {coors && <Marker {...coors} draggable offset={[0, -15]}
+                onDragEnd={handleOnDragEnd}
+              >
+                <Pin type={item.type}/>
+              </Marker>}
+            </Map>
+          </div>
+          <div>
+            {getCoordinates()}
+          </div>
         </div>
       </div>}
       

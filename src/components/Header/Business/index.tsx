@@ -8,6 +8,7 @@ import { generateAddress } from "../../../utils/Utils"
 import { useEffect, useState } from "react"
 import { apiCaller, itemApi } from "../../../api"
 import Noti from "../Noti"
+import { getLocalStorage } from "../../../utils/Auth"
 
 interface Item {
   id: string
@@ -56,6 +57,7 @@ export default function Header() {
   const navigate = useNavigate()
   const [list, setList] = useState<Item[]>([])
   const params = useParams()
+  const token = getLocalStorage("token")
 
   useEffect(() => {
     const getList = async () => {
@@ -111,7 +113,7 @@ export default function Header() {
             />
           </div>
           <div className="header-item flex justify-end w-52">
-            <Noti/>
+            {token && <Noti/>}
             <Auth itemsList={businessUserItems.items}/>
           </div>
         </nav>

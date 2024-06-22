@@ -10,7 +10,7 @@ import { GeolocateControl, Map, Marker, NavigationControl, Popup } from "react-m
 import GeocoderControl from "../../GeocoderControl";
 import { useMemo } from "react";
 import { MinusCircleOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import Pin from "../../../utils/Pin";
+import Pin from "../../../utils/Map";
 import axiosClient from "../../../api/axiosClient";
 import { apiCaller } from "../../../api";
 import { tripApi } from "../../../api/trip";

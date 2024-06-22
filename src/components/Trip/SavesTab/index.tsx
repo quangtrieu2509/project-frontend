@@ -1,12 +1,14 @@
 import { Collapse, CollapseProps } from "antd"
 import './index.style.scss'
 import SavedItem from "../../Item/SavedItem";
-import { categoryItems } from "../../../constants";
+import { ROUTES, categoryItems } from "../../../constants";
 import { JSX } from "react/jsx-runtime";
 import { useSelector } from "react-redux";
 import { getState } from "../../../redux/Trip";
+import { useNavigate } from "react-router-dom";
 
 export default function SavesTab() {
+  const navigate = useNavigate()
   const savesList = useSelector(getState).savesList as any[]
 
   type CategoryItem = {
@@ -54,7 +56,7 @@ export default function SavesTab() {
           <div 
             className="primary-outlined-button hover:bg-color-hover-primary"
             style={{ borderRadius: 9999 }}
-            onClick={() => alert("handle start explore")}  
+            onClick={() => navigate(ROUTES.SEARCH)}  
           >
             Start Exploring
           </div>
