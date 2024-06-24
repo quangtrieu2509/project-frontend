@@ -1,18 +1,18 @@
 import { Breadcrumb, Carousel, Progress, Rate, Typography } from "antd"
-import { ROUTES, pluralItemLabels, rateLevelArr } from "../../../constants"
+import { ROUTES, diningFeatures, diningMeals, diningPrices, diningTypes, pluralItemLabels, rateLevelArrRev } from "../../../constants"
 import ReviewList from "../../../components/Review/ReviewList"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { apiCaller, itemApi } from "../../../api"
 import { messages } from "../../../constants/message"
 import NotFound from "../../Static/NotFound"
-import { generateAddress, roundRate } from "../../../utils/Utils"
+import { filterFields, generateAddress, roundRate } from "../../../utils/Utils"
 import { useDispatch } from "react-redux"
 import { setTripListState } from "../../../redux/Trip"
 import TripListDrawer from "../../../components/Drawer/TripListDrawer"
 import { Map, Marker, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../configs"
-import Pin from "../../../utils/Map"
+import { Pin } from "../../../utils/Map"
 
 interface DiningDetail {
   id: string
@@ -41,15 +41,13 @@ interface DiningDetail {
     open: string
     close: string
   } | null>
-  features?: string[]
+  features: string[]
   review: {
     rate: number
     total: number
   }
   reviewCounts: Record<number, number>
 }
-
-const rateLevels = rateLevelArr.reverse()
 
 export default function Detail() {
   const [has404Error, setHas404Error] = useState<boolean>(false)
@@ -118,6 +116,11 @@ export default function Detail() {
     )
   }
 
+  const generatePriceRange = (range: number[] | undefined) => {
+    if (range === undefined || !range.length) return null
+    else return `(from ${range.map(e => "$" + e).join(" to ")})`
+  }
+
   const onTripListOpen = () => {
     dispatch(setTripListState(true))
   }
@@ -172,7 +175,7 @@ export default function Detail() {
               <div className="w-px h-6 mx-2.5 bg-color-border-primary"/>
               <div className="flex">
                 <div>
-                  {item.categories.join(", ")}
+                  {filterFields(item.categories, diningTypes, true).join(", ")}
                 </div>
                 <i className="bi bi-dot"/>
                 <div>{item.price.level}</div>
@@ -290,11 +293,11 @@ export default function Detail() {
               </div>
               <div className="mb-4">
                 {
-                  rateLevels.map((e, i) =>
+                  rateLevelArrRev.map((e, i) =>
                     generateRatingDetail(
                       e, 
-                      rateLevels.length - i, 
-                      item.reviewCounts[rateLevels.length - i]
+                      rateLevelArrRev.length - i, 
+                      item.reviewCounts[rateLevelArrRev.length - i]
                     )
                   )
                 }
@@ -319,25 +322,25 @@ export default function Detail() {
                 Types
               </div>
               <div className="text-sm mb-2">
-                {item.categories.join(", ")}
+                {filterFields(item.categories, diningTypes, true).join(", ")}
               </div>
               <div className="font-medium mb-1">
                 Meals
               </div>
               <div className="text-sm mb-2">
-                {item.features?.join(", ")}
+                {filterFields(item.features, diningMeals, true).join(", ")}
               </div>
               <div className="font-medium mb-1">
                 Price
               </div>
               <div className="text-sm mb-2">
-                Mid-range - $$
+                {diningPrices[item.price.level] + " - " + generatePriceRange(item.price.range) ?? item.price.level}
               </div>
               <div className="font-medium mb-1">
                 Features
               </div>
               <div className="text-sm mb-2">
-                {item.features?.join(", ")}
+                {filterFields(item.features, diningFeatures, true).join(", ")}
               </div>
             </div>
           </div>

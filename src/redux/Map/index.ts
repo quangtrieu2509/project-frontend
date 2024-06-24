@@ -1,16 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { MapPopupItemProps as MapPopupItem } from "../../components/Item/MapPopupItem"
+import { ViewState } from "./type"
 
 export const defaultMap = {
   longitude: 105.853333,
   latitude: 21.028333,
   zoom: 8
-}
-
-interface ViewState {
-  longitude: number
-  latitude: number
-  zoom: number
 }
 
 // Define a type for the slice state

@@ -1,5 +1,5 @@
 import { Form, Input, InputNumber, Rate, Select } from "antd"
-import { generateTimeList } from "../../../utils/Utils"
+import { generateCategories, generateTimeList } from "../../../utils/Utils"
 import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { setEditState, updateItineraryList } from "../../../redux/Trip"
@@ -61,17 +61,9 @@ export default function ItineraryItemEdit(props: ItineraryItemEditProps) {
               </div>
             </div>
             <div className="text-sm text-color-text-secondary">
-              {props.itineraryItem.item.categories.join("-")}
+              {generateCategories(props.itineraryItem.item.categories, props.itineraryItem.item.type).join(" - ")}
             </div>
           </div>
-          {/* {props.itineraryItem.note && <div className="text-sm pt-1 flex justify-between border-0 border-t border-solid border-color-border-secondary">
-            <div>
-              <span className="font-medium text-color-extra-text-primary mr-1.5">Note:</span>
-              <span className="text-color-text-secondary">
-                {props.itineraryItem.note}
-              </span>
-            </div>
-          </div>} */}
         </div>
       </div>
       <div>

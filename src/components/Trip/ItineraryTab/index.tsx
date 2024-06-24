@@ -9,8 +9,9 @@ import SavesList from "../../Drawer/SavesList";
 import { SavedItemProps } from "../../Item/SavedItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getState, setEditState, setItineraryList } from "../../../redux/Trip";
-import { generateIconType } from "../../../utils/Utils";
+import { generateCategories, generateIconType } from "../../../utils/Utils";
 import ItineraryItemDetail from "../../Drawer/ItineraryItemDetail";
+import { setPopupContent } from "../../../redux/Map";
 
 interface ItineraryTabProps {
   tripLength: number
@@ -82,6 +83,14 @@ export default function ItineraryTab(props: ItineraryTabProps) {
     </div>
   )
 
+  const handleOnMouseEnter = (item: ItineraryItem["item"]) => {
+    item.coordinates.length && dispatch(setPopupContent(item))
+  }
+
+  const handleOnMouseLeave = (item: ItineraryItem["item"]) => {
+    item.coordinates.length && dispatch(setPopupContent(undefined))
+  }
+
   const generateCollapseItem = (items: ItineraryItem[], key: number) => {
     if (items.length === 0) return (
       <div className="mb-6">
@@ -104,7 +113,10 @@ export default function ItineraryTab(props: ItineraryTabProps) {
     else return (
       <div className="mb-6">
         {items.map((e, i) => (
-          <div key={i} className="flex h-0 min-h-[12.875rem]">
+          <div key={e.id} className="flex h-0 min-h-[12.875rem]"
+            onMouseEnter={() => handleOnMouseEnter(e.item)}
+            onMouseLeave={() => handleOnMouseLeave(e.item)}
+          >
             <div className="w-fit h-full flex flex-col items-center ml-1 mr-9">
               <div className="w-fit h-fit px-1.5 py-0.5 border border-solid border-color-secondary rounded-full">
                 <i className={`bi bi-${generateIconType(e.item.type)} text-xl`}/>
@@ -137,7 +149,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
                     </div>
                   </div>
                   <div className="text-sm text-color-text-secondary">
-                    {e.item.categories.join("-")}
+                    {generateCategories(e.item.categories, e.item.type).join(" - ")}
                   </div>
                 </div>
                 <div className="text-sm pt-1 border-0 border-t border-solid border-color-border-secondary">
@@ -239,7 +251,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
       }
     >
       {selectedItem && <ItineraryItemDetail 
-        itineraryItem={itineraryList[selectedItem.day - 1][selectedItem.order]}
+        {...itineraryList[selectedItem.day - 1][selectedItem.order]}
       />}
     </Drawer>
     </>

@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { DrawerTrip } from "../../components/Drawer/TripList"
-import { SavedItemProps } from "../../components/Item/SavedItem"
+import { SavedItemProps as SavedItem } from "../../components/Item/SavedItem"
 import { ItineraryItem } from "../../components/Trip/ItineraryTab"
 
 // Define a type for the slice state
@@ -10,7 +10,7 @@ interface TripState {
   preAddState: boolean
   editState: boolean
   drawerTripsList: DrawerTrip[]
-  savesList: SavedItemProps[]
+  savesList: SavedItem[]
   itineraryList: Array<Array<ItineraryItem>>
 }
 
@@ -54,7 +54,7 @@ export const tripSlice = createSlice({
         else state.drawerTripsList = [payload, ...state.drawerTripsList]
     },
     setSavesList: 
-      (state, action: PayloadAction<SavedItemProps[]>) => {
+      (state, action: PayloadAction<SavedItem[]>) => {
         state.savesList = action.payload
     },
     removeSavedItem: 
@@ -65,7 +65,7 @@ export const tripSlice = createSlice({
         )
     },
     updateSavesList:
-      (state, action: PayloadAction<SavedItemProps>) => {
+      (state, action: PayloadAction<SavedItem>) => {
         state.savesList = state.savesList.map((e) => {
           if (e.id === action.payload.id) return action.payload
           return e

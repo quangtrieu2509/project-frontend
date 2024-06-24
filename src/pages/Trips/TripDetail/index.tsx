@@ -5,15 +5,16 @@ import { apiCaller, tripApi } from "../../../api"
 import { coorsToViewState, formatDate } from "../../../utils/Utils"
 import { Tabs } from "antd"
 import SavesTab from "../../../components/Trip/SavesTab"
-import ItineraryTab from "../../../components/Trip/ItineraryTab"
+import ItineraryTab, { ItineraryItem } from "../../../components/Trip/ItineraryTab"
 import { tabItems } from "../itemLists"
 import { useDispatch, useSelector } from "react-redux"
 import { getState as tripState, setSavesList } from "../../../redux/Trip"
 import { Map, Marker, NavigationControl, Popup } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../configs"
-import Pin from "../../../utils/Map"
+import { Pin } from "../../../utils/Map"
 import { getState as mapState, setPopupContent, setViewState } from "../../../redux/Map"
 import MapPopupItem from "../../../components/Item/MapPopupItem"
+import { SavedItemProps as SavedItem } from "../../../components/Item/SavedItem"
 
 export interface ITripDetail {
   id: string
@@ -57,7 +58,9 @@ export default function TripDetail() {
   const [activeTab, setActiveTab] = useState<string>("1")
   const params = useParams()
   const [queries] = useSearchParams()
-  const savesList = useSelector(tripState).savesList as any[]
+  const savesList = useSelector(tripState).savesList as SavedItem[]
+  const itineraryList = useSelector(tripState)
+                          .itineraryList as ItineraryItem[][]
   const { viewState, popupContent } = useSelector(mapState)
 
   useEffect(() => {
@@ -100,26 +103,45 @@ export default function TripDetail() {
     else navigate(`?tab=${activeKey}`, { replace: true })
   }
 
-  const pins = () =>
-      savesList.map(e => (
+  const pins = () => {
+    if (activeTab === tabItems[0].key) 
+      return savesList.map(e => (
         !e.item.coordinates.length
         ? <></>
-        : <Marker
-          key={e.id}
-          longitude={e.item.coordinates[1]}
-          latitude={e.item.coordinates[0]}
-          offset={[0, -15]}
+        : <Marker key={e.id} offset={[0, -15]}
+          longitude={e.item.coordinates[1]} latitude={e.item.coordinates[0]}
           onClick={ev => {
             // If we let the click event propagates to the map, it will immediately close the popup
             // with `closeOnClick: true`
             ev.originalEvent.stopPropagation()
-            console.log(e.item)
             dispatch(setPopupContent(e.item))
           }}
         >
           <Pin type={e.item.type}/>
         </Marker>
       ))
+    else if (activeTab === tabItems[1].key)
+      return itineraryList.map(
+        (day , index) => {
+          return day.map(e => (
+            !e.item.coordinates.length
+            ? <></>
+            : <Marker key={e.id} offset={[0, -15]}
+              longitude={e.item.coordinates[1]} latitude={e.item.coordinates[0]}
+              onClick={ev => {
+                // If we let the click event propagates to the map, it will immediately close the popup
+                // with `closeOnClick: true`
+                ev.originalEvent.stopPropagation()
+                dispatch(setPopupContent(e.item))
+              }}
+            >
+              <Pin type={e.item.type} badge={index + 1}/>
+            </Marker>
+          ))
+        }
+      )
+    
+  }
 
   return (
     <div className="tp-page trips-page bg-white">

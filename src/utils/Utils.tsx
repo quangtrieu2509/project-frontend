@@ -1,5 +1,5 @@
 import { LabeledValue } from "antd/es/select"
-import { iconTypes, itemTypes } from "../constants"
+import { diningTypes, iconTypes, itemTypes, lodgingTypes } from "../constants"
 import { days } from "../constants/days"
 
 export const getMonth = (time: any, short: boolean = false): string => {
@@ -125,10 +125,14 @@ export const compareFileChanges = (newList: any[]) => {
   return { uploads, remains }
 }
 
-export const filterFields = (input: string[], data: Record<string, any>) => {
+export const filterFields = (
+  input: string[], 
+  data: Record<string, any>, 
+  achieveValue: boolean = false 
+) => {
   return input.map(e => {
     if (data[e]) {
-      return e
+      return achieveValue ? data[e] : e
     } else return data[e]
   }).filter(e => e)
 }
@@ -153,5 +157,14 @@ export const coorsToViewState = (coors: number[], level: number = 2) => {
     latitude: coors[0],
     longitude: coors[1],
     zoom: level * 2 + 1
+  }
+}
+
+export const generateCategories = (list: string[], type: string) => {
+  switch(type) {
+    case itemTypes.DINING: return filterFields(list, diningTypes, true)
+    case itemTypes.LODGING: return filterFields(list, lodgingTypes, true)
+    // more config
+    default: return []
   }
 }

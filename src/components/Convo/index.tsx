@@ -147,7 +147,7 @@ export default function Convo() {
     <div className="convo-float-button">
       <FloatButton 
         badge={{ count: calculateConvosCount() }} 
-        icon={<CommentOutlined />} 
+        icon={<CommentOutlined />}
         onClick={() => setConvoState(true)}
       />
       <Drawer

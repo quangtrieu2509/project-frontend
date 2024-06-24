@@ -6,7 +6,8 @@ import { useDispatch } from "react-redux"
 import { removeSavedItem, updateSavesList } from "../../../redux/Trip"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { ROUTES } from "../../../constants"
-import { setPopupContent, setViewState } from "../../../redux/Map"
+import { setPopupContent } from "../../../redux/Map"
+import { generateCategories } from "../../../utils/Utils"
 
 export interface SavedItemProps {
   id: string
@@ -136,7 +137,7 @@ export default function SavedItem(props: SavedItemProps) {
             </div>}
           </div>
           <div className="text-sm text-color-text-secondary">
-            {props.item.categories.join("-")}
+            {generateCategories(props.item.categories, props.item.type).join(" - ")}
           </div>
         </div>
         <div className="text-sm mb-2">

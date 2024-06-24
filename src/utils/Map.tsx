@@ -1,16 +1,23 @@
+import { Badge } from "antd"
 import { itemTypes } from "../constants"
 
 interface PinProps {
   type?: string
+  badge?: any
 }
 
-export default function Pin(props: PinProps) {
+export function Pin(props: PinProps) {
+  const pin = (element: JSX.Element) => {
+    if (props.badge === undefined) return element
+    else  return <Badge count={props.badge} color="#333" >{element}</Badge>
+  }
+  
   switch (props.type) {
-    case itemTypes.LODGING: return LodgingPin()
-    case itemTypes.DINING: return DiningPin()
-    case itemTypes.ATTRACTION: return AttractionPin()
-    case itemTypes.ACTIVITY: return ActivityPin()
-    default: return LocationPin()
+    case itemTypes.LODGING: return pin(LodgingPin())
+    case itemTypes.DINING: return pin(DiningPin())
+    case itemTypes.ATTRACTION: return pin(AttractionPin())
+    case itemTypes.ACTIVITY: return pin(ActivityPin())
+    default: return pin(LocationPin())
   }
 }
 

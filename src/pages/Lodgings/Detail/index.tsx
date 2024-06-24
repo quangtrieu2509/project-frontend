@@ -1,18 +1,18 @@
 import { Breadcrumb, Carousel, Progress, Rate, Typography } from "antd"
-import { ROUTES, lodgingAmenities, lodgingPrices, lodgingRoomFeatures, lodgingTypes, pluralItemLabels, rateLevelArr } from "../../../constants"
+import { ROUTES, lodgingAmenities, lodgingPrices, lodgingRoomFeatures, lodgingTypes, pluralItemLabels, rateLevelArrRev } from "../../../constants"
 import ReviewList from "../../../components/Review/ReviewList"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { apiCaller, itemApi } from "../../../api"
 import { messages } from "../../../constants/message"
 import NotFound from "../../Static/NotFound"
-import { generateAddress, roundRate } from "../../../utils/Utils"
+import { filterFields, generateAddress, roundRate } from "../../../utils/Utils"
 import { useDispatch } from "react-redux"
 import { setTripListState } from "../../../redux/Trip"
 import TripListDrawer from "../../../components/Drawer/TripListDrawer"
 import { Map, Marker, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../configs"
-import Pin from "../../../utils/Map"
+import { Pin } from "../../../utils/Map"
 
 interface LodgingDetail {
   id: string
@@ -44,8 +44,6 @@ interface LodgingDetail {
   }
   reviewCounts: Record<number, number>
 }
-
-const rateLevels = rateLevelArr.reverse()
 
 export default function Detail() {
   const [has404Error, setHas404Error] = useState<boolean>(false)
@@ -207,10 +205,10 @@ export default function Detail() {
               <div className="w-px h-6 mx-2.5 bg-color-border-primary"/>
               <div className="flex">
                 <div>
-                  {item.categories.join(", ")}
+                  {filterFields(item.categories, lodgingTypes, true).join(", ")}
                 </div>
                 <i className="bi bi-dot"/>
-                <div>{item.price.level}</div>
+                <div>{generateHotelClass(item.price.level)}</div>
               </div>
             </div> 
 
@@ -317,11 +315,11 @@ export default function Detail() {
                   </div>
                   <div className="mb-4">
                     {
-                      rateLevels.map((e, i) =>
+                      rateLevelArrRev.map((e, i) =>
                         generateRatingDetail(
                           e, 
-                          rateLevels.length - i, 
-                          item.reviewCounts[rateLevels.length - i]
+                          rateLevelArrRev.length - i, 
+                          item.reviewCounts[rateLevelArrRev.length - i]
                         )
                       )
                     }

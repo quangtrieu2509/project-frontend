@@ -6,6 +6,7 @@ import { filterItems } from "../../../constants"
 import { useEffect, useState } from "react"
 import { Drawer, Form, Rate } from "antd"
 import PreAddForm from "../../Form/PreAddForm"
+import { generateCategories } from "../../../utils/Utils"
 
 interface SavesListProps {
   day: number
@@ -95,7 +96,7 @@ export default function SavesList (props: SavesListProps) {
                       </div>
                     </div>
                     <div className="text-sm text-color-text-secondary">
-                      {e.item.categories.join("-")}
+                      {generateCategories(e.item.categories, e.item.type).join(" - ")}
                     </div>
                   </div>
                   {e.note && <div className="text-sm pt-1 flex justify-between border-0 border-t border-solid border-color-border-secondary">

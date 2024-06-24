@@ -1,5 +1,7 @@
 export const rateLevelArr = ['Terrible', 'Poor', 'Average', 'Good', 'Excellent']
 
+export const rateLevelArrRev = ['Excellent', 'Good', 'Average', 'Poor', 'Terrible']
+
 type RateLevel = Record<number, string>
 export const rateLevelObj: RateLevel = {
   1: 'Terrible', 

@@ -11,7 +11,7 @@ import { setLoaderState } from "../../../redux/Loader"
 import { Map, Marker, MarkerDragEvent, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../configs"
 import GeocoderControl from "../../../components/GeocoderControl"
-import Pin from "../../../utils/Map"
+import { Pin } from "../../../utils/Map"
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 

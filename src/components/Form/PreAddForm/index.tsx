@@ -1,6 +1,6 @@
 import { Form, Input, InputNumber, Rate, Select } from "antd"
 import { SavedItemProps } from "../../Item/SavedItem"
-import { generateTimeList } from "../../../utils/Utils"
+import { generateCategories, generateTimeList } from "../../../utils/Utils"
 import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { setItineraryList, setPreAddState } from "../../../redux/Trip"
@@ -61,7 +61,7 @@ export default function PreAddForm(props: PreAddFormProps) {
               </div>
             </div>
             <div className="text-sm text-color-text-secondary">
-              {props.savedItem.item.categories.join("-")}
+              {generateCategories(props.savedItem.item.categories, props.savedItem.item.type).join(" - ")}
             </div>
           </div>
           {props.savedItem.note && <div className="text-sm pt-1 flex justify-between border-0 border-t border-solid border-color-border-secondary">

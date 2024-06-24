@@ -1,6 +1,6 @@
 import { Rate } from "antd"
 import "../SavedItem/index.style.scss"
-import { capitalize } from "../../../utils/Utils"
+import { capitalize, generateCategories } from "../../../utils/Utils"
 import { ROUTES, itemTypes } from "../../../constants"
 
 interface ItemInSearchProps {
@@ -76,7 +76,7 @@ export default function ItemInSearch(props: ItemInSearchProps) {
             }
             {
               props.categories && <div className="text-sm text-color-text-secondary">
-                {props.categories.join("-")}
+                {generateCategories(props.categories, props.type).join(" - ")}
               </div>
             }
           </div>
