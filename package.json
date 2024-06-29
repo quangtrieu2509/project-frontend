@@ -63,6 +63,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.7",
     "@types/randomcolor": "^0.5.7",
     "@types/react": "^18.2.38",
