@@ -6,7 +6,7 @@ import { getState, setView, setState } from "../../../redux/Auth"
 import { AuthView } from "../../../redux/Auth/types"
 import { getLocalStorage } from "../../../utils/Auth"
 import Dropdown from "../Dropdown"
-import { ItemType } from "antd/es/menu/hooks/useItems"
+import { ItemType } from "antd/es/menu/interface"
 
 interface AuthProps {
   itemsList: ItemType[]
