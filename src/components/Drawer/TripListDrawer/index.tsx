@@ -3,22 +3,25 @@ import { Drawer, Form } from "antd"
 import TripList from "../TripList"
 import NewTripForm from "../../Form/NewTripForm"
 import { useDispatch, useSelector } from "react-redux"
-import { getState, setDrawerTripsList, setTripCreationState, setTripListState } from "../../../redux/Trip"
+import { getState as tripState, setDrawerTripsList, setTripCreationState, setTripListState } from "../../../redux/Trip"
 import { useNavigate } from "react-router-dom"
 import { ROUTES } from "../../../constants"
+import { getState as itemState, setSelectedId } from "../../../redux/Item"
+import { useEffect } from "react"
 
-interface TripListDrawerProps {
-  itemId: string
-}
-
-export default function TripListDrawer(props: TripListDrawerProps) {
+export default function TripListDrawer() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { tripListState, tripCreationState } = useSelector(getState)
+  const { tripListState, tripCreationState } = useSelector(tripState)
+  const { selectedId } = useSelector(itemState)
   const [form] = Form.useForm()
 
+  useEffect(() => {
+    dispatch(setTripListState(selectedId ? true : false))
+  }, [selectedId])
+
   const onTripListClose = () => {
-    dispatch(setTripListState(false))
+    dispatch(setSelectedId(undefined))
   }
   const onTripCreationClose = () => {
     dispatch(setTripCreationState(false))
@@ -67,7 +70,7 @@ export default function TripListDrawer(props: TripListDrawerProps) {
         </div>
       }
     >
-      <TripList itemId={props.itemId}/>
+      <TripList itemId={selectedId ?? ""}/>
       <Drawer
         title="Create a new trip"
         onClose={onTripCreationClose}

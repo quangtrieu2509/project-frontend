@@ -76,7 +76,7 @@ export default function Bookings() {
   const handleCancelBooking = () => {
     if (selected) {
       Modal.confirm({
-        title: 'Are you sure cancel this booking?',
+        title: 'Are you sure to cancel this booking?',
         icon: <ExclamationCircleFilled />,
         okText: 'Yes',
         okType: 'danger',

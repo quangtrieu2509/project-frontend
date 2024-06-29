@@ -3,11 +3,13 @@ import { useEffect, useState } from "react"
 import "./index.style.scss"
 import { useNavigate, useParams } from "react-router-dom"
 import Slider from "react-slick"
-import ItemInTourism from "../../components/Item/ItemInTourism"
-import { apiCaller, locationApi } from "../../api"
+import TourismItem from "../../components/Item/TourismItem"
+import { apiCaller, itemApi, locationApi } from "../../api"
 import { messages } from "../../constants/message"
 import NotFound from "../Static/NotFound"
-import { ROUTES, categoryItems } from "../../constants"
+import { ROUTES, categoryItems, itemTypes } from "../../constants"
+import TripListDrawer from "../../components/Drawer/TripListDrawer"
+import { generateSlickClass } from "../../utils/Utils"
 
 const settings = {
   dots: false,
@@ -15,8 +17,10 @@ const settings = {
   speed: 500,
   slidesToShow: 4,
   slidesToScroll: 3,
-  className: "react-slick-item"
+  swipe: false
 }
+
+const slickLimit = 4
 
 interface Location {
   id: string
@@ -37,11 +41,14 @@ interface Location {
   slug: string
 }
 
+type Item = Record<string, any[]>
+
 export default function Tourism() {
   const navigate = useNavigate()
   const [paraExpanded, setParaExpanded] = useState<boolean>(false)
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const [location, setLocation] = useState<Location>()
+  const [items, setItems] = useState<Item>()
   const { slug } = useParams()
 
   useEffect(() => {
@@ -63,6 +70,21 @@ export default function Tourism() {
     getLocation()
   }, [slug])
 
+  useEffect(() => {
+    const getItemsOfLocation = async (locId: string) => {
+      const res = await apiCaller(itemApi.getItemsOfLocation(locId))
+
+      if (res !== undefined) {
+        console.log(res.data)
+        setItems(res.data)
+      }
+    }
+
+    if (location) {
+      getItemsOfLocation(location.id)
+    }
+  }, [location])
+
   const CategoryButton = (name: string, icon: string, link: string) => (
     <div 
       className="flex items-center justify-center p-4 border border-solid border-color-secondary rounded-md font-medium cursor-pointer hover:bg-color-hover-primary"
@@ -74,18 +96,19 @@ export default function Tourism() {
   )
 
   const generateBCItems = (ancestors: any[]) => {
-    const items: any = ancestors.reverse().map((e) => {
+    const tmp = [...ancestors]
+    const breadcrumbs: any = tmp.reverse().map((e) => {
       return {
         title: e.name,
         href: ROUTES.TOURISM_BASE + e.slug
       }
     })
 
-    items.push({
+    breadcrumbs.push({
       title: location?.name ?? ""
     })
   
-    return items
+    return breadcrumbs
   }
 
   const generateCarouselImg = (images: any[]) => {
@@ -152,54 +175,67 @@ export default function Tourism() {
           </Row>
         </div>
 
-        <div className="mb-10">
+        {items?.[itemTypes.ATTRACTION].length ? <div className="mb-10">
           <h2 className="mb-4">Check-in</h2>
-          <Slider {...settings}>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
+          <Slider {...settings} 
+            className={
+              generateSlickClass(items[itemTypes.ATTRACTION].length, slickLimit)
+            }
+          >
+            {
+              items[itemTypes.ATTRACTION].map(e => (
+                <TourismItem key={e.id} {...e}/>
+              ))
+            }
           </Slider>
-        </div>
+        </div> : <></>}
 
-        <div className="mb-10">
+        {items?.[itemTypes.LODGING].length ? <div className="mb-10">
           <h2 className="mb-4">Stay</h2>
-          <Slider {...settings}>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
+          <Slider {...settings} 
+            className={
+              generateSlickClass(items[itemTypes.LODGING].length, slickLimit)
+            }
+          >
+            {
+              items[itemTypes.LODGING].map(e => (
+                <TourismItem key={e.id} {...e}/>
+              ))
+            }
           </Slider>
-        </div>
+        </div> : <></>}
 
-        <div className="mb-10">
+        {items?.[itemTypes.DINING].length ? <div className="mb-10">
           <h2 className="mb-4">Eat & Drink</h2>
-          <Slider {...settings}>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
+          <Slider {...settings} 
+            className={
+              generateSlickClass(items[itemTypes.DINING].length, slickLimit)
+            }
+          >
+            {
+              items[itemTypes.DINING].map(e => (
+                <TourismItem key={e.id} {...e}/>
+              ))
+            }
           </Slider>
-        </div>
+        </div> : <></>}
 
-        <div className="mb-10">
+        {items?.[itemTypes.ACTIVITY].length ? <div className="mb-10">
           <h2 className="mb-4">Do</h2>
-          <Slider {...settings}>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
-            <ItemInTourism/>
+          <Slider {...settings} 
+            className={
+              generateSlickClass(items[itemTypes.ACTIVITY].length, slickLimit)
+            }
+          >
+            {
+              items[itemTypes.ACTIVITY].map(e => (
+                <TourismItem key={e.id} {...e}/>
+              ))
+            }
           </Slider>
-        </div>
+        </div> : <></>}
       </div>
+      <TripListDrawer/>
     </div>
   )
 }

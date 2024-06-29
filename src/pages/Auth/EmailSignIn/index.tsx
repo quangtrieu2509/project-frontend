@@ -10,6 +10,7 @@ import { setAuthStorage } from "../../../utils/Auth"
 import Header from "../../../components/Auth/Header"
 import { messages } from "../../../constants/message"
 import { setLoaderState } from "../../../redux/Loader"
+import { ROUTES, roles } from "../../../constants"
 
 export default function EmailSignIn() {
   const dispatch = useDispatch()
@@ -44,8 +45,10 @@ export default function EmailSignIn() {
         })
       } else {
         setAuthStorage(res.data)
-        window.location.reload() // fix here
-        // dispatch(setState(false))
+
+        if(res.data.user.role === roles.ADMIN) 
+          window.location.replace(ROUTES.ADMIN)
+        else  window.location.reload()
       }
     }
   }

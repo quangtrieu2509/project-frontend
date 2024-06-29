@@ -213,7 +213,7 @@ export default function TripDetail() {
             />
 
             </div>
-            <div className="h-[85vh] w-[35%] bg-color-background-primary sticky top-20 bottom-12 rounded-lg">
+            <div className="h-[85vh] w-[35%] bg-color-background-primary sticky top-20 bottom-12 rounded-lg mb-6">
               <Map
                 mapboxAccessToken={MAPBOX_API_KEY}
                 initialViewState={viewState}

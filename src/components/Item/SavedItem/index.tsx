@@ -63,7 +63,7 @@ export default function SavedItem(props: SavedItemProps) {
 
   const showDeleteConfirm = () => {
     Modal.confirm({
-      title: 'Are you sure remove this item?',
+      title: 'Are you sure to remove this item?',
       icon: <ExclamationCircleFilled />,
       content: <>
         <span className="font-semibold">{props.item.name}</span> will be removed from your saves.

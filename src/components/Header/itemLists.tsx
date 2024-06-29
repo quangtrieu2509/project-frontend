@@ -75,10 +75,10 @@ export const featureItems = [
       {
         key: "4",
         label: <Label url={ROUTES.HOME} title={pluralItemLabels.ACTIVITY} />,
-      },
+      }
     ],
-    route: "more",
-  },
+    route: "more"
+  }
 ]
 
 export const userItems = {
@@ -115,13 +115,13 @@ export const userItems = {
             window.location.href = "/"
           }}
         />
-      ),
-    },
-  ],
+      )
+    }
+  ]
 }
 
 export const businessUserItems = {
-  name: "User",
+  name: "Business",
   items: [
     {
       key: "1",
@@ -146,7 +146,30 @@ export const businessUserItems = {
             window.location.href = "/"
           }}
         />
-      ),
+      )
+    }
+  ]
+}
+
+export const adminItems = {
+  name: "Admin",
+  items: [
+    {
+      key: "3",
+      label: <Label url={ROUTES.HOME} title="Settings" />,
     },
-  ],
+    {
+      key: "5",
+      label: (
+        <Label
+          title="Sign out"
+          event={() => {
+            console.log("logout")
+            localStorage.removeItem("token")
+            window.location.href = "/"
+          }}
+        />
+      )
+    }
+  ]
 }

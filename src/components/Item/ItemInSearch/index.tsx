@@ -32,6 +32,14 @@ export default function ItemInSearch(props: ItemInSearchProps) {
         navStr = ROUTES.DINING_BASE + props.id
         break
       }
+      case itemTypes.ATTRACTION: {
+        navStr = ROUTES.ATTRACTION_BASE + props.id
+        break
+      }
+      case itemTypes.ACTIVITY: {
+        navStr = ROUTES.ACTIVITY_BASE + props.id
+        break
+      }
       case itemTypes.LODGING: {
         navStr = ROUTES.LODGING_BASE + props.id
         break

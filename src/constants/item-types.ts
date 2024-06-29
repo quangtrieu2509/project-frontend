@@ -16,7 +16,7 @@ export const pluralItemLabels = {
   LOCATION: 'Locations'
 }
 
-const keyTypes = {
+export const keyTypes = {
   ATTRACTION: 'attractions',
   LODGING: 'lodgings',
   DINING: 'dinings',

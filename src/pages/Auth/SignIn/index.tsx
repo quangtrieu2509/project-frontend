@@ -5,7 +5,7 @@ import "./index.style.scss"
 import "../index.style.scss"
 import { apiCaller } from "../../../api"
 import { authApi } from "../../../api"
-import { IMAGE_PATH } from "../../../constants"
+import { IMAGE_PATH, ROUTES, roles } from "../../../constants"
 import { setView, setUser, setGoogleToken } from "../../../redux/Auth"
 import { messages } from "../../../constants/message"
 import { APIResponse } from "../../../types/response"
@@ -34,8 +34,10 @@ export default function SignIn() {
           setAuthStorage(res.data)
         } else {
           setAuthStorage(res.data)
-          window.location.reload() // fix here
-          //dispatch(setState(false))
+          
+          if(res.data.user.role === roles.ADMIN) 
+            window.location.replace(ROUTES.ADMIN)
+          else  window.location.reload()
         }
       }
     },

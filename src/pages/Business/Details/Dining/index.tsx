@@ -77,7 +77,7 @@ export default function Dining(props: DiningProps) {
     }
     rest.hours = hours
     Modal.confirm({
-      title: 'Are you sure update this item?',
+      title: 'Are you sure to update this item?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
@@ -189,7 +189,7 @@ export default function Dining(props: DiningProps) {
         </Form.Item>
         <Form.Item
           name="isReservable"
-          label="Is Reservable?"
+          label="Reservable?"
           rules={[{ required: true, message: 'This field cannot be empty' }]}
         >
           <Select

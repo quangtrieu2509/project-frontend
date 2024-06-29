@@ -36,7 +36,7 @@ export default function Booking() {
       
       if (res !== undefined) {
         console.log(res.data)
-        setItem(res.data)
+        res.data.isReservable ? setItem(res.data) : setHas404Error(true)
       }
     }
 

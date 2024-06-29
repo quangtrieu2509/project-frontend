@@ -4,6 +4,9 @@ import { apiCaller, itemApi } from "../../../api"
 import { capitalize } from "../../../utils/Utils"
 import { itemTypes } from "../../../constants"
 import Dining from "./Dining"
+import Lodging from "./Lodging"
+import Attraction from "./Attraction"
+import Activity from "./Activity"
 
 interface DetailsItem {
   id: string
@@ -54,13 +57,13 @@ export default function Details() {
   const generateDetails = (detailsItem: any) => {
     switch (detailsItem.type) {
       case itemTypes.ATTRACTION: 
-        return <></>
+        return <Attraction {...detailsItem}/>
       case itemTypes.LODGING:
-        return <></>
+        return <Lodging {...detailsItem}/>
       case itemTypes.DINING:
         return <Dining {...detailsItem}/>
       case itemTypes.ACTIVITY:
-        return <></>
+        return <Activity {...detailsItem}/>
       default: 
         return <></>
     }

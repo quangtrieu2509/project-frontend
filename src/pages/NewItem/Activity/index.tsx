@@ -1,13 +1,15 @@
 import { Form, FormInstance, Input, InputNumber, Select } from "antd"
-import { itemTypes } from "../../../constants"
+import { Duration, activityTypes, defaultDuration, durationUnits, itemTypes } from "../../../constants"
 import { useState } from "react"
-import HoursConfig, { Hour } from "../../../components/Item/HoursConfig"
+import TextArea from "antd/es/input/TextArea"
 import { onSubmit } from ".."
 
 const formItemLayout = {
   labelCol: { span: 5 },
   wrapperCol: { span: 30 }
 }
+
+const textAreaSz = { minRows: 2, maxRows: 6 }
 
 interface ActivityProps {
   overviewForm: FormInstance
@@ -16,8 +18,9 @@ interface ActivityProps {
 
 export default function Activity(props: ActivityProps) {
   const [form] = Form.useForm()
-  const [hours, setHours] = useState<Hour[]>(Array(7).fill(null))
+  const [duration, setDuration] = useState<Duration>(defaultDuration)
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
+  const [ages, setAges] = useState<number[]>([0, 0])
 
   const handleGoBack = () => {
     props.onBack(1)
@@ -25,27 +28,23 @@ export default function Activity(props: ActivityProps) {
 
   const onFinish = (values: any) => {
     const { 
-      features, meals, priceLevel, 
       phoneNumber, email, website, ...rest
     } = values
-    rest.features = [...features, ...meals]
-    rest.price = {
-      level: priceLevel,
-      range: priceRange
-    }
+    rest.ticketPrice = priceRange
+    duration.value && (rest.duration = duration)
+    rest.ages = ages
     rest.contacts = {
       phoneNumber, email, website
     }
-    rest.hours = hours
     rest.type = itemTypes.ACTIVITY
+    // console.log(rest)
     onSubmit(props.overviewForm.getFieldsValue(), rest)
   }
 
   return (
-    <div className="flex">
-      <Form {...formItemLayout} form={form} 
-        variant="filled" className="w-[36rem] mr-14 poppins-font"
-        onFinish={onFinish}
+    <div className="grid grid-cols-2 gap-x-12">
+      <Form  className="w-full poppins-font" {...formItemLayout}
+        variant="filled" form={form} onFinish={onFinish}
       >
         <div className=" text-color-text-primary font-semibold text-lg mb-2">
           Basic Info
@@ -57,59 +56,15 @@ export default function Activity(props: ActivityProps) {
         >
           <Select
             mode="multiple"
-            placeholder="Select"
-            options={Object.entries([]).map(([key, value]) => {
+            placeholder="Select no more than 5"
+            maxCount={5}
+            options={Object.entries(activityTypes).map(([key, value]) => {
               return {
                 value: key, label: value
               }
             })}
           />
         </Form.Item>
-        {/* <Form.Item
-          name="meals"
-          label="Meals"
-          rules={[{ required: true, message: 'Select at least one' }]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Select"
-            options={Object.entries(diningMeals).map(([key, value]) => {
-              return {
-                value: key, label: value
-              }
-            })}
-          />
-        </Form.Item> */}
-        {/* <Form.Item
-          name="features"
-          label="Features"
-          rules={[{ required: true, message: 'Select at least one' }]}
-        >
-          <Select
-            mode="multiple"
-            placeholder="Select"
-            options={Object.entries(diningFeatures).map(([key, value]) => {
-              return {
-                value: key, label: value
-              }
-            })}
-          />
-        </Form.Item> */}
-        {/* <Form.Item
-          name="priceLevel"
-          label="Price Level"
-          rules={[{ required: true, message: 'This field cannot be empty' }]}
-        >
-          <Select
-            placeholder="Select"
-            style={{ width: "10rem" }}
-            options={Object.entries(diningPrices).map(([key, value]) => {
-              return {
-                value: key, label: `${key} ${value}`
-              }
-            })}
-          />
-        </Form.Item> */}
         <Form.Item
           label="Price Range"
         >
@@ -125,6 +80,47 @@ export default function Activity(props: ActivityProps) {
             onChange={
               (e) => setPriceRange([priceRange[0], e ?? priceRange[0]])
             } value={priceRange[1]}
+          />
+          <span className=" text-color-text-tertiary ml-3">(optional)</span>
+        </Form.Item>
+        <Form.Item
+          label="Duration"
+        >
+          <InputNumber
+            min={1} max={100} placeholder="0" className="w-20"
+            onChange={
+              (e) => setDuration({ ...duration, value: e ?? undefined })
+            } value={duration.value} 
+          />
+          <span className="mx-1"/>
+          <Select
+            placeholder="Select"
+            style={{ width: "7rem" }}
+            value={duration.unit}
+            onChange={e => setDuration({ ...duration, unit: e })}
+            options={Object.entries(durationUnits).map(([key, value]) => {
+              return {
+                value: key, label: value
+              }
+            })}
+          />
+          <span className=" text-color-text-tertiary ml-3">(optional)</span>
+        </Form.Item>
+        <Form.Item
+          label="Ages"
+        >
+          <InputNumber
+            min={0} max={100} placeholder="Min" addonAfter="y/o" className="w-[6.5rem]"
+            onChange={
+              (e) => setAges([e ?? 0, ages[1]])
+            } value={ages[0]} 
+          />
+          <span className="mx-1.5 text-lg">-</span>
+          <InputNumber 
+            min={0} max={100} placeholder="Max" addonAfter="y/o" className="w-[6.5rem]"
+            onChange={
+              (e) => setAges([ages[0], e ?? ages[0]])
+            } value={ages[1]}
           />
           <span className=" text-color-text-tertiary ml-3">(optional)</span>
         </Form.Item>
@@ -177,9 +173,34 @@ export default function Activity(props: ActivityProps) {
           </div>
         </Form.Item>
       </Form>
-      <div className="w-full max-w-[24rem]">
-        <HoursConfig hours={hours} onChange={(e) => setHours(e)}/>
-      </div>
+      <Form className="w-full poppins-font" {...formItemLayout}
+        variant="filled" form={form} onFinish={onFinish}
+      >
+        <div className=" text-color-text-primary font-semibold text-lg mb-2">
+          More Info
+        </div>
+        <Form.Item 
+          label="Included" name="included"
+        >
+          <TextArea placeholder="Enter things included (optional)"
+            autoSize={textAreaSz}
+          />
+        </Form.Item>
+        <Form.Item 
+          label="Excluded" name="excluded"
+        >
+          <TextArea placeholder="Enter things excluded (optional)"
+            autoSize={textAreaSz}
+          />
+        </Form.Item>
+        <Form.Item 
+          label="REQs" name="requirements"
+        >
+          <TextArea placeholder="Enter requirements (optional)"
+            autoSize={textAreaSz}
+          />
+        </Form.Item>
+      </Form>
     </div>
   )
 }

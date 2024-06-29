@@ -41,7 +41,7 @@ export default function Lodging(props: LodgingProps) {
   return (
     <div className="flex">
       <Form {...formItemLayout} form={form} 
-        variant="filled" className="w-[36rem] mr-14 poppins-font"
+        variant="filled" className="w-[38rem] mr-14 poppins-font"
         onFinish={onFinish}
       >
         <div className=" text-color-text-primary font-semibold text-lg mb-2">
@@ -135,7 +135,7 @@ export default function Lodging(props: LodgingProps) {
         </Form.Item>
         <Form.Item
           name="isReservable"
-          label="Is Reservable?"
+          label="Reservable?"
           rules={[{ required: true, message: 'This field cannot be empty' }]}
         >
           <Select

@@ -11,6 +11,7 @@ export enum ENDPOINTS {
   SAVED_TRIP = "/trip/saved",
   LOCATION = "/location",
   LOCATION_SEARCH = "/location/search",
+  LOCATION_LIST = "/location/list",
   ITEM = "/item",
   ITEM_SEARCH = "/item/search",
   REVIEW = "/review",

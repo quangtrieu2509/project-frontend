@@ -8,6 +8,8 @@ import { businessSlice } from "./Business"
 import { notiSlice } from "./Noti"
 import { chatSlice } from "./Chat"
 import { mapSlice } from "./Map"
+import { adminSlice } from "./Admin"
+import { itemSlice } from "./Item"
 
 
 export default configureStore({
@@ -20,6 +22,8 @@ export default configureStore({
     businessReducer: businessSlice.reducer,
     notiReducer: notiSlice.reducer,
     chatReducer: chatSlice.reducer,
-    mapReducer: mapSlice.reducer
+    mapReducer: mapSlice.reducer,
+    adminReducer: adminSlice.reducer,
+    itemReducer: itemSlice.reducer
   }
 })

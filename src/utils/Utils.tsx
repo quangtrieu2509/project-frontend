@@ -1,5 +1,5 @@
 import { LabeledValue } from "antd/es/select"
-import { diningTypes, iconTypes, itemTypes, lodgingTypes } from "../constants"
+import { activityTypes, attractionTypes, diningTypes, iconTypes, itemTypes, lodgingTypes } from "../constants"
 import { days } from "../constants/days"
 
 export const getMonth = (time: any, short: boolean = false): string => {
@@ -68,8 +68,7 @@ export const generateLast12Months = (): LabeledValue[] => {
 
 export const generateAddress = (ancestors: any[], address: string[]) => {
   const tmp = [...address]
-  const detail = tmp.reverse().join(", ")
-  return `${detail}, ${ancestors.map(item => item.name).slice(0, 2).join(", ")}`
+  return [...tmp.reverse(), ...ancestors.map(item => item.name).slice(0, 2)].join(", ")
 }
 
 export const capitalize = (s: string) => s[0].toUpperCase() + s.slice(1)
@@ -164,7 +163,17 @@ export const generateCategories = (list: string[], type: string) => {
   switch(type) {
     case itemTypes.DINING: return filterFields(list, diningTypes, true)
     case itemTypes.LODGING: return filterFields(list, lodgingTypes, true)
-    // more config
+    case itemTypes.ATTRACTION: return filterFields(list, attractionTypes, true)
+    case itemTypes.ACTIVITY: return filterFields(list, activityTypes, true)
     default: return []
   }
+}
+
+export const isEqual = (a: any[], b: any[]) => {
+    return a.join() === b.join();
+}
+
+export const generateSlickClass = (total: number, limit: number) => {
+  if (total < limit) return "react-slick-item format-slick-track"
+  else return "react-slick-item "
 }

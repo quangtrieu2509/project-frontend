@@ -10,9 +10,14 @@ import TripsHome from "../pages/Trips"
 import TripDetail from "../pages/Trips/TripDetail"
 import Tourism from "../pages/Tourism"
 import Search from "../pages/Search"
-import Dinings from "../pages/Dinings"
-import DiningDetail from "../pages/Dinings/Detail"
-import LodgingDetail from "../pages/Lodgings/Detail"
+import Dinings from "../pages/Items/Dinings"
+import Lodgings from "../pages/Items/Lodgings"
+import Attractions from "../pages/Items/Attractions"
+import Activities from "../pages/Items/Activities"
+import DiningDetail from "../pages/Items/Dinings/Detail"
+import LodgingDetail from "../pages/Items/Lodgings/Detail"
+import AttractionDetail from "../pages/Items/Attractions/Detail"
+import ActivityDetail from "../pages/Items/Activities/Detail"
 import Review from "../pages/Review"
 import { Spin } from "antd"
 import { useSelector } from "react-redux"
@@ -22,6 +27,7 @@ import Business from "../pages/Business"
 import Booking from "../pages/Booking"
 import Bookings from "../pages/Bookings"
 import NewItem from "../pages/NewItem"
+import Admin from "../pages/Admin"
 
 export type RouteType = {
   path: ROUTES | string
@@ -32,6 +38,12 @@ export type RouteType = {
 }
 
 const routes: RouteType[] = [
+  {
+    path: ROUTES.ADMIN,
+    title: "Admin",
+    element: Admin,
+    isPrivate: true
+  },
   {
     path: ROUTES.HOME,
     title: "Trippie",
@@ -68,6 +80,21 @@ const routes: RouteType[] = [
     element: Dinings
   },
   {
+    path: ROUTES.LODGINGS,
+    title: "Lodgings",
+    element: Lodgings
+  },
+  {
+    path: ROUTES.ATTRACTIONS,
+    title: "Attractions",
+    element: Attractions
+  },
+  {
+    path: ROUTES.ACTIVITIES,
+    title: "Activities",
+    element: Activities
+  },
+  {
     path: ROUTES.DINING_DETAIL,
     title: "Dining Detail",
     element: DiningDetail
@@ -76,6 +103,16 @@ const routes: RouteType[] = [
     path: ROUTES.LODGING_DETAIL,
     title: "Lodging Detail",
     element: LodgingDetail
+  },
+  {
+    path: ROUTES.ATTRACTION_DETAIL,
+    title: "Attraction Detail",
+    element: AttractionDetail
+  },
+  {
+    path: ROUTES.ACTIVITY_DETAIL,
+    title: "Activity Detail",
+    element: ActivityDetail
   },
   {
     path: ROUTES.REVIEW,

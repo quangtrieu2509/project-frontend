@@ -19,7 +19,7 @@ export default function BookingCard(props: BookingCardProps) {
 
   const handleUpdateBooking = (action: string, state: string) => {
     Modal.confirm({
-      title: `Are you sure ${action} this booking?`,
+      title: `Are you sure to ${action} this booking?`,
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',

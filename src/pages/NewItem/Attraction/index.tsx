@@ -3,6 +3,7 @@ import { itemTypes } from "../../../constants"
 import { useState } from "react"
 import HoursConfig, { Hour } from "../../../components/Item/HoursConfig"
 import { onSubmit } from ".."
+import { attractionTypes } from "../../../constants"
 
 const formItemLayout = {
   labelCol: { span: 5 },
@@ -33,6 +34,7 @@ export default function Attraction(props: AttractionProps) {
     }
     rest.hours = hours
     rest.type = itemTypes.ATTRACTION
+    // console.log(rest)
     onSubmit(props.overviewForm.getFieldsValue(), rest)
   }
 
@@ -52,8 +54,9 @@ export default function Attraction(props: AttractionProps) {
         >
           <Select
             mode="multiple"
-            placeholder="Select"
-            options={Object.entries([]).map(([key, value]) => {
+            placeholder="Select no more than 5"
+            maxCount={5}
+            options={Object.entries(attractionTypes).map(([key, value]) => {
               return {
                 value: key, label: value
               }
@@ -83,9 +86,9 @@ export default function Attraction(props: AttractionProps) {
         </div>
         <Form.Item 
           label="Phone Number" name="phoneNumber"
-          rules={[{ required: true, message: 'This field cannot be empty' }]}
+          // rules={[{ required: true, message: 'This field cannot be empty' }]}
         >
-          <Input placeholder="Enter a phone number"/>
+          <Input placeholder="Enter a phone number (optional)"/>
         </Form.Item>
         <Form.Item 
           label="Email" name="email"

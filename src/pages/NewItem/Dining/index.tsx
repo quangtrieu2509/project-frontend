@@ -130,7 +130,7 @@ export default function Dining(props: DiningProps) {
         </Form.Item>
         <Form.Item
           name="isReservable"
-          label="Is Reservable?"
+          label="Reservable?"
           rules={[{ required: true, message: 'This field cannot be empty' }]}
         >
           <Select

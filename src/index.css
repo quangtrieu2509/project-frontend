@@ -327,6 +327,7 @@ code {
   padding-top: 5rem/* 80px */;
   font-family: 'Poppins', sans-serif;
   color: var(--color-text-primary);
+  min-height: 70vh;
 
   .tp-wrapper {
     width: 72rem/* 1152px */;
@@ -559,4 +560,24 @@ label{
 /* Typo */
 .ant-typography {
   margin-bottom: 0 !important;
+}
+
+/* Slick */
+.format-slick-track {
+  .slick-track {
+    transform: translate3d(0, 0, 0) !important;
+  }
+}
+.react-slick-item {
+  .slick-slide > div {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+  }
+  .slick-list {
+    transform: translate3d(0, 0, 0);
+
+    .slick-track {
+      margin-left: 0;
+    }
+  }
 }

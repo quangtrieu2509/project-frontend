@@ -1,9 +1,9 @@
-import { Form, GetProp, Image, Input, Modal, Select, Tabs, Upload, UploadFile, UploadProps } from "antd";
+import { Form, Input, Modal, Select, Tabs, UploadFile, UploadProps } from "antd";
 import "./index.style.scss"
 import LocationSearch from "../../components/Trip/LocationSearch";
 import { useState } from "react";
 import { useForm } from "antd/es/form/Form";
-import { ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { ROUTES, categoryItems, itemTypes } from "../../constants";
 import Dining from "./Dining";
 import Attraction from "./Attraction";
@@ -18,27 +18,12 @@ import { MAPBOX_API_KEY } from "../../configs";
 import { defaultMap } from "../../redux/Map";
 import { Pin } from "../../utils/Map";
 import GeocoderControl from "../../components/GeocoderControl";
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = (error) => reject(error)
-  })
+import UploadFiles from "../../components/UploadFiles";
 
 const formItemLayout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 30 }
 }
-const uploadButton = (
-  <div className="bg-transparent border-0 cursor-pointer">
-    <PlusOutlined />
-    <div className="mt-1 poppins-font text-sm">Upload</div>
-  </div>
-)
 
 const steps = {
   OVERVIEW: 1,
@@ -59,7 +44,7 @@ export const onSubmit = (overviews: any, details: any) => {
   rest.address = extraAddress ? [address, extraAddress ] : [address]
 
   Modal.confirm({
-    title: 'Are you sure add this item?',
+    title: 'Are you sure to add this item?',
     icon: <ExclamationCircleFilled />,
     okText: 'Yes',
     okType: 'danger',
@@ -96,21 +81,10 @@ export const onSubmit = (overviews: any, details: any) => {
 
 export default function NewItem() {
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [previewOpen, setPreviewOpen] = useState(false)
-  const [previewImage, setPreviewImage] = useState('')
   const [activeTab, setActiveTab] = useState<number>(steps.OVERVIEW)
   const [coors, setCoors] = 
     useState<{longitude: number, latitude: number}>(defaultMap)
   const [form] = useForm()
-
-  const handleFilePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType)
-    }
-
-    setPreviewImage(file.url || (file.preview as string))
-    setPreviewOpen(true)
-  }
 
   const handleFilesChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     form.setFieldValue('images', newFileList.map(e => e.originFileObj ? e.originFileObj : e))
@@ -238,23 +212,20 @@ export default function NewItem() {
           </Form.Item>
           <Form.Item
             name="images" label="Images"
+            rules={[
+              { required: true, message: 'This field cannot be empty' },
+            ]}
           >
-            <Upload
-              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-              listType="picture-card" accept="image/png, image/jpeg"
-              fileList={fileList}
-              beforeUpload={(_) => {
-                return false
-              }}
-              onPreview={handleFilePreview}
-              onChange={handleFilesChange}
-            >
-              {fileList.length >= 3 ? null : uploadButton}
-            </Upload>
+            <UploadFiles fileList={fileList} filesMax={3}
+              handleFilesChange={handleFilesChange}
+            />
           </Form.Item>
           <Form.Item
             label=" "
             name="coordinates"
+            rules={[
+              { required: true, message: '' },
+            ]}
           >
             <div className="flex">
               <div 
@@ -316,15 +287,6 @@ export default function NewItem() {
           activeKey={activeTab.toString()}
         />
       </div>
-      <Image
-        wrapperStyle={{ display: 'none' }}
-        preview={{
-          visible: previewOpen,
-          onVisibleChange: (visible) => setPreviewOpen(visible),
-          afterOpenChange: (visible) => !visible && setPreviewImage(''),
-        }}
-        src={previewImage}
-      />
     </div>
   )
 }

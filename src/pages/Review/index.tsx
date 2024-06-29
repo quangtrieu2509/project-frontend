@@ -1,7 +1,6 @@
-import { Checkbox, Form, GetProp, Image, Input, Rate, Select, Upload, UploadFile, UploadProps } from "antd"
+import { Checkbox, Form, Input, Rate, Select, UploadFile, UploadProps } from "antd"
 import { useEffect, useState } from "react"
 import "./index.style.scss"
-import { PlusOutlined } from "@ant-design/icons"
 import { generateLast12Months } from "../../utils/Utils"
 import NotFound from "../Static/NotFound"
 import { useNavigate, useParams } from "react-router-dom"
@@ -12,21 +11,12 @@ import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../redux/Loader"
 import { ROUTES, rateLevelArr, rateLevelObj } from "../../constants"
 import CardItem, { CardItemProps } from "../../components/Item/CardItem"
+import UploadFiles from "../../components/UploadFiles"
 
 const agreement = "I certify that this review is based on my own experience" + 
   " and is my genuine opinion of this place, and that I have no personal or" + 
   " business relationship with this establishment, and have not been offered" + 
   " any incentive or payment originating from the establishment to write this review."
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = (error) => reject(error)
-  })
 
 const monthsList = generateLast12Months()
 
@@ -43,8 +33,6 @@ export default function Review() {
   const dispatch = useDispatch()
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const [rateValue, setRateValue] = useState<number>(5)
-  const [previewOpen, setPreviewOpen] = useState(false)
-  const [previewImage, setPreviewImage] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [item, setItem] = useState<CardItemProps>()
   const [form] = Form.useForm()
@@ -70,16 +58,6 @@ export default function Review() {
     getLocation()
 
   }, [id])
-
-
-  const handleFilePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType)
-    }
-
-    setPreviewImage(file.url || (file.preview as string))
-    setPreviewOpen(true)
-  }
 
   const handleFilesChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     form.setFieldValue('images', newFileList.map(e => e.originFileObj))
@@ -113,14 +91,7 @@ export default function Review() {
         }
       }
     }
-  } 
-
-  const uploadButton = (
-    <div className="bg-transparent border-0 cursor-pointer">
-      <PlusOutlined />
-      <div className="mt-1 poppins-font text-sm">Upload</div>
-    </div>
-  )
+  }
 
   return (
     has404Error 
@@ -197,19 +168,9 @@ export default function Review() {
               label="Add some photos"
               initialValue={[]}
             >
-              <Upload
-                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-                listType="picture-card"
-                accept="image/png, image/jpeg"
-                fileList={fileList}
-                beforeUpload={(file) => {
-                  return false
-                }}
-                onPreview={handleFilePreview}
-                onChange={handleFilesChange}
-              >
-                {fileList.length >= 5 ? null : uploadButton}
-              </Upload>
+              <UploadFiles fileList={fileList} filesMax={5}
+                handleFilesChange={handleFilesChange} 
+              />
             </Form.Item>
             <Form.Item
               name="agreement"
@@ -240,15 +201,6 @@ export default function Review() {
           </Form>
         </div>
       </div>
-      <Image
-        wrapperStyle={{ display: 'none' }}
-        preview={{
-          visible: previewOpen,
-          onVisibleChange: (visible) => setPreviewOpen(visible),
-          afterOpenChange: (visible) => !visible && setPreviewImage(''),
-        }}
-        src={previewImage}
-      />
     </div>
   )
 }

@@ -1,8 +1,8 @@
-import { Form, GetProp, Image, Input, Modal, Upload, UploadFile, UploadProps } from "antd"
+import { Form, Input, Modal, UploadFile, UploadProps } from "antd"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import LocationSearch from "../../../components/Trip/LocationSearch"
-import { ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons"
+import { ExclamationCircleFilled } from "@ant-design/icons"
 import { apiCaller, itemApi, uploadApi } from "../../../api"
 import { useForm } from "antd/es/form/Form"
 import { compareFileChanges, locationToAncestors } from "../../../utils/Utils"
@@ -12,16 +12,8 @@ import { Map, Marker, MarkerDragEvent, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../configs"
 import GeocoderControl from "../../../components/GeocoderControl"
 import { Pin } from "../../../utils/Map"
-
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
-const getBase64 = (file: FileType): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = (error) => reject(error)
-  })
+import UploadFiles from "../../../components/UploadFiles"
+import { defaultMap } from "../../../redux/Map"
 
 interface OverviewItem {
   id: string
@@ -36,12 +28,10 @@ interface OverviewItem {
 
 export default function Overview() {
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [previewOpen, setPreviewOpen] = useState(false)
-  const [previewImage, setPreviewImage] = useState('')
   const [item, setItem] = useState<OverviewItem>()
   const [removedFiles, setRemovedFiles] = useState<any[]>([])
   const [coors, setCoors] = useState<{longitude: number, latitude: number}>()
-  const [viewState, setViewState] = useState<any>()
+  const [viewState, setViewState] = useState<any>(defaultMap)
   const dispatch = useDispatch()
   const params = useParams()
   const [form] = useForm()
@@ -87,15 +77,6 @@ export default function Overview() {
         zoom: 12
       })
     }
-  }
-
-  const handleFilePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType)
-    }
-
-    setPreviewImage(file.url || (file.preview as string))
-    setPreviewOpen(true)
   }
 
   const handleFilesChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -148,7 +129,7 @@ export default function Overview() {
     const files = compareFileChanges(images)
     console.log(rest)
     Modal.confirm({
-      title: 'Are you sure update this item?',
+      title: 'Are you sure to update this item?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
@@ -188,12 +169,6 @@ export default function Overview() {
     labelCol: { span: 5 },
     wrapperCol: { span: 30 }
   }
-  const uploadButton = (
-    <div className="bg-transparent border-0 cursor-pointer">
-      <PlusOutlined />
-      <div className="mt-1 poppins-font text-sm">Upload</div>
-    </div>
-  )
   return (
     <div className="business-overview">
       <h2 className="mt-0">Overview</h2>
@@ -245,23 +220,20 @@ export default function Overview() {
           </Form.Item>
           <Form.Item
             name="images" label="Images"
+            rules={[
+              { required: true, message: 'This field cannot be empty' }
+            ]}
           >
-            <Upload
-              action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
-              listType="picture-card" accept="image/png, image/jpeg"
-              fileList={fileList}
-              beforeUpload={(_) => {
-                return false
-              }}
-              onRemove={handleOnRemove}
-              onPreview={handleFilePreview}
-              onChange={handleFilesChange}
-            >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
+            <UploadFiles fileList={fileList} filesMax={8}
+              handleFilesChange={handleFilesChange} 
+              handleOnRemove={handleOnRemove}
+            />
           </Form.Item>
           <Form.Item
             label=" " name="coordinates"
+            rules={[
+              { required: true, message: '' }
+            ]}
           >
             <div className="flex">
               <div className="primary-button mr-5" 
@@ -302,16 +274,6 @@ export default function Overview() {
           </div>
         </div>
       </div>}
-      
-      <Image
-        wrapperStyle={{ display: 'none' }}
-        preview={{
-          visible: previewOpen,
-          onVisibleChange: (visible) => setPreviewOpen(visible),
-          afterOpenChange: (visible) => !visible && setPreviewImage(''),
-        }}
-        src={previewImage}
-      />
     </div>
   )
 }

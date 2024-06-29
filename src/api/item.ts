@@ -5,7 +5,7 @@ import type { AxiosResponse } from "axios"
 export const itemApi = {
   getItemForReview:
     (id: string) => (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,name,ancestors,address,images,type`)
+      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,name,ancestors,address,images,type,isReservable`)
     },
   searchItems:
     (query: string, filter: string) => (): Promise<AxiosResponse<any, any>> => {
@@ -33,6 +33,20 @@ export const itemApi = {
     },
   getDetailsItem:
     (id: string) => (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,type,categories,features,price,contacts,hours,isReservable`)
+      return axiosClient.get(ENDPOINTS.ITEM + `/${id}`)
+    },
+  getItemsOfLocation:
+    (locId: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.ITEM + `/location/${locId}`)
+    },
+  getBrowsingItems:
+    (locId: string, type: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.ITEM + `/browsing/${locId}?type=${type}`)
+    },
+  getQueriedItems:
+    (locId: string, type: string, data: object) => 
+      (): Promise<AxiosResponse<any, any>> => {
+        console.log(data)
+      return axiosClient.post(ENDPOINTS.ITEM + `/location/${locId}/query?type=${type}`, data)
     },
 }
