@@ -3,30 +3,10 @@ import "./index.style.scss"
 import { setIsAtHome } from "../../redux/Header"
 import { useEffect, useState } from "react"
 import { ArrowRightOutlined } from "@ant-design/icons"
-import Map, { type FillLayer, GeolocateControl, NavigationControl, Layer, Marker, type CircleLayer, Source } from 'react-map-gl'
-import { MAPBOX_API_KEY } from "../../configs"
-import { type FeatureCollection } from "geojson"
-import GeocoderControl from "../../components/GeocoderControl"
 import { IMAGE_PATH, ROUTES } from "../../constants"
 import { Tabs } from "antd"
 import { categoryItems, getCatPhrases } from "./itemLists"
 import { useNavigate } from "react-router-dom"
-
-const geojson: FeatureCollection = {
-  type: 'FeatureCollection',
-  features: [
-    { type: 'Feature',"properties": {}, geometry: { type: 'Point', coordinates: [-122.4, 37.8] } }
-  ]
-};
-
-const layerStyle: CircleLayer = {
-  id: 'point',
-  type: 'circle',
-  paint: {
-    'circle-radius': 10,
-    'circle-color': 'red'
-  }
-};
 
 export default function Home() {
   const dispatch = useDispatch()
@@ -41,17 +21,6 @@ export default function Home() {
       dispatch(setIsAtHome(false))
     }
   }, [dispatch])
-
-  const parkLayer: FillLayer = {
-    id: 'landuse_park',
-    type: 'fill',
-    source: 'mapbox',
-    'source-layer': 'landuse',
-    filter: ['==', 'class', 'park'],
-    paint: {
-      'fill-color': '#4E3FC8'
-    }
-  };
 
   const handleRecommend = () => {
     alert("handle recommend")
@@ -119,34 +88,25 @@ export default function Home() {
             </span>
         </div>
 
-        <Map
-          mapboxAccessToken={MAPBOX_API_KEY}
-          initialViewState={{
-            longitude: 105.853333,
-            latitude: 21.028333,
-            zoom: 8
-          }}
-          style={{ width: "100%", height: "600px",  }}
-          mapStyle="mapbox://styles/mapbox/streets-v9"
-          attributionControl={false}
-          // interactive={false}
-          
-        > 
-        
-          <NavigationControl position="bottom-right"/>
-          <GeolocateControl
-            positionOptions={{ enableHighAccuracy: true }}
-            trackUserLocation={true}
-            position="bottom-right"
+        <div className="relative w-full h-[36rem] mb-20">
+          <img alt="#" src={IMAGE_PATH.HOME} 
+            className="image w-full h-full object-cover object-bottom rounded-lg" 
           />
-          {/* <Layer {...parkLayer} /> */}
-          <Marker longitude={105} latitude={21} style={{ cursor: "pointer" }} onClick={(evt) => console.log(evt)} />
-          {/* <Source id="my-data" type="geojson" data={geojson}>
-            <Layer {...layerStyle} />
-          </Source> */}
-          {/* <GeocoderControl mapboxAccessToken={MAPBOX_API_KEY} position="top-left" /> */}
-              
-        </Map>
+          <div className="absolute bottom-0 left-0 pb-16 px-10">
+            <div className="font-bold text-[5rem] leading-none mb-4 text-amber-400">
+              Explore
+            </div>
+            <div className="font-bold text-[3.5rem] leading-none mb-4 text-white">
+              the world
+            </div>
+            <div className="primary-button w-fit"
+              style={{ borderRadius: "99px" }}
+              onClick={() => navigate(ROUTES.TRIPS_HOME)}
+            >
+              Plan your trip
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

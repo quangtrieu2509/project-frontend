@@ -1,23 +1,24 @@
-import { Collapse, CollapseProps, Drawer, Rate } from "antd"
+import { Collapse, CollapseProps, Drawer, Modal, Rate } from "antd"
 import './index.style.scss'
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { apiCaller, tripApi } from "../../../api";
 import { separateItemsByDay } from "../../../utils/Trip";
-import { PlusOutlined } from "@ant-design/icons";
+import { ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
 import SavesList from "../../Drawer/SavesList";
-import { SavedItemProps } from "../../Item/SavedItem";
+import { SavedItemProps as SavedItem } from "../../Item/SavedItem";
 import { useDispatch, useSelector } from "react-redux";
-import { getState, setEditState, setItineraryList } from "../../../redux/Trip";
+import { cancelRemovedList, getState, removeItemsFromIList, setEditMode, setEditState, setItineraryList, updateRemovedList } from "../../../redux/Trip";
 import { generateCategories, generateIconType } from "../../../utils/Utils";
 import ItineraryItemDetail from "../../Drawer/ItineraryItemDetail";
 import { setPopupContent } from "../../../redux/Map";
 
 interface ItineraryTabProps {
   tripLength: number
+  isOwner: boolean
 }
 
-export interface ItineraryItem extends SavedItemProps {
+export interface ItineraryItem extends SavedItem {
   id: string
   savedItemId: string
   tripId: string
@@ -34,6 +35,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
   const dispatch = useDispatch()
   const itineraryList = useSelector(getState)
                           .itineraryList as Array<Array<ItineraryItem>>
+  const { savesList, editMode, removedList } = useSelector(getState)
   const [savesListState, setSavesListState] = useState<boolean>(false)
   const [itemDetailState, setItemDetailState] = useState<boolean>(false)
   const [selectedDay, setSelectedDay] = useState<number>(1)
@@ -48,7 +50,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
       const res = await apiCaller(tripApi.getItineraryItems(params.id ?? ""))
 
       if (res !== undefined) {
-        console.log(separateItemsByDay(res.data, props.tripLength))
+        // console.log(separateItemsByDay(res.data, props.tripLength))
         dispatch(
           setItineraryList(separateItemsByDay(res.data, props.tripLength))
         )
@@ -73,6 +75,48 @@ export default function ItineraryTab(props: ItineraryTabProps) {
     setItemDetailState(false)
   }
 
+  const handleSaveEdit = () => {
+    Modal.confirm({
+      title: `Are you sure to save the changes?`,
+      icon: <ExclamationCircleFilled />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk () {
+        const handleUpdate = () => {
+          apiCaller(
+            tripApi.removeItineraryItems(params.id ?? "", Array.from(removedList))
+          ).then((res) => {
+            if (res !== undefined) {
+              dispatch(removeItemsFromIList(removedList))
+              alert("Update successfully")
+            }
+          }).catch(_err => {
+            alert("Something went wrong. Try again.")
+            dispatch(cancelRemovedList())
+          })    
+          dispatch(setEditMode(false))
+        }
+        
+        handleUpdate()
+      }
+    })
+  }
+
+  const handleCancelEdit = () => {
+    Modal.confirm({
+      title: `Are you sure to cancel the changes?`,
+      icon: <ExclamationCircleFilled />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk () {
+        dispatch(cancelRemovedList())
+        dispatch(setEditMode(false))
+      }
+    })
+  }
+
   const addButton = (key: number) => (
     <div 
       className="primary-outlined-button w-fit"
@@ -91,23 +135,35 @@ export default function ItineraryTab(props: ItineraryTabProps) {
     item.coordinates.length && dispatch(setPopupContent(undefined))
   }
 
+  const isRemoving = (id: string) => {
+    return removedList.includes(id) ? "bg-red-100" : "bg-white"
+  }
+
   const generateCollapseItem = (items: ItineraryItem[], key: number) => {
     if (items.length === 0) return (
       <div className="mb-6">
         <div className="flex h-16">
           <div className="w-fit h-full flex flex-col items-center ml-1 mr-9">
-            <div className="w-fit h-fit px-[7px] py-[2px] border border-solid border-color-secondary rounded-full">
-              <i className="bi bi-clipboard-plus text-lg"/>
-            </div>
-            <div className="h-full w-px bg-color-secondary"/>
+            {
+              !editMode
+              ? <>
+                <div className="w-fit h-fit px-[7px] py-[2px] border border-solid border-color-secondary rounded-full">
+                  <i className="bi bi-clipboard-plus text-lg"/>
+                </div>
+                <div className="h-full w-px bg-color-secondary"/>
+              </>
+              : <>
+                <div className="w-6"/>
+              </>
+            }
           </div> 
           <div className="w-full h-[2.125rem] text-color-text-tertiary flex items-center">
             <span>Nothing planned. Let's add from your saves.</span>
           </div>
         </div>
-        <div>
+        {!editMode && <div>
           {addButton(key)}
-        </div>
+        </div>}
       </div>
     )
     else return (
@@ -118,12 +174,24 @@ export default function ItineraryTab(props: ItineraryTabProps) {
             onMouseLeave={() => handleOnMouseLeave(e.item)}
           >
             <div className="w-fit h-full flex flex-col items-center ml-1 mr-9">
-              <div className="w-fit h-fit px-1.5 py-0.5 border border-solid border-color-secondary rounded-full">
-                <i className={`bi bi-${generateIconType(e.item.type)} text-xl`}/>
-              </div>
-              <div className="h-full w-px bg-color-secondary"/>
+              {
+                !editMode
+                ? <>
+                  <div className="w-fit h-fit px-1.5 py-0.5 border border-solid border-color-secondary rounded-full">
+                    <i className={`bi bi-${generateIconType(e.item.type)} text-xl`}/>
+                  </div>
+                  <div className="h-full w-px bg-color-secondary"/>
+                </>
+                : <>
+                  <div className="h-full flex flex-col justify-center mb-7">
+                    <i className="bi bi-dash-circle text-2xl text-color-object-primary cursor-pointer"
+                      onClick={() => dispatch(updateRemovedList(e.id))}
+                    />
+                  </div>
+                </>
+              }
             </div> 
-            <div className="flex mb-7 w-full p-4 border border-solid border-color-border-primary rounded-lg overflow-hidden">
+            <div className={"flex mb-7 w-full p-4 border border-solid border-color-border-primary rounded-lg overflow-hidden " + isRemoving(e.id)}>
               <div className="relative flex w-36 min-w-[9rem] h-36 cursor-pointer"
                 onClick={() => onItemDetailOpen(e.day, i)}
               >
@@ -176,9 +244,17 @@ export default function ItineraryTab(props: ItineraryTabProps) {
             </div>
           </div>
         ))}
-        <div>
-          {addButton(key)}
-        </div>
+        {
+          props.isOwner
+          ? (!editMode && <div>
+            {addButton(key)}
+          </div>)
+          : (
+            <div className="w-fit h-fit px-1.5 py-0.5 border border-solid border-color-secondary rounded-full ml-1">
+              <i className={`bi bi-flag text-xl`}/>
+            </div>
+          )
+        }
       </div>
     )
   }
@@ -189,21 +265,52 @@ export default function ItineraryTab(props: ItineraryTabProps) {
       label: `Day ${key + 1}`,
       children: generateCollapseItem(items, key)
     }))
+
+  const generateSavesAdded = () => {
+    const savesSet = new Set(savesList.map((e: SavedItem) => e.id))
+    const total = savesSet.size
+
+    for (const item of itineraryList)
+      for (const subItem of item) {
+        savesSet.delete(subItem.savedItemId)
+      }
+    
+    return `${total - savesSet.size}/${total} saves added`
+  }
   
   return (
     <>
     <div className="trip-detail-itinerary-tab text-base mt-2">
       <div className="flex justify-between items-end">
         <div>
-          {`0/3 saves added`}
+          {generateSavesAdded()}
         </div>
-        <div 
-          className="primary-button"
-          style={{ fontWeight: 500, borderRadius: 9999 }}
-          onClick={() => alert("handle edit")}
-        >
-          Edit
-        </div>
+        {
+          props.isOwner && (!editMode
+          ? <div 
+            className="primary-button"
+            style={{ fontWeight: 500, borderRadius: 9999 }}
+            onClick={() => dispatch(setEditMode(true))}
+          >
+            Edit
+          </div>
+          : <div className="flex gap-2">
+            <div 
+              className="primary-button"
+              style={{ fontWeight: 500, borderRadius: 9999 }}
+              onClick={handleSaveEdit}
+            >
+              Save
+            </div>
+            <div 
+              className="primary-outlined-button"
+              style={{ fontWeight: 500, borderRadius: 9999, padding: "0.4375rem 0.875rem" }}
+              onClick={handleCancelEdit}
+            >
+              Cancel
+            </div>
+          </div>)
+        }
       </div>
       {itineraryList.length !== 0 && <div className="mt-8">
         <Collapse 
@@ -239,7 +346,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
         }
       }}
       footer={
-        <div className="flex justify-end p-3">
+        (props.isOwner && <div className="flex justify-end p-3">
           <div className="primary-button"
           onClick={() => {
             dispatch(setEditState(true))
@@ -247,7 +354,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
           >
             Edit
           </div>
-        </div>
+        </div>)
       }
     >
       {selectedItem && <ItineraryItemDetail 

@@ -27,6 +27,10 @@ export const tripApi = {
     (data: any) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.post(ENDPOINTS.TRIP, data)
     },
+  updateTrip:
+    (tripId: string, data: any) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.put(ENDPOINTS.TRIP + `/${tripId}`, data)
+    },
   addItemToTrip:
     (tripId: any, data: any) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.post(ENDPOINTS.TRIP + `/${tripId}/saves`, data)
@@ -46,6 +50,11 @@ export const tripApi = {
   getItineraryItems:
     (tripId: string) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.get(ENDPOINTS.TRIP + `/${tripId}/itinerary`)
+    },
+  removeItineraryItems:
+    (tripId: string, removedList: string[]) => 
+      (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.put(ENDPOINTS.TRIP + `/${tripId}/itinerary`, { removedList })
     },
   updateSavedItem:
     (id: string, data: any) => (): Promise<AxiosResponse<any, any>> => {

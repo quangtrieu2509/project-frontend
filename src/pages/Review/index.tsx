@@ -94,10 +94,9 @@ export default function Review() {
   }
 
   return (
-    has404Error 
-    ? <NotFound/> 
-    : <div className="tp-page review-page bg-white">
-      <div className="tp-wrapper flex mt-10 mb-5">
+    <div className="tp-page review-page bg-white">
+      { has404Error ? <NotFound/> 
+      : <div className="tp-wrapper flex mt-10 mb-5">
         <div className="w-1/3 min-w-[22rem] border-0 border-r border-solid border-color-border-secondary h-fit sticky top-24">
           <h1 className="mt-0 text-4xl">Tell us, how was your visit?</h1>
           {item && <CardItem {...item}/>}
@@ -200,7 +199,7 @@ export default function Review() {
             </Form.Item>
           </Form>
         </div>
-      </div>
+      </div>}
     </div>
   )
 }

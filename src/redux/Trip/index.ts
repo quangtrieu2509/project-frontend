@@ -12,6 +12,9 @@ interface TripState {
   drawerTripsList: DrawerTrip[]
   savesList: SavedItem[]
   itineraryList: Array<Array<ItineraryItem>>
+  editMode: boolean
+  removedList: string[]
+  editTripState: boolean
 }
 
 // Define the initial state using that type
@@ -22,7 +25,10 @@ const initialState: TripState = {
   editState: false,
   drawerTripsList: [],
   savesList: [],
-  itineraryList: []
+  itineraryList: [],
+  editMode: false,
+  removedList: [],
+  editTripState: false
 }
 
 type ExtraItineraryItem = {
@@ -43,6 +49,9 @@ export const tripSlice = createSlice({
     },
     setPreAddState: (state, action: PayloadAction<boolean>) => {
       state.preAddState = action.payload
+    },
+    setEditTripState: (state, action: PayloadAction<boolean>) => {
+      state.editTripState = action.payload
     },
     setEditState: (state, action: PayloadAction<boolean>) => {
       state.editState = action.payload
@@ -90,6 +99,24 @@ export const tripSlice = createSlice({
           state.itineraryList[day - 1].push(itineraryItem)
         }
         console.log(state.itineraryList)
+    },
+    setEditMode: (state, action: PayloadAction<boolean>) => {
+      state.editMode = action.payload
+    },
+    updateRemovedList: (state, action: PayloadAction<string>) => {
+      const id = action.payload
+      state.removedList.includes(id)
+      ? state.removedList = state.removedList.filter(e => e !== id)
+      : state.removedList.push(id)
+    },
+    removeItemsFromIList: (state, action: PayloadAction<string[]>) => {
+      state.itineraryList = state.itineraryList.map(day => (
+        day.filter(e => !action.payload.includes(e.id))
+      ))
+      state.removedList = []
+    },
+    cancelRemovedList: (state) => {
+      state.removedList = []
     }
   }
 })
@@ -104,7 +131,12 @@ export const {
   updateItineraryList,
   setPreAddState,
   setItineraryList,
-  setEditState
+  setEditState,
+  setEditMode,
+  updateRemovedList,
+  cancelRemovedList,
+  removeItemsFromIList,
+  setEditTripState
 } = tripSlice.actions
 
 // // Other code such as selectors can use the imported `RootState` type

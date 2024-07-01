@@ -32,6 +32,7 @@ export interface SavedItemProps {
     }
   }
   note?: string
+  isOwner: boolean
 }
 
 export default function SavedItem(props: SavedItemProps) {
@@ -101,12 +102,12 @@ export default function SavedItem(props: SavedItemProps) {
       onMouseLeave={handleOnMouseLeave}
     >
       <div className="relative flex w-[11.5rem] min-w-[11.5rem] h-[11.5rem]">
-        <div 
+        {props.isOwner && <div 
           className="absolute top-0 left-0 py-2 px-3 m-1.5 bg-white rounded-full cursor-pointer shadow-lg hover-button"
           onClick={showDeleteConfirm}  
         >
           <i className="bi bi-bookmarks-fill text-2xl text-color-object-tertirary"/>
-        </div>
+        </div>}
         <img alt="#" src={props.item.image.url} className="image w-full h-full rounded-lg object-cover object-center" />
       </div>
       <div className="ml-4 w-full flex flex-col justify-between">
@@ -129,7 +130,7 @@ export default function SavedItem(props: SavedItemProps) {
             <div className="text-sm font-semibold text-color-extra-primary bg-color-extra-secondary w-fit px-2 py-0.5 rounded-md">
               {props.item.ancestors.map(e => e.name).slice(0, 2).join(", ")}
             </div>
-            {props.item.isReservable && <div className="secondary-button absolute bottom-0 right-0"
+            {props.isOwner && props.item.isReservable && <div className="secondary-button absolute bottom-0 right-0"
               style={{ borderRadius: "999px", background: "var(--color-button-tertiary)" }}
               onClick={() => window.open(ROUTES.BOOKING_BASE + props.item.id)}
             >
@@ -165,16 +166,18 @@ export default function SavedItem(props: SavedItemProps) {
               ? <span className="text-color-text-secondary">
                 {props.note}
               </span>
-              : <span className=" text-color-extra-text-secondary">Write a note...</span>
+              : <span className=" text-color-extra-text-secondary">
+                {props.isOwner ? "Write a note..." : "Empty note..."}
+              </span>
             }
           </div>
-          <div 
+          {props.isOwner && <div 
             className="secondary-button h-fit"
             style={{ borderRadius: "999px", padding: "0.25rem 0.75rem" }}
             onClick={handeOpenModal}  
           >
             <i className="bi bi-pencil-square text-color-text-primary align-middle"/>
-          </div>
+          </div>}
         </div>
       </div>
     </div>

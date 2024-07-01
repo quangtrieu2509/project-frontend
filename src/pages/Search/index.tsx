@@ -88,6 +88,9 @@ export default function Search() {
             placeholder={"Search Trippie"}
             defaultValue={q}
             onChange={(value) => setQ(value.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleChangeSearchParam("q", q)
+            }}
           ></input>
           <span 
             className="flex items-center font-semibold text-base text-color-primary px-5 py-2.5 border-solid border border-color-primary rounded-full bg-white hover:bg-color-hover-primary cursor-pointer"
@@ -98,7 +101,7 @@ export default function Search() {
         </div>
       </div>
       <div className="tp-wrapper flex pt-10">
-        <div className="bg-white w-52 min-w-[13rem] h-fit px-8 py-5 mr-8 rounded-lg border border-solid border-color-border-secondary">
+        <div className="bg-white w-52 min-w-[13rem] h-fit px-8 py-5 mr-8 mb-8 rounded-lg border border-solid border-color-border-secondary sticky top-48 bottom-12">
           <div className="font-semibold text-lg">
             {"Filter Results"}
           </div>

@@ -116,12 +116,9 @@ export default function Detail() {
     dispatch(setSelectedId(id))
   }
   return (
-    has404Error 
-    ? <NotFound/> 
-    : !item
-    ? <></>
-    : <div className="tp-page attraction-detail-page bg-color-background-primary">
-      <div className="tp-wrapper">
+    <div className="tp-page attraction-detail-page bg-color-background-primary">
+      {has404Error ? <NotFound/> 
+      : (item && <div className="tp-wrapper">
         <Breadcrumb
           separator=">"
           items={generateBCItems(item.ancestors)}
@@ -381,7 +378,7 @@ export default function Detail() {
             <ReviewList id={item.id}/>
           </div>
         </div>
-      </div>
+      </div>)}
       <TripListDrawer/>
     </div>
   )

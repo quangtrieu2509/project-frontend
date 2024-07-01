@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux"
 // import { setLoaderState } from "../../redux/Loader"
 import InteractModal from "../../components/Profile/InteractModal"
 import { getState, setInteractModalState, setIntroInfo } from "../../redux/Profile"
+import { messages } from "../../constants/message"
+import NotFound from "../Static/NotFound"
 
 interface IUserProfile {
   id: string
@@ -39,6 +41,7 @@ export interface UserOverview {
 export default function Profile() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [has404Error, setHas404Error] = useState<boolean>(false)
   const [user, setUser] = useState<IUserProfile|null>(null)
   const [isOwner, setIsOwner] = useState<boolean>(false)
   const [isFollowing, setIsFollowing] = useState<boolean>(false)
@@ -59,7 +62,14 @@ export default function Profile() {
 
   useEffect(() => {
     const getUser = async () => {
-      const res = await apiCaller(userApi.getUser(params.id ?? ""))
+      const res = await apiCaller(
+        userApi.getUser(params.id ?? ""),
+        (error) => {
+          if (error.ec === messages.NOT_FOUND.ec) {
+            setHas404Error(true)
+          }
+        }
+      )
       
       if (res !== undefined) {
         console.log("Profile data: ", res.data) 
@@ -116,7 +126,8 @@ export default function Profile() {
   
   return (
     <div className="tp-page profile-page bg-color-background-primary">
-      <div className="tp-wrapper tp-profile-wrapper">
+      { has404Error ? <NotFound/>
+      : <div className="tp-wrapper tp-profile-wrapper">
         <div className="profile-item bg-white p-6 pb-0 flex justify-between rounded-t-lg">
           <div className="flex">
             <div className="profile-image w-28 h-28">
@@ -238,7 +249,7 @@ export default function Profile() {
             />
           }
         </div>
-      </div>
+      </div>}
       <Modal
         open={interactModalState}
         onCancel={()=>{ 

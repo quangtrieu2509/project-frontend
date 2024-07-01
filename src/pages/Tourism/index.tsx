@@ -124,10 +124,9 @@ export default function Tourism() {
   }
 
   return (
-    has404Error 
-    ? <NotFound/> 
-    : <div className="tp-page tourism-page bg-white">
-      <div className="tp-wrapper">
+    <div className="tp-page tourism-page bg-white">
+      { has404Error ? <NotFound/> 
+      : <div className="tp-wrapper">
         <Breadcrumb
           separator=">"
           items={generateBCItems(location?.ancestors ?? [])}
@@ -234,7 +233,7 @@ export default function Tourism() {
             }
           </Slider>
         </div> : <></>}
-      </div>
+      </div>}
       <TripListDrawer/>
     </div>
   )

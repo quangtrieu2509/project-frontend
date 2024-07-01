@@ -49,10 +49,9 @@ export default function Attractions() {
   }
 
   return (
-    has404Error 
-    ? <NotFound/> 
-    : <div className="tp-page attractions-page bg-color-background-primary">
-      <div className="tp-wrapper">
+    <div className="tp-page attractions-page bg-color-background-primary">
+      { has404Error ? <NotFound/> 
+      : <div className="tp-wrapper">
         <Breadcrumb
           separator=">"
           items={generateBcItems(bcItems)}
@@ -67,7 +66,7 @@ export default function Attractions() {
               keyType={keyTypes.ATTRACTION}
             />
         }
-      </div>
+      </div>}
     </div>
   )
 }
