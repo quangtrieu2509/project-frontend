@@ -28,6 +28,7 @@ import Booking from "../pages/Booking"
 import Bookings from "../pages/Bookings"
 import NewItem from "../pages/NewItem"
 import Admin from "../pages/Admin"
+import ActivateEmail from "../pages/Static/ActivateEmail"
 
 export type RouteType = {
   path: ROUTES | string
@@ -150,6 +151,11 @@ const routes: RouteType[] = [
     path: ROUTES.NEW_ITEM,
     title: "Add a place",
     element: NewItem
+  },
+  {
+    path: ROUTES.ACTIVATE_EMAIL,
+    title: "Activate Email",
+    element: ActivateEmail
   },
   {
     path: "*",

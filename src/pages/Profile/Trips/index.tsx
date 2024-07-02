@@ -10,7 +10,7 @@ import { getLocalStorage } from "../../../utils/Auth";
 import { ROUTES } from "../../../constants";
 
 export default function Trips() {
-  const [results, setResults] = useState<any[] | null[]>([null])
+  const [results, setResults] = useState<any[]>([undefined])
   const params = useParams()
   const navigate = useNavigate()
 
@@ -29,7 +29,7 @@ export default function Trips() {
   return (
     <div className="profile-subpage flex mb-4 text-color-text-primary">
       <div className="w-fit"><Intro/></div>
-      <div className="profile-content w-full">
+      <div className="profile-content flex-grow min-w-[50rem]">
         <TitleBar title="Trips"/>
         {
           params.id === getLocalStorage("id")
@@ -48,9 +48,9 @@ export default function Trips() {
           {
             results.length === 0
             ? <NoResult/>
-            : results.map((value, index) => {
+            : results.map(value => {
               return (
-                <TripOverview key={index} trip={value}/>
+                <TripOverview key={value?.id} trip={value}/>
               )
             })
           }

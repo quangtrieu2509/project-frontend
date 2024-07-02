@@ -1,5 +1,5 @@
 import { Breadcrumb } from "antd";
-import NotFound from "../../Static/NotFound";
+import NotFound from "../../../components/Static/NotFound";
 import { useEffect, useState } from "react";
 import { BreadcrumbItem } from "../../../types";
 import { useParams } from "react-router-dom";

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { apiCaller, itemApi } from "../../../../api"
 import { messages } from "../../../../constants/message"
-import NotFound from "../../../Static/NotFound"
+import NotFound from "../../../../components/Static/NotFound"
 import { filterFields, generateAddress, isEqual, roundRate } from "../../../../utils/Utils"
 import { useDispatch } from "react-redux"
 import TripListDrawer from "../../../../components/Drawer/TripListDrawer"
@@ -230,7 +230,7 @@ export default function Detail() {
                   {item.description}
                 </Typography.Paragraph>
                 <span 
-                  className="font-semibold underline text-color-text-secondary cursor-pointer hover:text-color-text-tertiary"
+                  className="text-sm font-semibold underline text-color-text-secondary cursor-pointer hover:text-color-text-tertiary"
                   onClick={() => setParaExpanded((e) => !e)}
                 >
                   {paraExpanded ? "Read less" : "Read more"}

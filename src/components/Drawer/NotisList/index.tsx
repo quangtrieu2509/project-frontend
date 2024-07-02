@@ -7,11 +7,13 @@ import { formatDateTime } from "../../../utils/Utils"
 import parser from "html-react-parser"
 import { apiCaller, notiApi } from "../../../api"
 import { INoti } from "../../Header/Noti"
+import { useNavigate } from "react-router-dom"
 
 const filters = ["all", "unread"]
 
 export default function NotisList() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [filter, setFilter] = useState<string>(filters[0])
   const notisList: INoti[] = useSelector(getState).notisList 
 
@@ -34,6 +36,7 @@ export default function NotisList() {
     dispatch(readNoti(noti.id))
     apiCaller(notiApi.readNoti(noti.id))
     // handle to url
+    window.location.replace(noti.url)
   }
 
   return (

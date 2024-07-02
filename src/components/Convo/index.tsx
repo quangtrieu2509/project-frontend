@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatDateTime, formatTime } from "../../utils/Utils";
 import { apiCaller, chatApi } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
-import { addMessage, getState, seenConvo, setConvosList, setMessageList } from "../../redux/Chat";
+import { addMessage, getState, seenConvo, setConvoState, setConvosList, setMessageList, setSelectedConvo } from "../../redux/Chat";
 import { getLocalStorage } from "../../utils/Auth";
 import { useSocket } from "../../hooks";
 import { useNavigate } from "react-router-dom";
@@ -43,12 +43,12 @@ export default function Convo() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const socket = useSocket()
-  const [convoState, setConvoState] = useState<boolean>(false)
-  const [selectedConvo, setSelectedConvo] = useState<IConvo>()
+
   const [filter, setFilter] = useState<string>(filters[0])
   const [message, setMessage] = useState<string>("")
   const list = useSelector(getState).convosList as IConvo[]
   const messageList = useSelector(getState).messageList as IMessage[]
+  const { convoState, selectedConvo } = useSelector(getState)
   const id = getLocalStorage("id")
 
   const getConvosList = async (unread: boolean) => {
@@ -95,17 +95,17 @@ export default function Convo() {
   }
 
   const handleOnMessBoxClose = () => {
-    setSelectedConvo(undefined)
+    dispatch(setSelectedConvo(undefined))
   }
   
   const handleOnConvoClose = () => {
-    setConvoState(false)
+    dispatch(setConvoState(false))
     setFilter(filters[0])
     handleOnMessBoxClose()
   }
 
   const handleSelectedConvo = (convo: IConvo) => {
-    setSelectedConvo(convo)
+    dispatch(setSelectedConvo(convo))
     dispatch(seenConvo(convo.id))
   }
 
@@ -148,7 +148,7 @@ export default function Convo() {
       <FloatButton 
         badge={{ count: calculateConvosCount() }} 
         icon={<CommentOutlined />}
-        onClick={() => setConvoState(true)}
+        onClick={() => dispatch(setConvoState(true))}
       />
       <Drawer
         title={<div className="flex items-center justify-between">

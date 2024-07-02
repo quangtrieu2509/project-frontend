@@ -88,8 +88,8 @@ export default function ReviewList(props: ReviewListProps) {
 
       <div className="h-full ml-[12.625rem]">
         {
-          reviews.map((e, i) => (
-            <ReviewItem {...e} key={i}/>
+          reviews.map(e => (
+            <ReviewItem {...e} key={e.id}/>
           ))
         }
       </div>

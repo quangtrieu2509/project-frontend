@@ -158,12 +158,20 @@ export default function ItineraryTab(props: ItineraryTabProps) {
             }
           </div> 
           <div className="w-full h-[2.125rem] text-color-text-tertiary flex items-center">
-            <span>Nothing planned. Let's add from your saves.</span>
+            <span>Nothing planned. Items can be added from the saves.</span>
           </div>
         </div>
-        {!editMode && <div>
-          {addButton(key)}
-        </div>}
+        {
+          props.isOwner
+          ? (!editMode && <div>
+            {addButton(key)}
+          </div>)
+          : (
+            <div className="w-fit h-fit px-1.5 py-0.5 border border-solid border-color-secondary rounded-full ml-1">
+              <i className={`bi bi-flag text-xl`}/>
+            </div>
+          )
+        }
       </div>
     )
     else return (

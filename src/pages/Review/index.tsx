@@ -2,7 +2,7 @@ import { Checkbox, Form, Input, Rate, Select, UploadFile, UploadProps } from "an
 import { useEffect, useState } from "react"
 import "./index.style.scss"
 import { generateLast12Months } from "../../utils/Utils"
-import NotFound from "../Static/NotFound"
+import NotFound from "../../components/Static/NotFound"
 import { useNavigate, useParams } from "react-router-dom"
 import { apiCaller, itemApi, uploadApi } from "../../api"
 import { messages } from "../../constants/message"

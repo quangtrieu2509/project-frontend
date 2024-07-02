@@ -14,5 +14,9 @@ export const chatApi = {
   getMessageList:
     (convoId: string) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.get(ENDPOINTS.CHAT + `/${convoId}`)
-    }
+    },
+  checkConvo:
+    (id: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.CHAT + `/check/${id}`)
+    },
 }

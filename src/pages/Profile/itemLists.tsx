@@ -1,4 +1,4 @@
-import { ExclamationCircleOutlined, PictureOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons"
+import { ExclamationCircleOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons"
 import Label from "../../components/Label"
 import Activities from "./Activities"
 import Trips from "./Trips"
@@ -122,10 +122,6 @@ export const settingActions = [
   },
   {
     key: "2",
-    label: <Label title="Edit profile picture" icon={<PictureOutlined/>}/>,
-  },
-  {
-    key: "3",
     label: <Label title="Settings" icon={<SettingOutlined/>}/>,
   }
 ]

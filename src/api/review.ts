@@ -15,6 +15,14 @@ export const reviewApi = {
   getReviews:
     (itemId: string, filter: string) =>
     (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.get(ENDPOINTS.REVIEW + `/${itemId}?filter=${filter}`)
+      return axiosClient.get(ENDPOINTS.REVIEW + `/item/${itemId}?filter=${filter}`)
+    },
+  getProfileReviews:
+    (id: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.PROFILE_REVIEW + `/${id}`)
+    },
+  interactReview:
+    (id: string, like: boolean) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.post(ENDPOINTS.REVIEW + `/${id}`, { like })
     },
 }

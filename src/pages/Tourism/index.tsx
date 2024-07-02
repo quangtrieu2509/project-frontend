@@ -6,7 +6,7 @@ import Slider from "react-slick"
 import TourismItem from "../../components/Item/TourismItem"
 import { apiCaller, itemApi, locationApi } from "../../api"
 import { messages } from "../../constants/message"
-import NotFound from "../Static/NotFound"
+import NotFound from "../../components/Static/NotFound"
 import { ROUTES, categoryItems, itemTypes } from "../../constants"
 import TripListDrawer from "../../components/Drawer/TripListDrawer"
 import { generateSlickClass } from "../../utils/Utils"
@@ -148,7 +148,7 @@ export default function Tourism() {
             {location?.description ?? ""}
           </Typography.Paragraph>
           <span 
-            className="font-semibold underline text-color-text-secondary cursor-pointer hover:text-color-text-tertiary"
+            className="text-sm font-semibold underline text-color-text-secondary cursor-pointer hover:text-color-text-tertiary"
             onClick={() => setParaExpanded((e) => !e)}
           >
             {paraExpanded ? "Read less" : "Read more"}

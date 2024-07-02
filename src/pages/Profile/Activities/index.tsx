@@ -3,20 +3,20 @@ import Intro from "../../../components/Profile/Intro";
 import NoResult from "../../../components/Profile/NoResult";
 import TitleBar from "../../../components/Profile/TitleBar";
 import TripOverview from "../../../components/Trip/TripOverview";
-import { apiCaller } from "../../../api";
-import { tripApi } from "../../../api/trip";
+import { apiCaller, userApi } from "../../../api";
 import { useEffect, useState } from "react";
+import ReviewOverview from "../../../components/Review/ReviewOverview";
 
 export default function Activities() {
-  const [results, setResults] = useState<any[] | null[]>([null])
+  const [results, setResults] = useState<any[] | null[]>([undefined])
   const params = useParams()
 
   useEffect(() => {
     const getTrips = async () => {
-      const res = await apiCaller(tripApi.getProfileTrips(params.id ?? ""))
+      const res = await apiCaller(userApi.getActivities(params.id ?? ""))
       
       if (res !== undefined) {
-        console.log("Activitis data: ", res.data)
+        // console.log("Activitis data: ", res.data)
         setResults(res.data)
       }
     }
@@ -27,16 +27,16 @@ export default function Activities() {
   return (
     <div className="profile-subpage flex mb-4">
       <div className="w-fit"><Intro/></div>
-      <div className="profile-content w-full">
+      <div className="profile-content flex-grow min-w-[50rem]">
         <TitleBar title="Activities"/>
         <div>
           {
             results.length === 0
             ? <NoResult/>
-            : results.map((value, index) => {
-              return (
-                <TripOverview key={index} trip={value}/>
-              )
+            : results.map(value => {
+              if (value?.type === "review")
+                return <ReviewOverview {...value}/>
+              else return <TripOverview key={value?.id} trip={value}/>
             })
           }
         </div>

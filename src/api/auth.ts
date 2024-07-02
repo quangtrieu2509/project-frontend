@@ -24,4 +24,7 @@ export const authApi = {
   signUpByEmail: (data: any) => (): Promise<AxiosResponse<any, any>> => {
     return axiosClient.post(ENDPOINTS.EMAIL_SIGNUP_AUTH, data)
   },
+  activateEmail: (token: string) => (): Promise<AxiosResponse<any, any>> => {
+    return axiosClient.get(ENDPOINTS.ACTIVATE_EMAIL + token)
+  },
 }

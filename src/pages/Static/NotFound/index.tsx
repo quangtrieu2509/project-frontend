@@ -1,25 +1,11 @@
-import { Button, Result } from "antd"
-import { useNavigate } from "react-router-dom"
-import { ROUTES } from "../../../constants"
+import NotFoundComponent from "../../../components/Static/NotFound"
 
-const NotFound = () => {
-  const navigate = useNavigate()
-  const backHome = () => {
-    navigate(ROUTES.HOME)
-  }
-
+export default function NotFound() {
   return (
-    <Result
-      status="404"
-      title="404"
-      subTitle="Sorry, the page you visited does not exist."
-      extra={
-        <Button onClick={backHome} type="primary">
-          Back Home
-        </Button>
-      }
-    />
+    <div className="tp-page">
+      <div className="tp-wrapper">
+        <NotFoundComponent/>
+      </div>
+    </div>
   )
 }
-
-export default NotFound

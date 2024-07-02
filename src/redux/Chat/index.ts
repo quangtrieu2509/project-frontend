@@ -5,12 +5,15 @@ import { IConvo, IMessage } from "../../components/Convo"
 interface ChatState {
   convosList: IConvo[]
   messageList: IMessage[]
+  convoState: boolean
+  selectedConvo?: IConvo
 }
 
 // Define the initial state using that type
 const initialState: ChatState = {
   convosList: [],
-  messageList: []
+  messageList: [],
+  convoState: false
 }
 
 export const chatSlice = createSlice({
@@ -20,6 +23,12 @@ export const chatSlice = createSlice({
   reducers: {
     setConvosList: (state, action: PayloadAction<IConvo[]>) => {
       state.convosList = action.payload
+    },
+    setConvoState: (state, action: PayloadAction<boolean>) => {
+      state.convoState = action.payload
+    },
+    setSelectedConvo: (state, action: PayloadAction<IConvo | undefined>) => {
+      state.selectedConvo = action.payload
     },
     setMessageList: (state, action: PayloadAction<IMessage[]>) => {
       state.messageList = action.payload
@@ -46,6 +55,8 @@ export const chatSlice = createSlice({
 
 export const { 
   setConvosList,
+  setConvoState,
+  setSelectedConvo,
   setMessageList,
   seenConvo,
   addConvo,

@@ -21,8 +21,8 @@ import { privacies } from "../../../constants/privacies"
 import { ROUTES } from "../../../constants"
 import { getLocalStorage } from "../../../utils/Auth"
 import { messages } from "../../../constants/message"
-import NotFound from "../../Static/NotFound"
-import Forbidden from "../../Static/Forbidden"
+import NotFound from "../../../components/Static/NotFound"
+import Forbidden from "../../../components/Static/Forbidden"
 
 export interface ITripDetail {
   id: string

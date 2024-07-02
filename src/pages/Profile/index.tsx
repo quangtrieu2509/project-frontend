@@ -1,11 +1,11 @@
 import "./index.style.scss"
 
-import { Dropdown, Modal, Skeleton, Tabs } from "antd"
+import { Dropdown, Form, Input, Modal, Skeleton, Tabs } from "antd"
 import { IMAGE_PATH, ROUTES } from "../../constants"
-import { BarsOutlined, PlusOutlined } from "@ant-design/icons"
+import { BarsOutlined, ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons"
 import { loadingTabItems, profileActions, profileTabItems, settingActions } from "./itemLists"
 import { useEffect, useState } from "react"
-import { apiCaller } from "../../api"
+import { apiCaller, chatApi } from "../../api"
 import { userApi } from "../../api/user"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { getLocalStorage } from "../../utils/Auth"
@@ -14,7 +14,8 @@ import { useDispatch, useSelector } from "react-redux"
 import InteractModal from "../../components/Profile/InteractModal"
 import { getState, setInteractModalState, setIntroInfo } from "../../redux/Profile"
 import { messages } from "../../constants/message"
-import NotFound from "../Static/NotFound"
+import NotFound from "../../components/Static/NotFound"
+import { seenConvo, setConvoState, setSelectedConvo } from "../../redux/Chat"
 
 interface IUserProfile {
   id: string
@@ -48,10 +49,13 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState<string>("1")
   const params = useParams()
   const [queries] = useSearchParams()
+  const [form] = Form.useForm()
 
   const { interactModalState } = useSelector(getState)
   const [interactTitle, setInteractTitle] = useState<string>("")
   const [interactUserList, setInteractUserList] = useState<UserOverview[]>([])
+
+  const [msgModalState, setMsgModalState] = useState<boolean>(false)
 
   const handleInteractUser = async (action: boolean) => {
     // dispatch(setLoaderState(true))
@@ -72,7 +76,7 @@ export default function Profile() {
       )
       
       if (res !== undefined) {
-        console.log("Profile data: ", res.data) 
+        // console.log("Profile data: ", res.data) 
         const userId = getLocalStorage("id")
         if (res.data.id !== userId) {
           setIsOwner(false)
@@ -121,6 +125,66 @@ export default function Profile() {
       setInteractTitle("Followings")
       setInteractUserList(res.data)
       dispatch(setInteractModalState(true))
+    }
+  }
+
+  const handleChat = () => {
+    if (params.id) {
+      apiCaller(
+        chatApi.checkConvo(params.id),
+        (error) => {
+          if (error.ec === messages.NOT_FOUND.ec) {
+            setMsgModalState(true)
+          }
+        }
+      ).then((res) => {
+        if (res !== undefined) {
+          dispatch(setSelectedConvo(res.data))
+          dispatch(setConvoState(true))
+          dispatch(seenConvo(res.data.id))
+        }
+      })
+    }
+  }
+
+  const handleCancelMsg = () => {
+    Modal.confirm({
+      title: `Are you sure to cancel?`,
+      icon: <ExclamationCircleFilled />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk () {
+        setMsgModalState(false)
+      }
+    })
+  }
+
+  const handleSubmitForm = () => {
+    const trimmed = form.getFieldValue("content").trimStart().trimEnd()
+    if (Boolean(trimmed)) {
+      form.setFieldValue("content", trimmed)
+      form.submit()
+    } else form.setFieldValue("content", undefined)
+  }
+
+  const handleOnFinish = (values: any) => {
+    if (params.id) {
+      Modal.confirm({
+        title: `Are you sure to send this message?`,
+        icon: <ExclamationCircleFilled />,
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk () {
+          const newMessage = {
+            content: values.content,
+            desUserId: params.id
+          }
+          void apiCaller(chatApi.createMessage(newMessage))
+          setMsgModalState(false)
+        }
+      })
     }
   }
   
@@ -220,6 +284,7 @@ export default function Profile() {
               }
               <i className="secondary-button text-lg bi bi-chat-left-dots"
                 style={{ paddingTop: "0.25rem", paddingBottom: "0.25rem" }}
+                onClick={handleChat}
               />
             </div>
           }
@@ -255,10 +320,55 @@ export default function Profile() {
         onCancel={()=>{ 
           dispatch(setInteractModalState(false)) }}
         title={interactTitle}
-        centered
+        centered destroyOnClose
         footer={false}
       >
         <InteractModal userList={interactUserList} />
+      </Modal>
+      <Modal
+        open={msgModalState} 
+        onCancel={handleCancelMsg}
+        title={<div className="w-full flex justify-center text-lg">Start Conversation</div>}
+        centered destroyOnClose
+        maskClosable={false}
+        footer={
+          <div className="flex justify-center relative">
+            <div className="secondary-button absolute left-0" 
+              onClick={handleCancelMsg}
+            >
+              Cancel
+            </div>
+            <div className="primary-button"
+            onClick={handleSubmitForm}
+            >
+              Send
+            </div>
+          </div>
+        }
+      >
+        <div className="mb-2 text-color-extra-text-primary">
+          Let's send a message.
+        </div>
+        <Form
+          layout="vertical"
+          form={form} onFinish={handleOnFinish}
+        >
+          <Form.Item
+            name="content" preserve={false}
+            rules={[
+              { required: true, message: "This field cannot be empty" }
+            ]}
+          >
+            <Input.TextArea 
+              autoSize={{ minRows: 3, maxRows: 6 }} 
+              placeholder="Leave a message here..." 
+              onKeyDown={(e) => {
+                if (!e.shiftKey && e.key === "Enter")
+                  handleSubmitForm()
+              }}
+            />
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   )

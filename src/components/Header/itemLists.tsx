@@ -1,5 +1,5 @@
 import Label from "./Label"
-import { ROUTES, pluralItemLabels } from "../../constants"
+import { ROUTES } from "../../constants"
 import { getLocalStorage } from "../../utils/Auth"
 
 export const featureItems = [
@@ -34,10 +34,6 @@ export const featureItems = [
       },
       {
         key: "3",
-        label: <Label url={ROUTES.NEW_ITEM} title="Add a place" />,
-      },
-      {
-        key: "4",
         label: <Label url={ROUTES.HOME} title="Forum (*)" />,
       }
     ],
@@ -61,21 +57,9 @@ export const featureItems = [
     name: "More",
     items: [
       {
-        key: "1",
-        label: <Label url={ROUTES.HOME} title={pluralItemLabels.ATTRACTION} />,
-      },
-      {
-        key: "2",
-        label: <Label url={ROUTES.HOME} title={pluralItemLabels.LODGING} />,
-      },
-      {
         key: "3",
-        label: <Label url={ROUTES.HOME} title={pluralItemLabels.DINING} />,
+        label: <Label url={ROUTES.NEW_ITEM} title="Add a place" />,
       },
-      {
-        key: "4",
-        label: <Label url={ROUTES.HOME} title={pluralItemLabels.ACTIVITY} />,
-      }
     ],
     route: "more"
   }
