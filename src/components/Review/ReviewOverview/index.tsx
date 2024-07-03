@@ -18,7 +18,7 @@ const initInteract = {
   likes: 0
 }
 
-interface ReviewOverviewProps {
+export interface ReviewOverviewProps {
   id: string
   user: {
     id: string

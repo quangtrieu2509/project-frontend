@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { apiCaller, itemApi } from "../../../api"
 import { capitalize } from "../../../utils/Utils"
 import { itemTypes } from "../../../constants"
 import Dining from "./Dining"
 import Lodging from "./Lodging"
 import Attraction from "./Attraction"
 import Activity from "./Activity"
+import { useSelector } from "react-redux"
+import { getState } from "../../../redux/Business"
 
 interface DetailsItem {
   id: string
@@ -30,7 +29,10 @@ interface DetailsItem {
   features?: string[]
   amenities?: string[]
   ticketPrice?: number[]
-  duration?: number // time
+  duration?: {
+    value: number
+    unit: string
+  }
   ages?: number[]
   included?: string[]
   excluded?: string[]
@@ -38,21 +40,7 @@ interface DetailsItem {
 }
 
 export default function Details() {
-  const [item, setItem] = useState<DetailsItem>()
-  const params = useParams()
-
-  useEffect(() => {
-    const getList = async () => {
-      const res = await apiCaller(itemApi.getDetailsItem(params.id ?? ""))
-
-      if (res !== undefined) {
-        console.log(res.data)
-        setItem(res.data)
-      }
-    }
-
-    getList()
-  }, [params])
+  const selectedItem = useSelector(getState).selectedItem as DetailsItem
 
   const generateDetails = (detailsItem: any) => {
     switch (detailsItem.type) {
@@ -71,8 +59,8 @@ export default function Details() {
 
   return (
     <div className="business-details">
-      {item && <><h2 className="mt-0">{capitalize(item.type)}</h2>
-        {generateDetails(item)}
+      {selectedItem && <><h2 className="mt-0">{capitalize(selectedItem.type)}</h2>
+        {generateDetails(selectedItem)}
       </>}
     </div>
   )

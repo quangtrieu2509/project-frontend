@@ -4,11 +4,13 @@ import { INoti } from "../../components/Header/Noti"
 // Define a type for the slice state
 interface NotiState {
   notisList: INoti[]
+  notiState: boolean
 }
 
 // Define the initial state using that type
 const initialState: NotiState = {
-  notisList: []
+  notisList: [],
+  notiState: false
 }
 
 export const notiSlice = createSlice({
@@ -18,6 +20,9 @@ export const notiSlice = createSlice({
   reducers: {
     setNotisList: (state, action: PayloadAction<INoti[]>) => {
       state.notisList = action.payload
+    },
+    setNotiState: (state, action: PayloadAction<boolean>) => {
+      state.notiState = action.payload
     },
     readAllNotis: (state, _action: PayloadAction<void>) => {
       state.notisList = state.notisList.map(e => ({ ...e, isSeen: true }))
@@ -40,6 +45,7 @@ export const notiSlice = createSlice({
 
 export const {
   setNotisList, 
+  setNotiState,
   readAllNotis, 
   addNoti, 
   readNoti 

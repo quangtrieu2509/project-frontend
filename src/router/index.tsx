@@ -29,6 +29,7 @@ import Bookings from "../pages/Bookings"
 import NewItem from "../pages/NewItem"
 import Admin from "../pages/Admin"
 import ActivateEmail from "../pages/Static/ActivateEmail"
+import ReviewDetail from "../pages/Review/ReviewDetail"
 
 export type RouteType = {
   path: ROUTES | string
@@ -116,9 +117,14 @@ const routes: RouteType[] = [
     element: ActivityDetail
   },
   {
-    path: ROUTES.REVIEW,
-    title: "Review",
+    path: ROUTES.WRITE_REVIEW,
+    title: "Write a Review",
     element: Review
+  },
+  {
+    path: ROUTES.REVIEW,
+    title: "Review Detail",
+    element: ReviewDetail
   },
   {
     path: ROUTES.BOOKING,

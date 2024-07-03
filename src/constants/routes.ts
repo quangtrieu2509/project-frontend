@@ -20,6 +20,8 @@ export const enum ROUTES {
   ATTRACTION_DETAIL = "/attraction/:id",
   ACTIVITY_BASE = "/activity/",
   ACTIVITY_DETAIL = "/activity/:id",
+  WRITE_REVIEW = "/write-review/:id",
+  WRITE_REVIEW_BASE = "/write-review/",
   REVIEW = "/review/:id",
   REVIEW_BASE = "/review/",
   BOOKINGS = "/bookings",

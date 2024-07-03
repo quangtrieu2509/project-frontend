@@ -98,7 +98,7 @@ export default function Detail() {
     return items
   }
 
-  const onNavigateToReview = () => window.open(ROUTES.REVIEW_BASE + id)
+  const onNavigateToReview = () => window.open(ROUTES.WRITE_REVIEW_BASE + id)
 
   const generateRatingDetail = (name: string, value: number, quant: number) => {
     const total = item?.review.total ?? 100

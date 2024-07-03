@@ -5,7 +5,7 @@ import type { AxiosResponse } from "axios"
 export const itemApi = {
   getItemForReview:
     (id: string) => (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,name,ancestors,address,images,type,isReservable`)
+      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,name,ancestors,address,images,type,isReservable,state`)
     },
   searchItems:
     (query: string, filter: string) => (): Promise<AxiosResponse<any, any>> => {
@@ -27,13 +27,9 @@ export const itemApi = {
     () => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.get(ENDPOINTS.ITEM + `?fields=id,name,ancestors,address,type`)
     },
-  getOverviewItem:
+  getBusinessItem:
     (id: string) => (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.get(ENDPOINTS.ITEM + `/${id}?fields=id,name,ancestors,coordinates,address,description,images,type`)
-    },
-  getDetailsItem:
-    (id: string) => (): Promise<AxiosResponse<any, any>> => {
-      return axiosClient.get(ENDPOINTS.ITEM + `/${id}`)
+      return axiosClient.get(ENDPOINTS.ITEM + `/business/${id}`)
     },
   getItemsOfLocation:
     (locId: string) => (): Promise<AxiosResponse<any, any>> => {
@@ -48,5 +44,13 @@ export const itemApi = {
       (): Promise<AxiosResponse<any, any>> => {
         console.log(data)
       return axiosClient.post(ENDPOINTS.ITEM + `/location/${locId}/query?type=${type}`, data)
+    },
+  getAdminItems:
+    (state: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.ITEM + `/admin?state=${state}`)
+    },
+  changeState:
+    (id: string, state: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.put(ENDPOINTS.ITEM + `/admin/${id}`, { state })
     },
 }

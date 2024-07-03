@@ -3,7 +3,7 @@ import { Booking } from "../../pages/Business/Bookings"
 
 // Define a type for the slice state
 interface BusinessState {
-  selectedItem?: string
+  selectedItem?: any
   bookingList: Booking[]
 }
 
@@ -17,7 +17,7 @@ export const businessSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setSelectedItem: (state, action: PayloadAction<string>) => {
+    setSelectedItem: (state, action: PayloadAction<any>) => {
       state.selectedItem = action.payload
     },
     setBookingList: 

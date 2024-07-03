@@ -7,6 +7,9 @@ import Reviews from "./Reviews";
 import Bookings from "./Bookings";
 import Permits from "./Permits";
 import Details from "./Details";
+import { apiCaller, itemApi } from "../../api";
+import { useDispatch, useSelector } from "react-redux";
+import { getState, setSelectedItem } from "../../redux/Business";
 
 const categories = [
   {
@@ -39,17 +42,26 @@ const categories = [
 export default function Business () {
   const navigate = useNavigate()
   const [queries] = useSearchParams()
-  const [itemId, setItemId] = useState<string>()
   const [activeTab, setActiveTab] = useState<string>("1")
   const params = useParams()
+  const dispatch = useDispatch()
+  const { selectedItem } = useSelector(getState)
 
   useEffect(() => {
     setActiveTab(queries.get("tab") ?? categories[0].key)
   }, [queries])
 
   useEffect(() => {
-    // check existed before assign
-    setItemId(params.id)
+    const getItem = async () => {
+      const res = await apiCaller(itemApi.getBusinessItem(params.id ?? ""))
+
+      if (res !== undefined) {
+        console.log(res.data)
+        dispatch(setSelectedItem(res.data))
+      }
+    }
+
+    getItem()
   }, [params])
 
   const handleOnChange = (activeKey: string) => {
@@ -62,7 +74,7 @@ export default function Business () {
     <div className="tp-page business-page">
       <div className="tp-wrapper">
         {
-          !itemId
+          selectedItem === undefined
           ? <Empty  className="w-full"
             description={
               <span className=" text-color-text-tertiary poppins-font">

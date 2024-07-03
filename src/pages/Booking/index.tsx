@@ -1,4 +1,4 @@
-import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from "antd"
+import { Col, DatePicker, Form, Input, InputNumber, Row, Select, Spin } from "antd"
 import { useEffect, useState } from "react"
 import "./index.style.scss"
 import { generateTimeList } from "../../utils/Utils"
@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../redux/Loader"
 import CardItem, { CardItemProps } from "../../components/Item/CardItem"
 import dayjs from "dayjs"
-import { ROUTES } from "../../constants"
+import { ItemStates, ROUTES } from "../../constants"
 
 
 const timeList = generateTimeList().map(e => ({ label: e, value: e }))
@@ -35,8 +35,10 @@ export default function Booking() {
       )
       
       if (res !== undefined) {
-        console.log(res.data)
-        res.data.isReservable ? setItem(res.data) : setHas404Error(true)
+        // console.log(res.data)
+        if (res.data.isReservable && 
+          res.data.state === ItemStates.ACTIVE) setItem(res.data) 
+        else  setHas404Error(true)
       }
     }
 
@@ -60,11 +62,12 @@ export default function Booking() {
 
   return (
     <div className="tp-page booking-page bg-white">
-      { has404Error ? <NotFound/> 
-      : <div className="tp-wrapper flex mt-10 mb-5">
+      {has404Error ? <NotFound/> : 
+      item === undefined ? <Spin className="my-4"/> :
+      <div className="tp-wrapper flex mt-10 mb-5">
         <div className="w-1/3 min-w-[22rem] border-0 border-r border-solid border-color-border-secondary h-fit sticky top-24">
-          <h1 className="mt-0 text-4xl">Let's bookkkk</h1>
-          {item && <CardItem {...item}/>}
+          <h1 className="mt-0 text-4xl">Make a reservation</h1>
+          <CardItem {...item}/>
         </div>
         <div className="w-2/3 pl-10">
           <Form 

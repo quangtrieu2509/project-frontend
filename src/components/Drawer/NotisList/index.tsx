@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getState, readNoti, setNotisList } from "../../../redux/Noti"
+import { getState, readNoti, setNotiState, setNotisList } from "../../../redux/Noti"
 import { useDispatch, useSelector } from "react-redux"
 import NoResult from "../../Profile/NoResult"
 import { notiIcons } from "../../../constants/noti-types"
@@ -36,7 +36,8 @@ export default function NotisList() {
     dispatch(readNoti(noti.id))
     apiCaller(notiApi.readNoti(noti.id))
     // handle to url
-    window.location.replace(noti.url)
+    navigate(noti.url)
+    dispatch(setNotiState(false))
   }
 
   return (

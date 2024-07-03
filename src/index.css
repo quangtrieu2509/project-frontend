@@ -581,3 +581,11 @@ label{
     }
   }
 }
+
+/* Spin */
+.ant-spin .ant-spin-dot-holder {
+  color: var(--color-primary)
+}
+.ant-spin {
+  color: var(--color-primary)
+}

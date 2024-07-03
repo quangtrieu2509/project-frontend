@@ -1,12 +1,11 @@
 import { Form, Input, Modal, UploadFile, UploadProps } from "antd"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
 import LocationSearch from "../../../components/Trip/LocationSearch"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { apiCaller, itemApi, uploadApi } from "../../../api"
 import { useForm } from "antd/es/form/Form"
-import { compareFileChanges, locationToAncestors } from "../../../utils/Utils"
-import { useDispatch } from "react-redux"
+import { capitalize, compareFileChanges, locationToAncestors } from "../../../utils/Utils"
+import { useDispatch, useSelector } from "react-redux"
 import { setLoaderState } from "../../../redux/Loader"
 import { Map, Marker, MarkerDragEvent, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../configs"
@@ -14,6 +13,8 @@ import GeocoderControl from "../../../components/GeocoderControl"
 import { Pin } from "../../../utils/Map"
 import UploadFiles from "../../../components/UploadFiles"
 import { defaultMap } from "../../../redux/Map"
+import { getState } from "../../../redux/Business"
+import { ItemStates } from "../../../constants"
 
 interface OverviewItem {
   id: string
@@ -24,36 +25,27 @@ interface OverviewItem {
   description: string
   images: any[]
   type: string
+  state: string
 }
 
 export default function Overview() {
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const [item, setItem] = useState<OverviewItem>()
   const [removedFiles, setRemovedFiles] = useState<any[]>([])
   const [coors, setCoors] = useState<{longitude: number, latitude: number}>()
   const [viewState, setViewState] = useState<any>(defaultMap)
+
+  const selectedItem = useSelector(getState).selectedItem as OverviewItem
+
   const dispatch = useDispatch()
-  const params = useParams()
   const [form] = useForm()
-  useEffect(() => {
-    const getList = async () => {
-      const res = await apiCaller(itemApi.getOverviewItem(params.id ?? ""))
-
-      if (res !== undefined) {
-        setItem(res.data)
-      }
-    }
-
-    getList()
-  }, [params])
 
   useEffect(() => {
     setInitialValues()
-  }, [item])
+  }, [selectedItem])
 
   const setInitialValues = () => {
-    if (item) {
-      const { address, ancestors, images, coordinates, ...rest } = item
+    if (selectedItem) {
+      const { address, ancestors, images, coordinates, ...rest } = selectedItem
       const location = JSON.stringify({ 
         ...ancestors[0], ancestors: ancestors.slice(1) 
       })
@@ -149,7 +141,7 @@ export default function Overview() {
               images: [...files.remains, ...res.data] 
             }
             res = await apiCaller(
-              itemApi.updateItem(item?.id ?? "", newData)
+              itemApi.updateItem(selectedItem?.id ?? "", newData)
             )          
             dispatch(setLoaderState(false))
 
@@ -169,10 +161,38 @@ export default function Overview() {
     labelCol: { span: 5 },
     wrapperCol: { span: 30 }
   }
+
+  const generateState = (state: string) => {
+    const cf = "text-sm font-semibold px-2 py-0.5 ml-4 rounded-md "
+    switch (state) {
+      case ItemStates.PENDING: 
+        return (
+          <div className={cf + "bg-neutral-200 text-neutral-700"}>
+            {capitalize(state)}
+          </div>
+        )
+      case ItemStates.ACTIVE: 
+        return (
+          <div className={cf + "bg-green-100 text-green-700"}>
+            {capitalize(state)}
+          </div>
+        )
+      case ItemStates.INACTIVE: 
+        return (
+          <div className={cf + "bg-red-100 text-red-700"}>
+            {capitalize(state)}
+          </div>
+        )
+      default: return <></>
+    }
+  }
   return (
     <div className="business-overview">
-      <h2 className="mt-0">Overview</h2>
-      {item && <div className="flex justify-between">
+      <h2 className="flex mt-0 w-fit">
+        <span>Overview</span>
+        {selectedItem && generateState(selectedItem.state)}
+      </h2>
+      {selectedItem && <div className="flex justify-between">
         <Form {...formItemLayout} form={form} 
           variant="filled" className="min-w-[36rem] mr-14"
           onFinish={onFinish}
@@ -265,7 +285,7 @@ export default function Overview() {
               {coors && <Marker {...coors} draggable offset={[0, -15]}
                 onDragEnd={handleOnDragEnd}
               >
-                <Pin type={item.type}/>
+                <Pin type={selectedItem.type}/>
               </Marker>}
             </Map>
           </div>

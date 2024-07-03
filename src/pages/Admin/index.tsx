@@ -3,7 +3,7 @@ import "./index.style.scss"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Locations from "./Locations";
-import Places from "./Places";
+import Items from "./Items";
 
 const categories = [
   {
@@ -12,9 +12,9 @@ const categories = [
     children: <Locations/>
   },
   {
-    key: "place",
-    label: "Places",
-    children: <Places/>
+    key: "item",
+    label: "Items",
+    children: <Items/>
   },
   {
     key: "review",
@@ -55,7 +55,7 @@ export default function Admin () {
 
   return (
     <div className="tp-page admin-page">
-      <div className="tp-wrapper">
+      <div className="tp-wrapper mb-10">
         <Tabs
           className="text-base"
           items={categories}

@@ -65,10 +65,12 @@ axiosClient.interceptors.response.use(
         }
         case messages.ACCESS_TOKEN_EXPIRED.ec: {
           alert(messages.ACCESS_TOKEN_EXPIRED.msg)
+          window.location.replace("/")
           break
         }
         case messages.ACCESS_TOKEN_INVALID.ec: {
           alert(messages.ACCESS_TOKEN_INVALID.msg)
+          window.location.replace("/")
           break
         }
       }

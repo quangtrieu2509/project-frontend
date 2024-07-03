@@ -1,4 +1,4 @@
-import { Checkbox, Form, Input, Rate, Select, UploadFile, UploadProps } from "antd"
+import { Checkbox, Form, Input, Rate, Select, Spin, UploadFile, UploadProps } from "antd"
 import { useEffect, useState } from "react"
 import "./index.style.scss"
 import { generateLast12Months } from "../../utils/Utils"
@@ -9,7 +9,7 @@ import { messages } from "../../constants/message"
 import { reviewApi } from "../../api/review"
 import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../redux/Loader"
-import { ROUTES, rateLevelArr, rateLevelObj } from "../../constants"
+import { ItemStates, ROUTES, rateLevelArr, rateLevelObj } from "../../constants"
 import CardItem, { CardItemProps } from "../../components/Item/CardItem"
 import UploadFiles from "../../components/UploadFiles"
 
@@ -50,8 +50,10 @@ export default function Review() {
       )
       
       if (res !== undefined) {
-        console.log(res.data)
-        setItem(res.data)
+        // console.log(res.data)
+        if (res.data.state === ItemStates.ACTIVE)
+          setItem(res.data)
+        else setHas404Error(true)
       }
     }
 
@@ -95,11 +97,12 @@ export default function Review() {
 
   return (
     <div className="tp-page review-page bg-white">
-      { has404Error ? <NotFound/> 
-      : <div className="tp-wrapper flex mt-10 mb-5">
+      { has404Error ? <NotFound/> : 
+      item === undefined ? <Spin className="my-4"/> :
+      <div className="tp-wrapper flex mt-10 mb-5">
         <div className="w-1/3 min-w-[22rem] border-0 border-r border-solid border-color-border-secondary h-fit sticky top-24">
           <h1 className="mt-0 text-4xl">Tell us, how was your visit?</h1>
-          {item && <CardItem {...item}/>}
+          <CardItem {...item}/>
         </div>
         <div className="w-2/3 pl-10">
           <Form 

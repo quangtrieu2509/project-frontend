@@ -45,6 +45,46 @@ interface LodgingDetail {
   reviewCounts: Record<number, number>
 }
 
+export const generateHotelClass = (value: string) => {
+  if (lodgingPrices[value] === lodgingPrices.N) {
+    return <div><i>{lodgingPrices.N}</i></div>
+  } 
+  else {
+    return <Rate
+      value={+value}
+      disabled
+      className="text-color-text-secondary text-sm ml-1"
+    />
+  }
+}
+
+export const generateAttribute =  (
+  name: string, labelObj: any, valueList: any[]
+) => {
+  valueList = valueList.filter(e => labelObj[e])
+  const leftList = valueList.filter((_, i) => !(i%2))
+  const rightList = valueList.filter((_, i) => i%2) 
+  const genLabel = (e: any, i: number) => (
+    <div key={i} className="flex mb-1">
+      <i className={`bi bi-${labelObj[e].icon} mr-2`}/>
+      <div>{labelObj[e].label}</div>
+    </div>
+  )
+  return (
+    <div key={name} className="mb-3">
+      <div className="font-medium mb-1">{name}</div>
+      <div className="grid grid-cols-2 gap-x-6 text-sm">
+        <div>
+          {leftList.map((e, i) => genLabel(e, i))}
+        </div>
+        <div>
+          {rightList.map((e, i) => genLabel(e, i))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Detail() {
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const [paraExpanded, setParaExpanded] = useState<boolean>(false)
@@ -94,7 +134,7 @@ export default function Detail() {
     return items
   }
 
-  const onNavigateToReview = () => window.open(ROUTES.REVIEW_BASE + id)
+  const onNavigateToReview = () => window.open(ROUTES.WRITE_REVIEW_BASE + id)
 
   const generateRatingDetail = (name: string, value: number, quant: number) => {
     const total = item?.review.total ?? 100
@@ -110,46 +150,6 @@ export default function Detail() {
         </span>
       </div>
     )
-  }
-
-  const generateAttribute =  (
-    name: string, labelObj: any, valueList: any[]
-  ) => {
-    valueList = valueList.filter(e => labelObj[e])
-    const leftList = valueList.filter((_, i) => !(i%2))
-    const rightList = valueList.filter((_, i) => i%2) 
-    const genLabel = (e: any, i: number) => (
-      <div key={i} className="flex mb-1">
-        <i className={`bi bi-${labelObj[e].icon} mr-2`}/>
-        <div>{labelObj[e].label}</div>
-      </div>
-    )
-    return (
-      <div key={name} className="mb-3">
-        <div className="font-medium mb-1">{name}</div>
-        <div className="grid grid-cols-2 gap-x-6 text-sm">
-          <div>
-            {leftList.map((e, i) => genLabel(e, i))}
-          </div>
-          <div>
-            {rightList.map((e, i) => genLabel(e, i))}
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const generateHotelClass = (value: string) => {
-    if (lodgingPrices[value] === lodgingPrices.N) {
-      return <div><i>{lodgingPrices.N}</i></div>
-    } 
-    else {
-      return <Rate
-        value={+value}
-        disabled
-        className="text-color-text-secondary text-sm ml-1"
-      />
-    }
   }
 
   const onTripListOpen = () => {

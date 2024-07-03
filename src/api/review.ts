@@ -25,4 +25,8 @@ export const reviewApi = {
     (id: string, like: boolean) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.post(ENDPOINTS.REVIEW + `/${id}`, { like })
     },
+  getReview:
+    (id: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.REVIEW + `/${id}`)
+    },
 }

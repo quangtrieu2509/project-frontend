@@ -1,9 +1,9 @@
 import { Badge, Drawer } from "antd";
 import NotisList from "../../Drawer/NotisList";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLocalStorage, setLocalStorage } from "../../../utils/Auth";
-import { addNoti, getState, readAllNotis, setNotisList } from "../../../redux/Noti";
+import { addNoti, getState, readAllNotis, setNotiState, setNotisList } from "../../../redux/Noti";
 import { apiCaller, notiApi } from "../../../api";
 import { useSocket } from "../../../hooks";
 
@@ -20,8 +20,8 @@ export interface INoti {
 export default function Noti() {
   const dispatch = useDispatch()
   const socket = useSocket()
-  const [notiState, setNotiState] = useState<boolean>(false)
   const notisList = useSelector(getState).notisList as INoti[]
+  const { notiState } = useSelector(getState)
 
   useEffect(() => {
     const getNotisList = async () => {
@@ -58,7 +58,7 @@ export default function Noti() {
 
   const handleOnClose = () => {
     setLocalStorage({ key: "latestSeen", value: Date.now().toString() })
-    setNotiState(false)
+    dispatch(setNotiState(false))
   }
 
   const calculateNotisCount = (): number => {
@@ -72,7 +72,7 @@ export default function Noti() {
     <>
       <span 
         className="text-base font-medium text-color-text-primary px-5 py-2 mx-px rounded-full bg-transparent hover:bg-color-hover-primary cursor-pointer"
-        onClick={() => setNotiState(true)}
+        onClick={() => dispatch(setNotiState(true))}
       >
         <Badge 
           count={calculateNotisCount()} 

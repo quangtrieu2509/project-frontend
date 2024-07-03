@@ -49,6 +49,12 @@ interface DiningDetail {
   reviewCounts: Record<number, number>
 }
 
+export const generatePriceRange = (range: number[] | undefined) => {
+  if (range === undefined || !range.length || isEqual(range, [0, 0])) 
+    return null
+  else return `(from ${range.map(e => "$" + e).join(" to ")})`
+}
+
 export default function Detail() {
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const [paraExpanded, setParaExpanded] = useState<boolean>(false)
@@ -98,7 +104,7 @@ export default function Detail() {
     return items
   }
 
-  const onNavigateToReview = () => window.open(ROUTES.REVIEW_BASE + id)
+  const onNavigateToReview = () => window.open(ROUTES.WRITE_REVIEW_BASE + id)
 
   const generateRatingDetail = (name: string, value: number, quant: number) => {
     const total = item?.review.total ?? 100
@@ -114,12 +120,6 @@ export default function Detail() {
         </span>
       </div>
     )
-  }
-
-  const generatePriceRange = (range: number[] | undefined) => {
-    if (range === undefined || !range.length || isEqual(range, [0, 0])) 
-      return null
-    else return `(from ${range.map(e => "$" + e).join(" to ")})`
   }
 
   const onTripListOpen = () => {
