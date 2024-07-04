@@ -36,7 +36,7 @@ export default function NotisList() {
     dispatch(readNoti(noti.id))
     apiCaller(notiApi.readNoti(noti.id))
     // handle to url
-    navigate(noti.url)
+    noti.url && navigate(noti.url)
     dispatch(setNotiState(false))
   }
 

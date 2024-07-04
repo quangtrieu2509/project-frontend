@@ -12,7 +12,7 @@ export interface INoti {
   userId: string
   type: string
   content: string
-  url: string
+  url?: string
   isSeen: boolean
   createdAt: Date
 }
