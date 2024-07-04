@@ -121,6 +121,13 @@ export default function ItineraryItemEdit(props: ItineraryItemEditProps) {
           >
             <Input.TextArea rows={3} placeholder="Enter a note" />
           </Form.Item>
+          <Form.Item
+            name="reservationNumber"
+            label="Reservation Number"
+            initialValue={props.itineraryItem.reservationNumber}
+          >
+            <Input placeholder="Enter a number/code" allowClear/>
+          </Form.Item>
         </Form>
       </div>
     </div>

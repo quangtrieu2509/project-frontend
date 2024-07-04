@@ -7,6 +7,7 @@ import { IMAGE_PATH, ROUTES } from "../../constants"
 import { Tabs } from "antd"
 import { categoryItems, getCatPhrases } from "./itemLists"
 import { useNavigate } from "react-router-dom"
+import { setTripCreationState } from "../../redux/Trip"
 
 export default function Home() {
   const dispatch = useDispatch()
@@ -23,7 +24,7 @@ export default function Home() {
   }, [dispatch])
 
   const handleRecommend = () => {
-    alert("handle recommend")
+    // alert("handle recommend")
   }
 
   const handleOnChange = (value: string) => {
@@ -101,7 +102,10 @@ export default function Home() {
             </div>
             <div className="primary-button w-fit"
               style={{ borderRadius: "99px" }}
-              onClick={() => navigate(ROUTES.TRIPS_HOME)}
+              onClick={() => {
+                navigate(ROUTES.TRIPS_HOME)
+                dispatch(setTripCreationState(true))
+              }}
             >
               Plan your trip
             </div>

@@ -29,4 +29,12 @@ export const reviewApi = {
     (id: string) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.get(ENDPOINTS.REVIEW + `/${id}`)
     },
+  getAdminReviews:
+    (state: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.get(ENDPOINTS.REVIEW + `/admin?state=${state}`)
+    },
+  changeState:
+    (id: string, state: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.put(ENDPOINTS.REVIEW + `/admin/${id}`, { state })
+    }
 }

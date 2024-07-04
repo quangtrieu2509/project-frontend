@@ -13,6 +13,7 @@ import { Map, Marker, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../../configs"
 import { Pin } from "../../../../utils/Map"
 import { setSelectedId } from "../../../../redux/Item"
+import { useDocumentTitle } from "../../../../hooks"
 
 interface LodgingDetail {
   id: string
@@ -91,6 +92,9 @@ export default function Detail() {
   const { id } = useParams()
   const [item, setItem] = useState<LodgingDetail>()
   const dispatch = useDispatch()
+
+  const title = item ? item.name : "Lodging Detail"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getItem = async () => {

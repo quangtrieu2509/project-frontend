@@ -1,6 +1,8 @@
 import Label from "./Label"
 import { ROUTES } from "../../constants"
 import { getLocalStorage } from "../../utils/Auth"
+import store from "../../redux/store"
+import { setTripCreationState } from "../../redux/Trip"
 
 export const featureItems = [
   {
@@ -44,7 +46,10 @@ export const featureItems = [
     items: [
       {
         key: "1",
-        label: <Label url={ROUTES.TRIPS_HOME} title={"Make a trip"} />,
+        label: <Label 
+          url={ROUTES.TRIPS_HOME} title={"Make a trip"} 
+          event={() => store.dispatch(setTripCreationState(true))}
+        />,
       },
       {
         key: "2",

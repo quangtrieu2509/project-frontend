@@ -46,7 +46,7 @@ export default function Booking() {
 
   }, [id])
 
-  const onSubmitReview = async (value: any) => {
+  const onSubmitBooking = async (value: any) => {
     console.log(value)
     if (id !== undefined) {
       dispatch(setLoaderState(true))
@@ -62,8 +62,8 @@ export default function Booking() {
 
   return (
     <div className="tp-page booking-page bg-white">
-      {has404Error ? <NotFound/> : 
-      item === undefined ? <Spin className="my-4"/> :
+    {
+      item !== undefined ?
       <div className="tp-wrapper flex mt-10 mb-5">
         <div className="w-1/3 min-w-[22rem] border-0 border-r border-solid border-color-border-secondary h-fit sticky top-24">
           <h1 className="mt-0 text-4xl">Make a reservation</h1>
@@ -73,7 +73,7 @@ export default function Booking() {
           <Form 
             layout="vertical"
             form={form}  
-            onFinish={onSubmitReview}
+            onFinish={onSubmitBooking}
           >
             <Form.Item
               name="date"
@@ -168,7 +168,9 @@ export default function Booking() {
             </Form.Item>
           </Form>
         </div>
-      </div>}
+      </div> : 
+      has404Error ? <NotFound/> : <Spin className="my-4"/>
+    }
     </div>
   )
 }

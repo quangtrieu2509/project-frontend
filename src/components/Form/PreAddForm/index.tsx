@@ -126,6 +126,12 @@ export default function PreAddForm(props: PreAddFormProps) {
           >
             <Input.TextArea rows={3} placeholder="Enter a note" />
           </Form.Item>
+          <Form.Item
+            name="reservationNumber"
+            label="Reservation Number"
+          >
+            <Input placeholder="Enter a number/code" allowClear/>
+          </Form.Item>
         </Form>
       </div>
     </div>

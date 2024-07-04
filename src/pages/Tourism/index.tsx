@@ -10,6 +10,7 @@ import NotFound from "../../components/Static/NotFound"
 import { ROUTES, categoryItems, itemTypes } from "../../constants"
 import TripListDrawer from "../../components/Drawer/TripListDrawer"
 import { generateSlickClass } from "../../utils/Utils"
+import { useDocumentTitle } from "../../hooks"
 
 const settings = {
   dots: false,
@@ -50,6 +51,9 @@ export default function Tourism() {
   const [location, setLocation] = useState<Location>()
   const [items, setItems] = useState<Item>()
   const { slug } = useParams()
+
+  const title = location ? `Tourism in ${location.name}` : "Tourism"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getLocation = async () => {

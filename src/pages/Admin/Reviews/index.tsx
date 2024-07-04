@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { apiCaller, itemApi } from "../../../api"
+import { apiCaller, reviewApi } from "../../../api"
 import { useDispatch, useSelector } from "react-redux"
-import { getState, removeFromItemList, setDetailItem, setItemList } from "../../../redux/Admin"
+import { getState, removeFromReviewList, setDetailReview, setReviewList } from "../../../redux/Admin"
 import NoResult from "../../../components/Profile/NoResult"
 import { Drawer, Modal, Spin } from "antd"
-import AdminItem from "../../../components/Item/AdminItem"
-import ItemDetail from "../../../components/Drawer/ItemDetail"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { setLoaderState } from "../../../redux/Loader"
-import { ItemStates } from "../../../constants"
+import { ReviewStates } from "../../../constants"
+import AdminReview from "../../../components/Review/AdminReview"
+import ReviewDetail from "../../../components/Drawer/ReviewDetail"
 
-export const itemStates = [
+export const reviewStates = [
   {
     key: "pending",
     label: "Pending"
@@ -26,70 +26,51 @@ export const itemStates = [
   }
 ]
 
-export interface Item {
+export interface Review {
   id: string
-  owner: {
+  user: {
     id: string
-    familyName: string
     givenName: string
+    familyName: string
     profileImage: string
   }
-  ancestors: Array<{
+  item: {
     id: string
     name: string
-    level: number
-    slug: string
-  }>
-  name: string
-  coordinates: number[]
-  address?: string[]
-  description: string
+    type: string
+    ancestors: any[]
+    image: {
+      name: string
+      url: string
+    }
+    review: {
+      rate: number
+      total: number
+    }
+  }
+  rate: number
+  travelDate: Date
+  tripType: string
+  content: string
   images: Array<{
     name: string
     url: string
   }>
-  contacts?: {
-    phoneNumber: string
-    website?: string
-    email?: string
-  }
-  type: string
-  isReservable: boolean
-  state: string
-  adminUpdatedAt: Date
-  categories: string[]
-  price?: {
-    level: string
-    range?: number[]
-  }
-  hours?: Array<{
-    open: string
-    close: string
-  } | null>
-  features?: string[]
-  amenities?: string[]
-  ticketPrice?: number[]
-  duration?: {
-    value: number
-    unit: string
-  }
-  ages?: number[]
-  included?: string[]
-  excluded?: string[]
-  requirements?: string[]
+  updatedAt: Date
   createdAt: Date
+  state: string
 }
 
-export default function Items() {
+export default function Reviews() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [queries] = useSearchParams()
   const [activeTab, setActiveTab] = useState<string>()
 
-  const { itemList, detailItem } = useSelector(getState)
+  const { reviewList, detailReview } = useSelector(getState)
 
   useEffect(() => {
-    setActiveTab(queries.get("state") ?? itemStates[0].key)
+    setActiveTab(queries.get("state") ?? reviewStates[0].key)
   }, [queries])
 
   const handleOnChange = (activeKey: string) => {
@@ -98,13 +79,13 @@ export default function Items() {
   }
 
   useEffect(() => {
-    dispatch(setItemList(undefined))
+    dispatch(setReviewList(undefined))
     const getItems = async (state: string) => {
-      const res = await apiCaller(itemApi.getAdminItems(state))
+      const res = await apiCaller(reviewApi.getAdminReviews(state))
 
       if (res !== undefined) {
         console.log(res.data)
-        dispatch(setItemList(res.data))
+        dispatch(setReviewList(res.data))
       }
     }
     
@@ -125,30 +106,30 @@ export default function Items() {
   }
 
   const handleOnDetailClose = () => {
-    dispatch(setDetailItem(undefined))
+    dispatch(setDetailReview(undefined))
   }
 
   const handleChangeState = (action: string, state: string) => {
     Modal.confirm({
-      title: `Are you sure to ${action} this item?`,
+      title: `Are you sure to ${action} this review?`,
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk () {
-        const changeStateItem = async () => {
+        const changeStateReview = async () => {
           dispatch(setLoaderState(true))
-          const id = detailItem?.id ?? ""
-          const res = await apiCaller(itemApi.changeState(id, state))
+          const id = detailReview?.id ?? ""
+          const res = await apiCaller(reviewApi.changeState(id, state))
           dispatch(setLoaderState(false))
           if (res !== undefined) {
             alert("Update successfully")
-            dispatch(removeFromItemList(id))
-            dispatch(setDetailItem(undefined))
+            dispatch(removeFromReviewList(id))
+            dispatch(setDetailReview(undefined))
           }
         }
         
-        changeStateItem()
+        changeStateReview()
       }
     })
   }
@@ -157,7 +138,7 @@ export default function Items() {
     const activeBtn = (
       <div className="primary-button"
         style={{ fontSize: "14px", backgroundColor: "var(--yellow-500)" }}
-        onClick={() => handleChangeState("activate", ItemStates.ACTIVE)}
+        onClick={() => handleChangeState("activate", ReviewStates.ACTIVE)}
       >
         Activate
       </div>
@@ -166,20 +147,20 @@ export default function Items() {
     const inactiveBtn = (
       <div className="primary-button"
         style={{ fontSize: "14px",backgroundColor: "var(--red-500)" }}
-        onClick={() => handleChangeState("inactivate", ItemStates.INACTIVE)}
+        onClick={() => handleChangeState("inactivate", ReviewStates.INACTIVE)}
       >
         Inactivate
       </div>
     )
 
     return (
-      detailItem && <div className="flex items-center gap-4">
+      detailReview && <div className="flex items-center gap-4">
       {
-        detailItem.state === itemStates[0].key ?
+        detailReview.state === reviewStates[0].key ?
         <>{activeBtn}{inactiveBtn}</> :
-        detailItem.state === itemStates[1].key ?
+        detailReview.state === reviewStates[1].key ?
         inactiveBtn :
-        detailItem.state === itemStates[2].key ?
+        detailReview.state === reviewStates[2].key ?
         activeBtn : <></>
       }
       </div>
@@ -188,21 +169,21 @@ export default function Items() {
 
   return (
     <div>
-      <h2 className="mt-0">Items</h2>
+      <h2 className="mt-0">Reviews</h2>
       <div className="flex gap-4 mb-6">
       {
-        itemStates.map(e => generateTabButton(e.key, e.label))
+        reviewStates.map(e => generateTabButton(e.key, e.label))
       }
       </div>
       <div>
         {
-          itemList === undefined ? 
+          reviewList === undefined ? 
           <div className="flex flex-col items-center py-4"><Spin/></div> :
-          !itemList.length ? <NoResult/> :
-          <div className="grid grid-cols-3 gap-5">
+          !reviewList.length ? <NoResult/> :
+          <div className="grid grid-cols-2 gap-5">
           {
-            itemList.map((e: Item) => (
-              <AdminItem key={e.id} {...e}/>
+            reviewList.map((e: Review) => (
+              <AdminReview key={e.id} {...e}/>
             ))
           }
           </div>
@@ -212,15 +193,15 @@ export default function Items() {
         title={<div className="flex justify-between items-center">
           <div className="flex items-center">
             <span className="mr-1.5">ID:</span>
-            <span className="font-medium">{detailItem?.id ?? ""}</span>
+            <span className="font-medium">{detailReview?.id ?? ""}</span>
           </div>
           {generateButton()}
         </div>}
         onClose={handleOnDetailClose}
-        open={detailItem} width={600}
+        open={detailReview} width={550}
         destroyOnClose closeIcon={false}
       >
-        {detailItem && <ItemDetail {...detailItem}/>}
+        {detailReview && <ReviewDetail {...detailReview}/>}
       </Drawer>
     </div>
   )

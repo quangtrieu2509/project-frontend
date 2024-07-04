@@ -2,6 +2,14 @@ import { LabeledValue } from "antd/es/select"
 import { activityTypes, attractionTypes, diningTypes, iconTypes, itemTypes, lodgingTypes } from "../constants"
 import { days } from "../constants/days"
 
+const compareDate = (date1: Date, date2: Date) => {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  )
+}
+
 export const getMonth = (time: any, short: boolean = false): string => {
   const rDate = new Date(time)
   const month = rDate.getMonth()
@@ -44,7 +52,7 @@ export const formatDateTime = (
   const rDate = new Date(date)
   const rTime = hasTime ? formatTime(rDate) : ""
   const now = new Date()
-  if (rDate.getDay() === now.getDay() )
+  if (compareDate(rDate, now))
     return formatTime(rDate)
   else if (getYear(rDate) === getYear(now))
     return `${getMonth(rDate, short)}  ${rDate.getDate()} ${rTime}`

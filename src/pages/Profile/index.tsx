@@ -16,6 +16,7 @@ import { getState, setInteractModalState, setIntroInfo } from "../../redux/Profi
 import { messages } from "../../constants/message"
 import NotFound from "../../components/Static/NotFound"
 import { seenConvo, setConvoState, setSelectedConvo } from "../../redux/Chat"
+import { useDocumentTitle } from "../../hooks"
 
 interface IUserProfile {
   id: string
@@ -63,6 +64,9 @@ export default function Profile() {
     // dispatch(setLoaderState(false))
     setIsFollowing(action)
   }
+
+  const title = user ? `Profile - ${user.familyName} ${user.givenName}` : "Profile"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getUser = async () => {
@@ -190,7 +194,7 @@ export default function Profile() {
   
   return (
     <div className="tp-page profile-page bg-color-background-primary">
-      { has404Error ? <NotFound/>
+      { has404Error && user === null ? <NotFound/>
       : <div className="tp-wrapper tp-profile-wrapper">
         <div className="profile-item bg-white p-6 pb-0 flex justify-between rounded-t-lg">
           <div className="flex">

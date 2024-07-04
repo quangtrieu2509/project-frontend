@@ -8,11 +8,15 @@ import { useParams } from "react-router-dom";
 import { apiCaller, locationApi } from "../../../api";
 import { messages } from "../../../constants/message";
 import { BreadcrumbItem } from "../../../types";
+import { useDocumentTitle } from "../../../hooks";
 
 export default function Activities() {
   const [bcItems, setBcItems] = useState<BreadcrumbItem[]>([])
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const { slug } = useParams()
+
+  const title = bcItems.length ? `${bcItems[bcItems.length - 1].name} Activities` : "Activities"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getBreadcrumbItems = async () => {

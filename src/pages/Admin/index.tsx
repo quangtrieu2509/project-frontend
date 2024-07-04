@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Locations from "./Locations";
 import Items from "./Items";
+import Reviews from "./Reviews";
 
 const categories = [
   {
@@ -19,7 +20,7 @@ const categories = [
   {
     key: "review",
     label: "Reviews",
-    // children: <Reviews/>
+    children: <Reviews/>
   },
   // {
   //   key: "bookings",

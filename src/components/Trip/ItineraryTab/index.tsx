@@ -224,7 +224,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
                       <span className="text-sm text-color-text-secondary">{e.item.review.total}</span>
                     </div>
                   </div>
-                  <div className="text-sm text-color-text-secondary">
+                  <div className="text-sm text-color-text-secondary ellipsis">
                     {generateCategories(e.item.categories, e.item.type).join(" - ")}
                   </div>
                 </div>

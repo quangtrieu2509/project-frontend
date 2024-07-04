@@ -10,6 +10,7 @@ import Details from "./Details";
 import { apiCaller, itemApi } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
 import { getState, setSelectedItem } from "../../redux/Business";
+import { useDocumentTitle } from "../../hooks";
 
 const categories = [
   {
@@ -46,6 +47,9 @@ export default function Business () {
   const params = useParams()
   const dispatch = useDispatch()
   const { selectedItem } = useSelector(getState)
+
+  const title = selectedItem ? `Business - ${selectedItem.name}` : "Business"
+  useDocumentTitle(title)
 
   useEffect(() => {
     setActiveTab(queries.get("tab") ?? categories[0].key)

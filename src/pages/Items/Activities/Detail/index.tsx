@@ -13,6 +13,7 @@ import { Map, Marker, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../../configs"
 import { Pin } from "../../../../utils/Map"
 import { setSelectedId } from "../../../../redux/Item"
+import { useDocumentTitle } from "../../../../hooks"
 
 interface ActivityDetail {
   id: string
@@ -55,6 +56,9 @@ export default function Detail() {
   const { id } = useParams()
   const [item, setItem] = useState<ActivityDetail>()
   const dispatch = useDispatch()
+
+  const title = item ? item.name : "Activity Detail"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getItem = async () => {
@@ -248,7 +252,7 @@ export default function Detail() {
               {item.duration && <>
               <div className="font-medium mb-1">Duration</div>
               <div className="text-sm flex mb-2">
-                <i className="bi bi-clock mr-2"/>
+                <i className="bi bi-clock-history mr-2"/>
                 <div>
                   {`${item.duration.value} ${durationUnits[item.duration.unit]}`}
                 </div>

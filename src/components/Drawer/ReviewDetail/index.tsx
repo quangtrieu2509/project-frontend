@@ -1,88 +1,24 @@
 // import "../index.style.scss"
-import { Dropdown, Image, Rate, Typography } from "antd"
+import { Image, Rate, Typography } from "antd"
 import { IMAGE_PATH, ROUTES } from "../../../constants"
 import { capitalize, formatDateTime, generateAddress, generateIconType, getMonth, getYear } from "../../../utils/Utils"
-import { privacyIcons } from "../../../constants/privacies"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { apiCaller, reviewApi } from "../../../api"
-import Label from "../../Label"
-import { ExclamationCircleOutlined } from "@ant-design/icons"
+import { useState } from "react"
+import { Review } from "../../../pages/Admin/Reviews"
 
-interface Interact {
-  liked: boolean
-  likes: number
-}
-const initInteract = {
-  liked: false,
-  likes: 0
-}
-
-export interface ReviewOverviewProps {
-  id: string
-  user: {
-    id: string
-    givenName: string
-    familyName: string
-    profileImage: string
-  }
-  item: {
-    id: string
-    name: string
-    type: string
-    ancestors: any[]
-    image: {
-      name: string
-      url: string
-    }
-    review: {
-      rate: number
-      total: number
-    }
-  }
-  interact: Interact
-  rate: number
-  travelDate: Date
-  tripType: string
-  content: string
-  images: Array<{
-    name: string
-    url: string
-  }>
-  createdAt: Date
-}
-
-export default function ReviewOverview(props: ReviewOverviewProps) {
-  const navigate = useNavigate()
-  const [interact, setInteract] = useState<Interact>(initInteract)
+export default function ReviewDetail(props: Review) {
   const [paraExpanded, setParaExpanded] = useState<boolean>(false)
 
-  useEffect(() => {
-    setInteract(props.interact)
-  }, [props])
-
   const goToProfile = () => {
-    navigate(ROUTES.PROFILE_BASE + props.user.id)
+    window.open(ROUTES.PROFILE_BASE + props.user.id)
   }
 
   const goToItemDetail = () => {
-    navigate(`/${props.item.type}/${props.item.id}`)
+    window.open(`/${props.item.type}/${props.item.id}`)
   }
 
-  
-  const handleLike = async () => {
-    const { liked, likes } = interact
-      await apiCaller(
-        reviewApi.interactReview(props.id, !liked)
-      )
-
-      liked
-      ? setInteract({ liked: !liked, likes: likes - 1 })
-      : setInteract({ liked: !liked, likes: likes + 1 })
-  }
   return (
-    <div className="rounded-md pt-3.5 bg-white mb-4">
-      <div className="review-header px-6 h-10 flex mb-3.5 text-color-text-primary">
+    <div className="text-color-text-primary">
+      <div className="review-header h-10 flex mb-3.5 text-color-text-primary">
         <div className="h-10 max-w-[2.5rem] mr-3">
           <img alt="#" src={props.user.profileImage ?? IMAGE_PATH.DEFAULT_AVATAR} 
             className="image h-full rounded-full cursor-pointer" 
@@ -91,7 +27,7 @@ export default function ReviewOverview(props: ReviewOverviewProps) {
         </div>
         <div className="flex flex-col justify-between w-full">
           <div>
-            <span className="font-semibold cursor-pointer mr-1.5"
+            <span className="font-semibold text-base cursor-pointer mr-1.5 hover:underline"
               onClick={goToProfile}
             >
               {`${props.user.familyName} ${props.user.givenName}`}
@@ -101,33 +37,11 @@ export default function ReviewOverview(props: ReviewOverviewProps) {
             </span>
           </div>
           <div className="flex items-center text-xs text-color-text-secondary h-4">
-            <span>{formatDateTime(props.createdAt, true, true)}</span>
-            <i className="bi bi-dot mx-1"/>
-            <span>
-              {privacyIcons.PUBLIC}
-            </span>
+            <span>{`created at ${formatDateTime(props.createdAt, true, true)}`}</span>
           </div>
         </div>
-        <div className="like font-medium mr-4 flex items-center">
-          <i className={`text-sm mr-2 cursor-pointer p-1 bi bi-heart${interact.liked ? "-fill text-color-object-primary" : ""}`}
-            onClick={handleLike}
-          />
-          <div>{interact.likes}</div>
-        </div>
-        <Dropdown
-          menu={{ items: [
-            {
-              key: "1",
-              label: <Label title="Report this review" icon={<ExclamationCircleOutlined/>}/>,
-            }
-          ] }}
-          trigger={["click"]}
-          onOpenChange={() => {}}
-        >
-          <i className="bi bi-three-dots text-xl cursor-pointer px-2 mb-2 mt-1 rounded-lg"/>
-        </Dropdown>
       </div>
-      <div className="review-content px-6 mb-3">
+      <div className="review-content mb-3">
         <div>
           <Rate disabled value={props.rate} 
             className="text-color-primary text-base"

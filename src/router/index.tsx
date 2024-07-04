@@ -133,7 +133,7 @@ const routes: RouteType[] = [
   },
   {
     path: ROUTES.BOOKINGS,
-    title: "Bookings",
+    title: "My Bookings",
     element: Bookings
   },
   {
@@ -143,13 +143,13 @@ const routes: RouteType[] = [
   },  
   {
     path: ROUTES.BUSINESS,
-    title: "Trippie Business",
+    title: "Business",
     element: Business,
     type: "business"
   },
   {
     path: ROUTES.BUSINESS_DETAIL,
-    title: "Trippie Business",
+    title: "Business",
     element: Business,
     type: "business"
   },

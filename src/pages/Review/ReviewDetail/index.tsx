@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { apiCaller, reviewApi } from "../../../api";
 import { messages } from "../../../constants/message";
 import NotFound from "../../../components/Static/NotFound";
+import { Spin } from "antd";
 
 export default function ReviewDetail() {
   const [review, setReview] = useState<Review>()
@@ -35,7 +36,7 @@ export default function ReviewDetail() {
       <div className="tp-wrapper flex flex-col items-center text-sm">
         {
           has404Error ? <NotFound/> : review === undefined ? 
-          <div className="text-center">Loading...</div> :
+          <div className="text-center py-4"><Spin/></div> :
           <div className="max-w-3xl">
             <ReviewOverview {...review}/>
           </div>

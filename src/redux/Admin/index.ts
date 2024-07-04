@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { Location } from "../../pages/Admin/Locations"
 import { Item } from "../../pages/Admin/Items"
+import { Review } from "../../pages/Admin/Reviews"
 
 // Define a type for the slice state
 interface AdminState {
@@ -8,8 +9,10 @@ interface AdminState {
   editLocState: boolean
   detailLoc?: Location
   detailItem?: Item
+  detailReview?: Review
   locList: Location[]
   itemList?: Item[]
+  reviewList?: Review[]
 }
 
 // Define the initial state using that type
@@ -36,6 +39,9 @@ export const adminSlice = createSlice({
     setDetailItem: (state, action: PayloadAction<Item | undefined>) => {
       state.detailItem = action.payload
     },
+    setDetailReview: (state, action: PayloadAction<Review | undefined>) => {
+      state.detailReview = action.payload
+    },
     setLocList: (state, action: PayloadAction<Location[] | Location>) => {
       const { payload } = action
       if (Array.isArray(payload)) state.locList = payload
@@ -43,6 +49,9 @@ export const adminSlice = createSlice({
     },
     setItemList: (state, action: PayloadAction<Item[] | undefined>) => {
       state.itemList = action.payload
+    },
+    setReviewList: (state, action: PayloadAction<Review[] | undefined>) => {
+      state.reviewList = action.payload
     },
     updateLocList: (state, action: PayloadAction<Location>) => {
       state.locList = state.locList.map(e => 
@@ -52,6 +61,10 @@ export const adminSlice = createSlice({
     removeFromItemList: (state, action: PayloadAction<string>) => {
       const id = action.payload
       state.itemList = state.itemList?.filter(e => e.id !== id)
+    },
+    removeFromReviewList: (state, action: PayloadAction<string>) => {
+      const id = action.payload
+      state.reviewList = state.reviewList?.filter(e => e.id !== id)
     }
   }
 })
@@ -61,10 +74,13 @@ export const {
   setEditLocState,
   setDetailLoc,
   setDetailItem,
+  setDetailReview,
   setLocList,
   setItemList,
+  setReviewList,
   updateLocList,
-  removeFromItemList
+  removeFromItemList,
+  removeFromReviewList
 } = adminSlice.actions
 
 // // Other code such as selectors can use the imported `RootState` type

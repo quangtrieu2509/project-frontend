@@ -13,6 +13,8 @@ import { Map, Marker, NavigationControl } from "react-map-gl"
 import { MAPBOX_API_KEY } from "../../../../configs"
 import { Pin } from "../../../../utils/Map"
 import { setSelectedId } from "../../../../redux/Item"
+import { useDocumentTitle } from "../../../../hooks"
+import HoursPreview from "../../../../components/Item/HoursPreview"
 
 interface DiningDetail {
   id: string
@@ -61,6 +63,9 @@ export default function Detail() {
   const { id } = useParams()
   const [item, setItem] = useState<DiningDetail>()
   const dispatch = useDispatch()
+
+  const title = item ? item.name : "Dining Detail"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getItem = async () => {
@@ -224,9 +229,7 @@ export default function Detail() {
                 <div className="mr-1.5">
                   {"Open now"}
                 </div>
-                <div className="font-normal text-xs underline cursor-pointer hover-button">
-                  {"See all hours"}
-                </div>
+                <HoursPreview hours={item.hours}/>
               </div>
             </div>
 

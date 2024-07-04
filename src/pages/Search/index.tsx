@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setIsAtSearch } from "../../redux/Header"
 import "./index.style.scss"
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -7,6 +7,8 @@ import ItemInSearch from "../../components/Item/ItemInSearch";
 import { apiCaller, itemApi } from "../../api";
 import { itemTypes, pluralItemLabels } from "../../constants";
 import NoResult from "../../components/Profile/NoResult";
+import { Spin } from "antd";
+import { getState, setSearchResults } from "../../redux/Item";
 
 const items = [
   {
@@ -40,7 +42,7 @@ export default function Search() {
   const navigate = useNavigate()
   const [filterSelected, setFilterSelected] = useState<string>('all')
   const [q, setQ] = useState<string>("")
-  const [results, setResults] = useState<any[]>([])
+  const { searchResults } = useSelector(getState)
   const [queries] = useSearchParams()
 
   useEffect(() => {
@@ -58,10 +60,11 @@ export default function Search() {
     setFilterSelected(filter)
 
     const getResults = async () => {
+      dispatch(setSearchResults(undefined))
       const res = await apiCaller(itemApi.searchItems(query, filter))
 
       if(res !== undefined) {
-        setResults(res.data)
+        dispatch(setSearchResults(res.data))
       }
     }
 
@@ -128,9 +131,10 @@ export default function Search() {
 
           <div>
             {
-              !results.length
+              searchResults === undefined ? <div className="flex justify-center"><Spin/></div> :
+              !searchResults.length
               ? <NoResult/>
-              : results.map(e => {
+              : searchResults.map((e: any) => {
                 return (
                   <ItemInSearch key={e.id} {...e}/>
                 )

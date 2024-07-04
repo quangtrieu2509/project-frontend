@@ -8,11 +8,15 @@ import { messages } from "../../../constants/message";
 import { ROUTES, keyTypes } from "../../../constants";
 import Browsing from "./Browsing";
 import Selecting from "../Selecting";
+import { useDocumentTitle } from "../../../hooks";
 
 export default function Lodgings() {
   const [bcItems, setBcItems] = useState<BreadcrumbItem[]>([])
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const { slug } = useParams()
+
+  const title = bcItems.length ? `${bcItems[bcItems.length - 1].name} Lodgings` : "Lodgings"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getBreadcrumbItems = async () => {

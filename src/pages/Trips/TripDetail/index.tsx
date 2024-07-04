@@ -23,6 +23,7 @@ import { getLocalStorage } from "../../../utils/Auth"
 import { messages } from "../../../constants/message"
 import NotFound from "../../../components/Static/NotFound"
 import Forbidden from "../../../components/Static/Forbidden"
+import { useDocumentTitle } from "../../../hooks"
 
 export interface ITripDetail {
   id: string
@@ -74,6 +75,9 @@ export default function TripDetail() {
   const [editTripForm] = Form.useForm()
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const [has403Error, setHas403Error] = useState<boolean>(false)
+
+  const title = trip ? `Trip - ${trip.title}` : "Trip Detail"
+  useDocumentTitle(title)
 
   useEffect(() => {
     const getTrip = async () => {

@@ -17,7 +17,7 @@ export default function AdminItem(props: Item) {
       `updated at ${formatDateTime(props.adminUpdatedAt, true, true)}`
   }
   return (
-    <div className="text-color-text-primary border border-solid border-color-border-primary rounded-md">
+    <div className="min-w-[19.875rem] text-color-text-primary border border-solid border-color-border-primary rounded-md">
       <div className="relative h-40">
         <div className="absolute top-0 left-0 h-11 w-11 m-1.5 bg-white rounded-full shadow-lg flex items-center justify-center">
           <i className={"text-2xl text-color-primary bi bi-" + generateIconType(props.type)}/>
@@ -27,7 +27,7 @@ export default function AdminItem(props: Item) {
           onClick={handleOpenDetail}
         />
       </div>
-      <div className="box-border px-4 py-2">
+      <div className="box-border px-4 py-2 bg-white rounded-b-[5px]">
         <div className="w-full ellipsis font-semibold text-lg mb-1 cursor-pointer hover:underline"
           onClick={handleOpenDetail}
         >

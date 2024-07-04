@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 // Define a type for the slice state
 interface ItemState {
   selectedId?: string
+  searchResults?: any[]
 }
 
 // Define the initial state using that type
@@ -17,12 +18,16 @@ export const itemSlice = createSlice({
   reducers: {
     setSelectedId: (state, action: PayloadAction<string | undefined>) => {
       state.selectedId = action.payload
+    },
+    setSearchResults: (state, action: PayloadAction<any[] | undefined>) => {
+      state.searchResults = action.payload
     }
   }
 })
 
 export const { 
-  setSelectedId
+  setSelectedId,
+  setSearchResults
 } = itemSlice.actions
 
 // // Other code such as selectors can use the imported `RootState` type

@@ -8,6 +8,7 @@ import { filterFields, formatDateTime, generateAddress, generateCategories, gene
 import { IMAGE_PATH, ROUTES, diningFeatures, diningMeals, diningPrices, durationUnits, itemTypes, lodgingAmenities, lodgingRoomFeatures } from "../../../constants"
 import { generatePriceRange } from "../../../pages/Items/Dinings/Detail"
 import { generateAttribute, generateHotelClass } from "../../../pages/Items/Lodgings/Detail"
+import HoursPreview from "../../Item/HoursPreview"
 
 interface ItemDetailProps extends Item {}
 
@@ -41,7 +42,8 @@ export default function ItemDetail(props: ItemDetailProps) {
       <div className="text-sm mb-2">
         {filterFields(props.features, diningFeatures, true).join(", ")}
       </div>
-      <div className="font-medium mb-1">Hours</div>
+      {props.hours && <><div className="font-medium mb-1">Hours</div>
+      <HoursPreview hours={props.hours}/><div className="mb-2"/></>}
     </>
   )
 
@@ -116,11 +118,12 @@ export default function ItemDetail(props: ItemDetailProps) {
         </div>
       </div>
       </>}
-      <div className="font-medium mb-1">Hours</div>
+      {props.hours && <><div className="font-medium mb-1">Hours</div>
+      <HoursPreview hours={props.hours}/><div className="mb-2"/></>}
     </>
   )
   return (
-    <div className="itinerary-item-detail text-color-text-primary">
+    <div className="text-color-text-primary">
       <div className="relative">
         <div className="absolute z-[99] top-0 left-0 h-11 w-11 m-2 bg-white rounded-full shadow-lg flex items-center justify-center">
           <i className={"text-2xl text-color-primary bi bi-" + generateIconType(props.type)}/>
