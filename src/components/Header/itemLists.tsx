@@ -28,7 +28,7 @@ export const featureItems = [
     items: [
       {
         key: "1",
-        label: <Label url={ROUTES.HOME} title="New Feeds" />,
+        label: <Label url={ROUTES.NEW_FEEDS} title="New Feeds" />,
       },
       {
         key: "2",

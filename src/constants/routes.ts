@@ -33,5 +33,6 @@ export const enum ROUTES {
   BUSINESS_DETAIL = "/business/:id",
   NEW_ITEM = "/new-item",
   ADMIN = "/admin",
-  ACTIVATE_EMAIL = "/auth/activate-email/:token"
+  ACTIVATE_EMAIL = "/auth/activate-email/:token",
+  NEW_FEEDS = "/new-feeds"
 }

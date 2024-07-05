@@ -25,7 +25,7 @@ export const profileTabItems = [
   {
     label: "Travel Map",
     key: "travel_map",
-    children: "Content of Travel Map",
+    children: "Comming soon...",
   }
 ]
 

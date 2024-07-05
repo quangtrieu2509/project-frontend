@@ -30,6 +30,7 @@ import NewItem from "../pages/NewItem"
 import Admin from "../pages/Admin"
 import ActivateEmail from "../pages/Static/ActivateEmail"
 import ReviewDetail from "../pages/Review/ReviewDetail"
+import NewFeeds from "../pages/NewFeeds"
 
 export type RouteType = {
   path: ROUTES | string
@@ -162,6 +163,11 @@ const routes: RouteType[] = [
     path: ROUTES.ACTIVATE_EMAIL,
     title: "Activate Email",
     element: ActivateEmail
+  },
+  {
+    path: ROUTES.NEW_FEEDS,
+    title: "New Feeds",
+    element: NewFeeds
   },
   {
     path: "*",

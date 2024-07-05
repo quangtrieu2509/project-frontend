@@ -20,4 +20,7 @@ export const userApi = {
   getFollowings: (id: string) => (): Promise<AxiosResponse<any, any>> => {
     return axiosClient.get(ENDPOINTS.USER + `/${id}/followings`)
   },
+  getNewFeeds: () => (): Promise<AxiosResponse<any, any>> => {
+    return axiosClient.get(ENDPOINTS.USER + `/new-feeds`)
+  },
 }
