@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import { apiCaller, tripApi } from "../../../api"
 import NoResult from "../../Profile/NoResult"
-import { formatDate } from "../../../utils/Utils"
+import { formatDate, loadingMessage, successMessage } from "../../../utils/Utils"
 import { useDispatch, useSelector } from "react-redux"
 import { getState, setDrawerTripsList } from "../../../redux/Trip"
-import { Form, Input, Modal } from "antd"
+import { Form, Input, message, Modal } from "antd"
 
 interface TripListProps {
   itemId: string
@@ -31,6 +31,7 @@ export interface DrawerTrip {
 }
 
 export default function TripList (props: TripListProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const list: DrawerTrip[] = useSelector(getState).drawerTripsList
   const [modalState, setModalState] = useState<boolean>(false)
   const [selectedTrip, setSelectedTrip] = useState<string>()
@@ -59,10 +60,11 @@ export default function TripList (props: TripListProps) {
     if (isSaved) {
       saves.forEach(async e => {
         if (e.itemId === props.itemId) {
+          loadingMessage(messageApi, 'remove')
           await apiCaller(
             tripApi.removeItemFromTrip(e.id)
           )
-          alert("Removed Item")
+          successMessage(messageApi, 'remove', 'Removed item.')
           getList()
           return
         }
@@ -179,6 +181,7 @@ export default function TripList (props: TripListProps) {
           </Form.Item>
         </Form>
       </Modal>
+      {contextHolder}
     </div>
   )
 }

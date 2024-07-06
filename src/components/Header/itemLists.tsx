@@ -1,8 +1,14 @@
 import Label from "./Label"
-import { ROUTES } from "../../constants"
+import { roles, ROUTES } from "../../constants"
 import { getLocalStorage } from "../../utils/Auth"
 import store from "../../redux/store"
 import { setTripCreationState } from "../../redux/Trip"
+
+const admin = getLocalStorage("id") === "0d5392a1987" ?
+  [{
+    key: "4",
+    label: <Label url={ROUTES.ADMIN} title="Admin" />,
+  }] : []
 
 export const featureItems = [
   {
@@ -65,6 +71,7 @@ export const featureItems = [
         key: "3",
         label: <Label url={ROUTES.NEW_ITEM} title="Add a place" />,
       },
+      ...admin
     ],
     route: "more"
   }

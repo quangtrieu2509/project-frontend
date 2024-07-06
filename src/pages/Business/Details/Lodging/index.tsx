@@ -1,9 +1,9 @@
-import { Form, Input, InputNumber, Modal, Select } from "antd"
+import { Form, Input, InputNumber, message, Modal, Select } from "antd"
 import { useEffect, useState } from "react"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { apiCaller, itemApi } from "../../../../api"
 import { useForm } from "antd/es/form/Form"
-import { filterFields } from "../../../../utils/Utils"
+import { filterFields, loadingMessage, successMessage } from "../../../../utils/Utils"
 import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../../../redux/Loader"
 import { lodgingAmenities, lodgingPrices, lodgingRoomFeatures, lodgingTypes } from "../../../../constants"
@@ -32,6 +32,7 @@ const formItemLayout = {
 }
 
 export default function Lodging(props: LodgingProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
   const dispatch = useDispatch()
   const [form] = useForm()
@@ -78,13 +79,14 @@ export default function Lodging(props: LodgingProps) {
       onOk () {
         const handleUpdate = async () => {
           dispatch(setLoaderState(true))
+          loadingMessage(messageApi, 'update')
           const res = await apiCaller(
             itemApi.updateItem(props.id ?? "", rest)
           )          
           dispatch(setLoaderState(false))
 
           if (res !== undefined) {
-            alert("Update successfully")
+            successMessage(messageApi, 'update', 'Updated successfully.')
           }
         }
         
@@ -259,6 +261,7 @@ export default function Lodging(props: LodgingProps) {
           </div>
         </Form.Item>
       </Form>
+      {contextHolder}
     </div>
   )
 }

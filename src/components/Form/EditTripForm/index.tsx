@@ -5,11 +5,14 @@ import { useDispatch } from "react-redux"
 import { setEditTripState } from "../../../redux/Trip"
 import { ITripDetail as TripDetail } from "../../../pages/Trips/TripDetail"
 import dayjs from "dayjs"
+import { MessageInstance } from "antd/es/message/interface"
+import { loadingMessage, successMessage } from "../../../utils/Utils"
 
 interface EditTripFormProps {
   form: FormInstance
   event?: (trip: any) => void
   trip: TripDetail
+  messageApi: MessageInstance
 }
 
 export default function EditTripForm(props: EditTripFormProps) {
@@ -25,12 +28,13 @@ export default function EditTripForm(props: EditTripFormProps) {
     value.tripLength === props.trip.tripLength && (delete value.tripLength)
     
     dispatch(setEditTripState(false))
-
+    
+    loadingMessage(props.messageApi, 'update')
     const res = await apiCaller(tripApi.updateTrip(props.trip.id, value))
     
     if (res !== undefined) {
       
-      alert("Update successfully!")
+      successMessage(props.messageApi, 'update', 'Updated successfully.')
       props.event?.(res.data)
     }
   }

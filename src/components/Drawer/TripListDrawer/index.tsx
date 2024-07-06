@@ -41,14 +41,14 @@ export default function TripListDrawer() {
   return (
     <Drawer
       title={<div className="flex justify-between items-center">
-      <div>My trips</div>
-      <div 
-        className=" text-sm font-normal underline cursor-pointer hover:text-color-extra-text-primary"
-        onClick={handleNavigateToTrips}
-      >
-        View all trips
-      </div>
-    </div>}
+        <div>My trips</div>
+        <div 
+          className=" text-sm font-normal underline cursor-pointer hover:text-color-extra-text-primary"
+          onClick={handleNavigateToTrips}
+        >
+          View all trips
+        </div>
+      </div>}
       onClose={onTripListClose}
       open={tripListState}
       width={500}

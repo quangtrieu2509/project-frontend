@@ -1,4 +1,4 @@
-import { Collapse, CollapseProps } from "antd"
+import { Collapse, CollapseProps, message } from "antd"
 import './index.style.scss'
 import SavedItem from "../../Item/SavedItem";
 import { ROUTES, categoryItems } from "../../../constants";
@@ -12,6 +12,7 @@ interface SavesTabProps {
 }
 
 export default function SavesTab(props: SavesTabProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
   const savesList = useSelector(getState).savesList as any[]
 
@@ -24,7 +25,11 @@ export default function SavesTab(props: SavesTabProps) {
     const results: JSX.Element[] = []
     savesList.forEach((e, i) => {
       if (e.item.type === item.type){
-        results.push(<SavedItem {...e} isOwner={props.isOwner} key={e.id}/>)
+        results.push(
+          <SavedItem {...e} isOwner={props.isOwner} 
+            key={e.id} messageApi={messageApi}
+          />
+        )
       }
     })
     return { 
@@ -75,6 +80,7 @@ export default function SavesTab(props: SavesTabProps) {
           />
         </div>
       }
+      {contextHolder}
     </div>
   )
 }

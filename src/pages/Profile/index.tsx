@@ -40,6 +40,8 @@ export interface UserOverview {
   isFollowing: boolean
 }
 
+const { confirm } = Modal
+
 export default function Profile() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -152,12 +154,13 @@ export default function Profile() {
   }
 
   const handleCancelMsg = () => {
-    Modal.confirm({
+    confirm({
       title: `Are you sure to cancel?`,
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
+      maskClosable: true,
       onOk () {
         setMsgModalState(false)
       }
@@ -174,7 +177,7 @@ export default function Profile() {
 
   const handleOnFinish = (values: any) => {
     if (params.id) {
-      Modal.confirm({
+      confirm({
         title: `Are you sure to send this message?`,
         icon: <ExclamationCircleFilled />,
         okText: 'Yes',

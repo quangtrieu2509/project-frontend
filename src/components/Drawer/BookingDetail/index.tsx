@@ -1,26 +1,30 @@
 import { Col, Row } from "antd"
 import { Booking } from "../../../pages/Bookings"
-import { formatDate } from "../../../utils/Utils"
+import { formatDate, generateAddress, generateCategories } from "../../../utils/Utils"
 
 interface BookingDetailProps {
   booking: Booking
 }
 
 export default function BookingDetail(props: BookingDetailProps) {
+  const { item } = props.booking
 
+  const handleGoToItem = () => {
+    window.open(`/${item.type}/${item.id}`)
+  }
   return (
     <>
     <div className="booking-detail">
       <div className="relative flex w-full h-48 cursor-pointer"
-        onClick={() => {}}
+        onClick={handleGoToItem}
       >
-        <img alt="#" src={props.booking.item.image.url} className="image w-full h-full object-cover object-center" />
+        <img alt="#" src={item.image.url} className="image w-full h-full object-cover object-center" />
       </div>
       <div className="my-4">
         <div className="text-2xl font-bold cursor-pointer hover:underline mb-1"
-          onClick={() => window.open(`/${props.booking.item.type}/${props.booking.item.id}`)}
+          onClick={handleGoToItem}
         >
-          {props.booking.item.name}
+          {item.name}
         </div>
         {/* <div className="flex items-center mb-2">
           <Rate 
@@ -34,10 +38,11 @@ export default function BookingDetail(props: BookingDetailProps) {
           </span>
         </div> */}
         <div className="text-sm font-semibold text-color-extra-primary bg-color-extra-secondary w-fit px-2 py-0.5 rounded-md mb-2">
-          {props.booking.item.ancestors.map(e => e.name).slice(0, 2).join(", ")}
+          {generateCategories(item.categories, item.type).join(" - ")}
         </div>
         <div className="text-sm text-color-text-secondary">
-          {props.booking.item.categories.join("-")}
+          <i className="bi bi-geo-alt mr-1.5"/>
+          {generateAddress(item.ancestors, item.address)}
         </div>
       </div>
       {/* <div className="text-sm mb-5">

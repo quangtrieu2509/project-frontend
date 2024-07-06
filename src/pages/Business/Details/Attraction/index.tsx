@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Modal, Select } from "antd"
+import { Form, Input, InputNumber, message, Modal, Select } from "antd"
 import { useEffect, useState } from "react"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { apiCaller, itemApi } from "../../../../api"
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../../../redux/Loader"
 import HoursConfig, { Hour } from "../../../../components/Item/HoursConfig"
 import { attractionTypes } from "../../../../constants"
+import { loadingMessage, successMessage } from "../../../../utils/Utils"
 
 interface AttractionProps {
   id: string
@@ -31,6 +32,7 @@ const formItemLayout = {
 }
 
 export default function Attraction(props: AttractionProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const [hours, setHours] = useState<Hour[]>(Array(7).fill(null))
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
   const dispatch = useDispatch()
@@ -68,13 +70,14 @@ export default function Attraction(props: AttractionProps) {
       onOk () {
         const handleUpdate = async () => {
           dispatch(setLoaderState(true))
+          loadingMessage(messageApi, 'update')
           const res = await apiCaller(
             itemApi.updateItem(props.id, rest)
           )          
           dispatch(setLoaderState(false))
 
           if (res !== undefined) {
-            alert("Update successfully")
+            successMessage(messageApi, 'update', 'Updated successfully.')
           }
         }
         
@@ -178,6 +181,7 @@ export default function Attraction(props: AttractionProps) {
       <div className="w-full">
         <HoursConfig hours={hours} onChange={(e) => setHours(e)}/>
       </div>
+      {contextHolder}
     </div>
   )
 }

@@ -31,6 +31,10 @@ export const tripApi = {
     (tripId: string, data: any) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.put(ENDPOINTS.TRIP + `/${tripId}`, data)
     },
+  deleteTrip:
+    (tripId: string) => (): Promise<AxiosResponse<any, any>> => {
+      return axiosClient.delete(ENDPOINTS.TRIP + `/${tripId}`)
+    },
   addItemToTrip:
     (tripId: any, data: any) => (): Promise<AxiosResponse<any, any>> => {
       return axiosClient.post(ENDPOINTS.TRIP + `/${tripId}/saves`, data)

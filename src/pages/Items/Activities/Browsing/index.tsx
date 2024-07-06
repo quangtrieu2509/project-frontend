@@ -1,13 +1,18 @@
-import { Checkbox, Collapse, CollapseProps, Rate } from "antd";
+import { Checkbox, Collapse, CollapseProps, Drawer, Rate } from "antd";
 import Slider from "react-slick";
 import "./index.style.scss"
-import { itemTypes, attractionTypes, activityTypes } from "../../../../constants";
+import { itemTypes, activityTypes } from "../../../../constants";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import ActivityOverview, { ActivityOverviewProps as Item } from "../../../../components/Item/ActivityOverview";
 import { apiCaller, itemApi } from "../../../../api";
 import { generateSlickClass } from "../../../../utils/Utils";
 import TripListDrawer from "../../../../components/Drawer/TripListDrawer";
+import { Map } from "react-map-gl";
+import { MAPBOX_API_KEY } from "../../../../configs";
+import MapDrawer from "../../../../components/Drawer/MapDrawer";
+import { useDispatch, useSelector } from "react-redux";
+import { getState, setMapState } from "../../../../redux/Map";
 
 const settings = {
   dots: false,
@@ -21,6 +26,7 @@ const slickLimit = 3
 
 interface BrowsingProps {
   id: string
+  coors: number[]
 }
 
 type BrowsingItem = Record<string, Item[]>
@@ -34,10 +40,12 @@ const browsingInit = {
 
 export default function Browsing(props: BrowsingProps) {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [browsingList, setBrowsingList] = useState<BrowsingItem>(browsingInit)
   const [queriedList, setQueriedList] = useState<Item[]>([])
   const [types, setTypes] = useState<string[]>([])
   const [rates, setRates] = useState<string[]>([])
+  const { mapState } = useSelector(getState)
 
   const [queries] = useSearchParams()
 
@@ -181,9 +189,30 @@ export default function Browsing(props: BrowsingProps) {
     <>
     <div className="dinings-browsing flex">
       <div className="w-fit min-w-fit flex flex-col">
-        <div className="h-32 bg-color-primary mb-5 rounded-lg">
-          This is map here
-        </div>
+        {!mapState && <div className="relative h-32 bg-color-background-primary mb-5 rounded-lg overflow-hidden">
+          <Map
+            mapboxAccessToken={MAPBOX_API_KEY}
+            initialViewState={{
+              longitude: props.coors[1],
+              latitude: props.coors[0],
+              zoom: 12
+            }}
+            style={{ width: "100%", height: "100%" }}
+            mapStyle="mapbox://styles/mapbox/streets-v9"
+            attributionControl={false} 
+            scrollZoom={false}
+          > 
+          </Map>
+          <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center">
+            <div className="primary-outlined-button bg-neutral-50 hover:bg-neutral-100 w-fit"
+              style={{ borderRadius: "99px" }}
+              onClick={() => dispatch(setMapState(true))}
+            >
+              See map
+            </div>
+          </div>
+          
+        </div>}
 
         <div className="bg-white w-52 h-fit mb-5 px-8 py-5 rounded-lg border border-solid border-color-border-secondary">
           <Collapse 
@@ -233,6 +262,9 @@ export default function Browsing(props: BrowsingProps) {
         }
       </div>
     </div>
+    <MapDrawer coors={props.coors} 
+      list={isEmptyFilter() ? Object.values(browsingList).flat() : queriedList}
+    />
     <TripListDrawer/>
     </>
   )

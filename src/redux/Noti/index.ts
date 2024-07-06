@@ -3,13 +3,12 @@ import { INoti } from "../../components/Header/Noti"
 
 // Define a type for the slice state
 interface NotiState {
-  notisList: INoti[]
+  notisList?: INoti[]
   notiState: boolean
 }
 
 // Define the initial state using that type
 const initialState: NotiState = {
-  notisList: [],
   notiState: false
 }
 
@@ -18,27 +17,34 @@ export const notiSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setNotisList: (state, action: PayloadAction<INoti[]>) => {
+    setNotisList: (state, action: PayloadAction<INoti[] | undefined>) => {
       state.notisList = action.payload
     },
     setNotiState: (state, action: PayloadAction<boolean>) => {
       state.notiState = action.payload
     },
     readAllNotis: (state, _action: PayloadAction<void>) => {
-      state.notisList = state.notisList.map(e => ({ ...e, isSeen: true }))
+      if (state.notisList !== undefined) {
+        state.notisList = state.notisList.map(e => ({ ...e, isSeen: true }))
+      }
     },
     addNoti: (state, action: PayloadAction<INoti>) => {
-      const newNoti = action.payload
-      state.notisList = [
-        newNoti, 
-        ...state.notisList.filter(e => e.id !== newNoti.id)
-      ]
+      if (state.notisList !== undefined) {
+        const newNoti = action.payload
+        state.notisList = [
+          newNoti, 
+          ...state.notisList.filter(e => e.id !== newNoti.id)
+        ]
+      }
+
     },
     readNoti: (state, action: PayloadAction<string>) => {
-      const id = action.payload
-      state.notisList = state.notisList.map(e => 
-        (e.id === id ? { ...e, isSeen: true } : e)
-      )
+      if (state.notisList !== undefined) {
+        const id = action.payload
+        state.notisList = state.notisList.map(e => 
+          (e.id === id ? { ...e, isSeen: true } : e)
+        )
+      }
     } 
   }
 })

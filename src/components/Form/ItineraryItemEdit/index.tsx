@@ -1,13 +1,15 @@
 import { Form, Input, InputNumber, Rate, Select } from "antd"
-import { generateCategories, generateTimeList } from "../../../utils/Utils"
+import { errorMessage, generateCategories, generateTimeList, loadingMessage, successMessage } from "../../../utils/Utils"
 import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { setEditState, updateItineraryList } from "../../../redux/Trip"
 import { ItineraryItem } from "../../Trip/ItineraryTab"
+import { MessageInstance } from "antd/es/message/interface"
 
 interface ItineraryItemEditProps {
   form: any
   itineraryItem: ItineraryItem
+  messageApi: MessageInstance
 }
 
 export default function ItineraryItemEdit(props: ItineraryItemEditProps) {
@@ -19,12 +21,12 @@ export default function ItineraryItemEdit(props: ItineraryItemEditProps) {
     //             itineraryItem: { ...props.itineraryItem, ...value }, 
     //             day: props.itineraryItem.day 
     //           })
-    
+    loadingMessage(props.messageApi, 'update')
     apiCaller(
       tripApi.editItineraryItem(props.itineraryItem.id, value)
     ).then(res => {
       if (res !== undefined) {
-        alert("Update successfully")
+        successMessage(props.messageApi, 'update', 'Updated successfully.')
         dispatch(
           updateItineraryList(
             { 
@@ -34,7 +36,7 @@ export default function ItineraryItemEdit(props: ItineraryItemEditProps) {
           )
         )
       }
-    }).catch(_err => alert("Something went wrong. Try again."))
+    }).catch(_err => errorMessage(props.messageApi, 'update', 'Something went wrong. Try again.'))
 
     dispatch(setEditState(false))
   }

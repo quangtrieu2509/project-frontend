@@ -4,12 +4,13 @@ import { apiCaller, reviewApi } from "../../../api"
 import { useDispatch, useSelector } from "react-redux"
 import { getState, removeFromReviewList, setDetailReview, setReviewList } from "../../../redux/Admin"
 import NoResult from "../../../components/Profile/NoResult"
-import { Drawer, Modal, Spin } from "antd"
+import { Drawer, message, Modal, Spin } from "antd"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { setLoaderState } from "../../../redux/Loader"
 import { ReviewStates } from "../../../constants"
 import AdminReview from "../../../components/Review/AdminReview"
 import ReviewDetail from "../../../components/Drawer/ReviewDetail"
+import { loadingMessage, successMessage } from "../../../utils/Utils"
 
 export const reviewStates = [
   {
@@ -62,6 +63,7 @@ export interface Review {
 }
 
 export default function Reviews() {
+  const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [queries] = useSearchParams()
@@ -120,10 +122,11 @@ export default function Reviews() {
         const changeStateReview = async () => {
           dispatch(setLoaderState(true))
           const id = detailReview?.id ?? ""
+          loadingMessage(messageApi, 'change')
           const res = await apiCaller(reviewApi.changeState(id, state))
           dispatch(setLoaderState(false))
           if (res !== undefined) {
-            alert("Update successfully")
+            successMessage(messageApi, 'change', 'Done.')
             dispatch(removeFromReviewList(id))
             dispatch(setDetailReview(undefined))
           }
@@ -203,6 +206,7 @@ export default function Reviews() {
       >
         {detailReview && <ReviewDetail {...detailReview}/>}
       </Drawer>
+      {contextHolder}
     </div>
   )
 }

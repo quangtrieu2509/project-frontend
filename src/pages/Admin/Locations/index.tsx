@@ -25,6 +25,8 @@ export interface Location {
   }>
 }
 
+const { confirm } = Modal
+
 export default function Locations() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -73,18 +75,19 @@ export default function Locations() {
   }
 
   const handleOnNewLocClose = () => {
-    Modal.confirm({
+    confirm({
       title: 'Are you sure to cancel?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
+      maskClosable: true,
       onOk () { dispatch(setNewLocState(false)) }
     })
   }
 
   const handleSubmitNewLoc = () => {
-    Modal.confirm({
+    confirm({
       title: 'Are you sure to create?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',

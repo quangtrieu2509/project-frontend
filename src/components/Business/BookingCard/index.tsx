@@ -1,6 +1,6 @@
 import { Col, Modal, Row } from "antd"
 import { Booking } from "../../../pages/Business/Bookings"
-import { formatDate } from "../../../utils/Utils"
+import { formatDate, loadingMessage, successMessage } from "../../../utils/Utils"
 import { useState } from "react"
 import { bookingStates } from "../../../constants/booking-states"
 import { ExclamationCircleFilled } from "@ant-design/icons"
@@ -8,9 +8,11 @@ import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../../redux/Loader"
 import { apiCaller, bookingApi } from "../../../api"
 import { removeBooking } from "../../../redux/Business"
+import { MessageInstance } from "antd/es/message/interface"
 
 interface BookingCardProps {
   booking: Booking
+  messageApi: MessageInstance
 }
 
 export default function BookingCard(props: BookingCardProps) {
@@ -27,6 +29,7 @@ export default function BookingCard(props: BookingCardProps) {
       onOk () {
         const handleUpdate = async () => {
           dispatch(setLoaderState(true))
+          loadingMessage(props.messageApi, 'update')
           const res = await apiCaller(
             bookingApi.updateBusinessBooking(
               props.booking.itemId, props.booking.id, { state }
@@ -35,9 +38,7 @@ export default function BookingCard(props: BookingCardProps) {
           dispatch(setLoaderState(false))
 
           if (res !== undefined) {
-            alert("Update successfully")
-            // setItems(items.filter(e => e !== selected))
-            // onDetailClose()
+            successMessage(props.messageApi, 'update', 'Done.')
             dispatch(removeBooking(props.booking.id))
           }
         }

@@ -25,7 +25,7 @@ export default function EmailSignIn() {
   }
 
   const handleForgotPassword = () => {
-    alert('handleForgotPassword')
+    // alert('handleForgotPassword')
   }
 
   const handleSignInByEmail = async (values: any) => {

@@ -1,10 +1,10 @@
-import { Form, Input, Modal, UploadFile, UploadProps } from "antd"
+import { Form, Input, message, Modal, UploadFile, UploadProps } from "antd"
 import { useEffect, useState } from "react"
 import LocationSearch from "../../../components/Trip/LocationSearch"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { apiCaller, itemApi, uploadApi } from "../../../api"
 import { useForm } from "antd/es/form/Form"
-import { capitalize, compareFileChanges, locationToAncestors } from "../../../utils/Utils"
+import { capitalize, compareFileChanges, loadingMessage, locationToAncestors, successMessage } from "../../../utils/Utils"
 import { useDispatch, useSelector } from "react-redux"
 import { setLoaderState } from "../../../redux/Loader"
 import { Map, Marker, MarkerDragEvent, NavigationControl } from "react-map-gl"
@@ -29,6 +29,7 @@ interface OverviewItem {
 }
 
 export default function Overview() {
+  const [messageApi, contextHolder] = message.useMessage()
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [removedFiles, setRemovedFiles] = useState<any[]>([])
   const [coors, setCoors] = useState<{longitude: number, latitude: number}>()
@@ -129,6 +130,7 @@ export default function Overview() {
       onOk () {
         const handleUpdate = async () => {
           dispatch(setLoaderState(true))
+          loadingMessage(messageApi, 'update')
           if (removedFiles.length !== 0) 
             apiCaller(uploadApi.removeData(removedFiles))
           let res
@@ -146,7 +148,7 @@ export default function Overview() {
             dispatch(setLoaderState(false))
 
             if (res !== undefined) {
-              alert("Update successfully")
+              successMessage(messageApi, 'update', 'Updated successfully.')
             }
           }
 
@@ -294,6 +296,7 @@ export default function Overview() {
           </div>
         </div>
       </div>}
+      {contextHolder}
     </div>
   )
 }

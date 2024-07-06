@@ -1,7 +1,7 @@
 export default function Permits() {
   return (
     <div>
-      ANALYTICS
+      Comming soon...
     </div>
   )
 }

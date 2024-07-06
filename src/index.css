@@ -388,6 +388,9 @@ label{
   margin-bottom: 2rem/* 32px */;
 }
 
+.ant-modal-mask {
+  pointer-events: auto !important;
+}
 .ant-modal-wrap {
   position: fixed;
   height: 100%;
@@ -400,6 +403,7 @@ label{
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
 .ant-modal-content, .ant-drawer-content {
   font-family: 'Poppins', sans-serif; 
   .ant-modal-title, .ant-drawer-title {

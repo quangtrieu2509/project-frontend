@@ -6,6 +6,7 @@ import BookingCard from "../../../components/Business/BookingCard"
 import { useDispatch, useSelector } from "react-redux"
 import { getState, setBookingList } from "../../../redux/Business"
 import NoResult from "../../../components/Profile/NoResult"
+import { message, Spin } from "antd"
 
 export interface Booking {
   id: string
@@ -29,11 +30,12 @@ export interface Booking {
 }
 
 export default function Bookings() {
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useDispatch()
   const [queries] = useSearchParams()
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<string>("1")
-  const items = useSelector(getState).bookingList as Booking[]
+  const items = useSelector(getState).bookingList
   const params = useParams()
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export default function Bookings() {
   useEffect(() => {
     const getItems = async () => {
       if (params.id) {
+        dispatch(setBookingList(undefined))
         const res = await apiCaller(
           bookingApi.getBusinessBookings(params.id, activeTab)
         )
@@ -84,11 +87,15 @@ export default function Bookings() {
       </div>
       <div>
         {
+          items === undefined ? <Spin className="flex justify-center py-1"/> : 
           items.length 
-          ? items.map((e, i) => <BookingCard key={i} booking={e}/>) 
+          ? items.map((e: Booking) => 
+            <BookingCard key={e.id} booking={e} messageApi={messageApi}/>
+          ) 
           : <NoResult/>
         }
       </div>
+      {contextHolder}
     </div>
   )
 }

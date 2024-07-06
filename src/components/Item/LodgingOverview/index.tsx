@@ -8,6 +8,7 @@ import { setSelectedId } from "../../../redux/Item"
 export interface LodgingOverviewProps {
   id: string
   name: string
+  coordinates: number[]
   categories: string[]
   price: {
     level: string
@@ -31,8 +32,8 @@ export default function LodgingOverview(props: LodgingOverviewProps) {
     window.open(ROUTES.LODGING_BASE + props.id)
   }
   return (
-    <div className="dining-overview w-full bg-white border border-solid border-color-border-secondary rounded-lg">
-      <div className="relative flex w-full min-w-[16rem] h-48">
+    <div className="dining-overview w-full min-w-[16rem] bg-white border border-solid border-color-border-secondary rounded-lg">
+      <div className="relative flex w-full h-40">
         <div 
           className="absolute top-0 left-0 py-2 px-3 m-1.5 bg-white rounded-full cursor-pointer shadow-lg hover-button"
           onClick={() => dispatch(setSelectedId(props.id))}  

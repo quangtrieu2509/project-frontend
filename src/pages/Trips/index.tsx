@@ -4,7 +4,7 @@ import { apiCaller } from "../../api";
 import { tripApi } from "../../api/trip";
 import NoResult from "../../components/Profile/NoResult";
 import { privacies } from "../../constants/privacies";
-import { Drawer, Form } from "antd";
+import { Drawer, Form, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getState, setTripCreationState } from "../../redux/Trip";
 import NewTripForm from "../../components/Form/NewTripForm";
@@ -40,7 +40,7 @@ export interface ITripHome {
 }
 
 export default function Trips() {
-  const [trips, setTrips] = useState<ITripHome[]>([])
+  const [trips, setTrips] = useState<ITripHome[]>()
   const { tripCreationState } = useSelector(getState)
   const dispatch = useDispatch()
   const [form] = Form.useForm()
@@ -67,8 +67,10 @@ export default function Trips() {
   }
 
   const handleUpdateTrips = (trip: any) => {
-    const newList = [trip, ...trips]
-    setTrips(newList)
+    if (trips) {
+      const newList = [trip, ...trips]
+      setTrips(newList)
+    }
   }
 
   return (
@@ -88,9 +90,9 @@ export default function Trips() {
         </div>
         <div>
           {
-            trips.length === 0
-            ? <NoResult/>
-            : trips.map(value => {
+            trips === undefined ? <Spin className="flex justify-center py-1"/> :
+            trips.length === 0 ? <NoResult/> : 
+            trips.map(value => {
               return (
                 <div key={value.id} 
                   className="flex w-full mb-6 border border-solid border-color-border-primary rounded-md"

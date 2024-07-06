@@ -6,8 +6,6 @@ import { RRError } from "../types"
 import CustomError from "../utils/CustomError"
 import { messages } from "../constants/message"
 import { Modal } from "antd"
-import store from "../redux/store"
-import { setLoaderState } from "../redux/Loader"
 
 const token = localStorage.getItem("token")
 const axiosClient = axios.create({
@@ -64,13 +62,29 @@ axiosClient.interceptors.response.use(
           break
         }
         case messages.ACCESS_TOKEN_EXPIRED.ec: {
-          alert(messages.ACCESS_TOKEN_EXPIRED.msg)
+          Modal.error({
+            title: "Error "+ messages.ACCESS_TOKEN_EXPIRED.ec,
+            content: "Something went wrong. You should re-signin.",
+            className: "error-modal",
+            okType: "danger",
+            centered: true,
+          })
           window.location.replace("/")
+          localStorage.clear()
           break
         }
         case messages.ACCESS_TOKEN_INVALID.ec: {
-          alert(messages.ACCESS_TOKEN_INVALID.msg)
-          window.location.replace("/")
+          Modal.error({
+            title: "Error " + messages.ACCESS_TOKEN_INVALID.ec,
+            content: "Something went wrong. You should re-signin.",
+            className: "error-modal",
+            okType: "danger",
+            centered: true,
+            onOk: () => {
+              window.location.replace("/")
+              localStorage.clear()
+            }
+          })
           break
         }
       }

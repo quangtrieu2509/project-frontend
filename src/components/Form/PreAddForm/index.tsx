@@ -1,14 +1,16 @@
 import { Form, Input, InputNumber, Rate, Select } from "antd"
 import { SavedItemProps } from "../../Item/SavedItem"
-import { generateCategories, generateTimeList } from "../../../utils/Utils"
+import { errorMessage, generateCategories, generateTimeList, loadingMessage, successMessage } from "../../../utils/Utils"
 import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { setItineraryList, setPreAddState } from "../../../redux/Trip"
+import { MessageInstance } from "antd/es/message/interface"
 
 interface PreAddFormProps {
   form: any
   savedItem: SavedItemProps
   day: number
+  messageApi: MessageInstance
 }
 
 export default function PreAddForm(props: PreAddFormProps) {
@@ -19,11 +21,12 @@ export default function PreAddForm(props: PreAddFormProps) {
     value.day = props.day
     value.numOfGuests = value.numOfGuests ?? undefined
     
+    loadingMessage(props.messageApi, 'add')
     apiCaller(
       tripApi.addItineraryItem(props.savedItem.tripId, value)
     ).then(res => {
       if (res !== undefined) {
-        alert("Add successfully")
+        successMessage(props.messageApi, 'add', 'Added successfully.')
         dispatch(
           setItineraryList(
             { 
@@ -34,7 +37,7 @@ export default function PreAddForm(props: PreAddFormProps) {
         )
       }
       
-    }).catch(_err => alert("Something went wrong. Try again."))
+    }).catch(_err => errorMessage(props.messageApi, 'add', 'Something went wrong. Try again.'))
 
     dispatch(setPreAddState(false))
   }

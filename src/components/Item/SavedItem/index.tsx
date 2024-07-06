@@ -7,7 +7,8 @@ import { removeSavedItem, updateSavesList } from "../../../redux/Trip"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { ROUTES } from "../../../constants"
 import { setPopupContent } from "../../../redux/Map"
-import { generateCategories } from "../../../utils/Utils"
+import { generateCategories, loadingMessage, successMessage } from "../../../utils/Utils"
+import { MessageInstance } from "antd/es/message/interface"
 
 export interface SavedItemProps {
   id: string
@@ -33,6 +34,7 @@ export interface SavedItemProps {
   }
   note?: string
   isOwner: boolean
+  messageApi: MessageInstance
 }
 
 export default function SavedItem(props: SavedItemProps) {
@@ -74,10 +76,11 @@ export default function SavedItem(props: SavedItemProps) {
       cancelText: 'No',
       onOk() {
         const handleRemove = async () => {
+          loadingMessage(props.messageApi, 'remove')
           const res = await apiCaller(tripApi.removeItemFromTrip(props.id))
 
           if (res !== undefined) {
-            alert("Removed Item")
+            successMessage(props.messageApi, 'remove', 'Removed item.')
             dispatch(removeSavedItem(props.id))
           }
         }

@@ -1,6 +1,7 @@
 import { LabeledValue } from "antd/es/select"
 import { activityTypes, attractionTypes, diningTypes, iconTypes, itemTypes, lodgingTypes } from "../constants"
 import { days } from "../constants/days"
+import { MessageInstance } from "antd/es/message/interface"
 
 const compareDate = (date1: Date, date2: Date) => {
   return (
@@ -184,4 +185,33 @@ export const isEqual = (a: any[], b: any[]) => {
 export const generateSlickClass = (total: number, limit: number) => {
   if (total < limit) return "react-slick-item format-slick-track"
   else return "react-slick-item "
+}
+
+export const loadingMessage = 
+  (
+    message: MessageInstance, 
+    key: string, 
+    content: string = "Loading..."
+  ) => {
+  return message.open({ key, content, type: 'loading' })
+}
+
+export const successMessage = 
+  (
+    message: MessageInstance, 
+    key: string, 
+    content: string,
+    duration: number = 2
+  ) => {
+  return message.open({ key, content, type: 'success', duration })
+}
+
+export const errorMessage = 
+  (
+    message: MessageInstance, 
+    key: string, 
+    content: string,
+    duration: number = 2
+  ) => {
+  return message.open({ key, content, type: 'error', duration })
 }

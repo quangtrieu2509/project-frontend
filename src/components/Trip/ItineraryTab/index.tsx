@@ -1,4 +1,4 @@
-import { Collapse, CollapseProps, Drawer, Modal, Rate } from "antd"
+import { Collapse, CollapseProps, Drawer, message, Modal, Rate } from "antd"
 import './index.style.scss'
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import SavesList from "../../Drawer/SavesList";
 import { SavedItemProps as SavedItem } from "../../Item/SavedItem";
 import { useDispatch, useSelector } from "react-redux";
 import { cancelRemovedList, getState, removeItemsFromIList, setEditMode, setEditState, setItineraryList, updateRemovedList } from "../../../redux/Trip";
-import { generateCategories, generateIconType } from "../../../utils/Utils";
+import { errorMessage, generateCategories, generateIconType, loadingMessage, successMessage } from "../../../utils/Utils";
 import ItineraryItemDetail from "../../Drawer/ItineraryItemDetail";
 import { setPopupContent } from "../../../redux/Map";
 
@@ -31,7 +31,10 @@ export interface ItineraryItem extends SavedItem {
   reservationNumber?: string
 }
 
+const { confirm } = Modal
+
 export default function ItineraryTab(props: ItineraryTabProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useDispatch()
   const itineraryList = useSelector(getState)
                           .itineraryList as Array<Array<ItineraryItem>>
@@ -76,7 +79,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
   }
 
   const handleSaveEdit = () => {
-    Modal.confirm({
+    confirm({
       title: `Are you sure to save the changes?`,
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
@@ -84,15 +87,16 @@ export default function ItineraryTab(props: ItineraryTabProps) {
       cancelText: 'No',
       onOk () {
         const handleUpdate = () => {
+          loadingMessage(messageApi, 'save')
           apiCaller(
             tripApi.removeItineraryItems(params.id ?? "", Array.from(removedList))
           ).then((res) => {
             if (res !== undefined) {
               dispatch(removeItemsFromIList(removedList))
-              alert("Update successfully")
+              successMessage(messageApi, 'save', 'Saved successfully.')
             }
           }).catch(_err => {
-            alert("Something went wrong. Try again.")
+            errorMessage(messageApi, 'save', 'Something went wrong. Try again.')
             dispatch(cancelRemovedList())
           })    
           dispatch(setEditMode(false))
@@ -104,12 +108,13 @@ export default function ItineraryTab(props: ItineraryTabProps) {
   }
 
   const handleCancelEdit = () => {
-    Modal.confirm({
+    confirm({
       title: `Are you sure to cancel the changes?`,
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
+      maskClosable: true,
       onOk () {
         dispatch(cancelRemovedList())
         dispatch(setEditMode(false))
@@ -369,6 +374,7 @@ export default function ItineraryTab(props: ItineraryTabProps) {
         {...itineraryList[selectedItem.day - 1][selectedItem.order]}
       />}
     </Drawer>
+    {contextHolder}
     </>
   )
 }

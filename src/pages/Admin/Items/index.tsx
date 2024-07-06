@@ -4,12 +4,13 @@ import { apiCaller, itemApi } from "../../../api"
 import { useDispatch, useSelector } from "react-redux"
 import { getState, removeFromItemList, setDetailItem, setItemList } from "../../../redux/Admin"
 import NoResult from "../../../components/Profile/NoResult"
-import { Drawer, Modal, Spin } from "antd"
+import { Drawer, message, Modal, Spin } from "antd"
 import AdminItem from "../../../components/Item/AdminItem"
 import ItemDetail from "../../../components/Drawer/ItemDetail"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { setLoaderState } from "../../../redux/Loader"
 import { ItemStates } from "../../../constants"
+import { loadingMessage, successMessage } from "../../../utils/Utils"
 
 export const itemStates = [
   {
@@ -81,6 +82,7 @@ export interface Item {
 }
 
 export default function Items() {
+  const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [queries] = useSearchParams()
@@ -139,10 +141,11 @@ export default function Items() {
         const changeStateItem = async () => {
           dispatch(setLoaderState(true))
           const id = detailItem?.id ?? ""
+          loadingMessage(messageApi, 'change')
           const res = await apiCaller(itemApi.changeState(id, state))
           dispatch(setLoaderState(false))
           if (res !== undefined) {
-            alert("Update successfully")
+            successMessage(messageApi, 'change', 'Done.')
             dispatch(removeFromItemList(id))
             dispatch(setDetailItem(undefined))
           }
@@ -209,10 +212,10 @@ export default function Items() {
         }
       </div>
       <Drawer
-        title={<div className="flex justify-between items-center">
+        title={detailItem && <div className="flex justify-between items-center">
           <div className="flex items-center">
             <span className="mr-1.5">ID:</span>
-            <span className="font-medium">{detailItem?.id ?? ""}</span>
+            <span className="font-medium">{detailItem.id}</span>
           </div>
           {generateButton()}
         </div>}
@@ -222,6 +225,7 @@ export default function Items() {
       >
         {detailItem && <ItemDetail {...detailItem}/>}
       </Drawer>
+      {contextHolder}
     </div>
   )
 }

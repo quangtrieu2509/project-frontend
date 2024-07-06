@@ -8,6 +8,7 @@ import parser from "html-react-parser"
 import { apiCaller, notiApi } from "../../../api"
 import { INoti } from "../../Header/Noti"
 import { useNavigate } from "react-router-dom"
+import { Spin } from "antd"
 
 const filters = ["all", "unread"]
 
@@ -15,11 +16,12 @@ export default function NotisList() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [filter, setFilter] = useState<string>(filters[0])
-  const notisList: INoti[] = useSelector(getState).notisList 
+  const { notisList } = useSelector(getState)
 
   useEffect(() => {
     const getNotisList = async () => {
       let res
+      dispatch(setNotisList(undefined))
       if (filter === filters[1]) {
         res = await apiCaller(notiApi.getUnreadNotis())
       } else res = await apiCaller(notiApi.getAllNotis())
@@ -66,9 +68,9 @@ export default function NotisList() {
       </div>
       <div>
       {
-        !notisList.length
-        ? <NoResult/>
-        : notisList.map(e => (
+        notisList === undefined ? <Spin className="flex justify-center py-1"/> :
+        !notisList.length ? <NoResult/> :
+        notisList.map((e: INoti) => (
           <div key={e.id} 
             className="flex p-3 cursor-pointer hover:bg-color-hover-primary rounded-lg"
             onClick={() => handleClickNoti(e)}

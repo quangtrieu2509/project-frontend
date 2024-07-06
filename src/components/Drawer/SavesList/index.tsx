@@ -4,7 +4,7 @@ import { getState, setPreAddState } from "../../../redux/Trip"
 import { SavedItemProps } from "../../Item/SavedItem"
 import { filterItems } from "../../../constants"
 import { useEffect, useState } from "react"
-import { Drawer, Form, Rate } from "antd"
+import { Drawer, Form, message, Rate } from "antd"
 import PreAddForm from "../../Form/PreAddForm"
 import { generateCategories } from "../../../utils/Utils"
 
@@ -13,6 +13,7 @@ interface SavesListProps {
 }
 
 export default function SavesList (props: SavesListProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useDispatch()
   const savesList = useSelector(getState).savesList as SavedItemProps[]
   const { preAddState } = useSelector(getState)
@@ -138,10 +139,11 @@ export default function SavesList (props: SavesListProps) {
           </div>
         }
       >
-        {selected && <PreAddForm 
+        {selected && <PreAddForm messageApi={messageApi}
           savedItem={selected} form={form} day={props.day}
         />}
       </Drawer>
+      {contextHolder}
     </div>
   )
 }

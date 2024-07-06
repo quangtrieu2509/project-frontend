@@ -1,4 +1,4 @@
-import { Drawer, Form, Rate, Typography } from "antd"
+import { Drawer, Form, message, Rate, Typography } from "antd"
 import { ItineraryItem } from "../../Trip/ItineraryTab"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -9,6 +9,7 @@ import { generateCategories } from "../../../utils/Utils"
 interface ItineraryItemDetailProps extends ItineraryItem {}
 
 export default function ItineraryItemDetail(props: ItineraryItemDetailProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useDispatch()
   const [paraExpanded, setParaExpanded] = useState<boolean>(false)
   const { editState } = useSelector(getState)
@@ -130,8 +131,11 @@ export default function ItineraryItemDetail(props: ItineraryItemDetailProps) {
         </div>
       }
     >
-      <ItineraryItemEdit form={form} itineraryItem={props}/>
+      <ItineraryItemEdit form={form} 
+        itineraryItem={props} messageApi={messageApi}
+      />
     </Drawer>
+    {contextHolder}
     </>
   )
 }

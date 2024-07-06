@@ -1,8 +1,9 @@
-import { Col, DatePicker, Form, Input, InputNumber, Row, Select } from "antd"
+import { Col, DatePicker, Form, Input, InputNumber, message, Row, Select } from "antd"
 import LocationSearch from "../../Trip/LocationSearch"
 import { apiCaller, tripApi } from "../../../api"
 import { useDispatch } from "react-redux"
 import { setTripCreationState } from "../../../redux/Trip"
+import { loadingMessage, successMessage } from "../../../utils/Utils"
 
 interface NewTripFormProps {
   form: any
@@ -10,6 +11,7 @@ interface NewTripFormProps {
 }
 
 export default function NewTripForm(props: NewTripFormProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useDispatch()
 
   const handleOnFinish = async (value: any) => {
@@ -17,11 +19,12 @@ export default function NewTripForm(props: NewTripFormProps) {
     value.image = value.destination.image
     value.locationId = value.destination.id
     
+    loadingMessage(messageApi, 'created')
     const res = await apiCaller(tripApi.createTrip(value))
 
     if (res !== undefined) {
       dispatch(setTripCreationState(false))
-      alert("Create successfully!")
+      successMessage(messageApi, 'created', 'Created successfully.')
       value.id = res.data.id
       props.event(value)
       props.form.resetFields()
@@ -102,6 +105,7 @@ export default function NewTripForm(props: NewTripFormProps) {
           </Col>
         </Row>
       </Form>
+      {contextHolder}
     </div>
   )
 }

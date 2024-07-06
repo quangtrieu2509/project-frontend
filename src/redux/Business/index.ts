@@ -4,12 +4,11 @@ import { Booking } from "../../pages/Business/Bookings"
 // Define a type for the slice state
 interface BusinessState {
   selectedItem?: any
-  bookingList: Booking[]
+  bookingList?: Booking[]
 }
 
 // Define the initial state using that type
 const initialState: BusinessState = {
-  bookingList: []
 }
 
 export const businessSlice = createSlice({
@@ -21,14 +20,16 @@ export const businessSlice = createSlice({
       state.selectedItem = action.payload
     },
     setBookingList: 
-      (state, action: PayloadAction<Booking[]>) => {
+      (state, action: PayloadAction<Booking[] | undefined>) => {
         state.bookingList = action.payload
     },
     removeBooking: 
       (state, action: PayloadAction<string>) => {
-        state.bookingList = state.bookingList.filter(
-          e => e.id !== action.payload
-        )
+        if (state.bookingList !== undefined) {
+          state.bookingList = state.bookingList.filter(
+            e => e.id !== action.payload
+          )
+        }
     }
   }
 })

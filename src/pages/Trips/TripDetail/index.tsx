@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import "./index.style.scss"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { apiCaller, tripApi } from "../../../api"
-import { coorsToViewState, formatDate, formatDateTime } from "../../../utils/Utils"
-import { Drawer, Form, Modal, Tabs } from "antd"
+import { coorsToViewState, errorMessage, formatDate, formatDateTime, loadingMessage, successMessage } from "../../../utils/Utils"
+import { Drawer, Form, message, Modal, Tabs } from "antd"
 import SavesTab from "../../../components/Trip/SavesTab"
 import ItineraryTab, { ItineraryItem } from "../../../components/Trip/ItineraryTab"
 import { tabItems } from "../itemLists"
@@ -59,8 +59,10 @@ export interface ITripDetail {
   }
 }
 
+const { confirm } = Modal
 
 export default function TripDetail() {
+  const [messageApi, contextHolder] = message.useMessage()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [trip, setTrip] = useState<ITripDetail>()
@@ -135,18 +137,19 @@ export default function TripDetail() {
 
   
   const handleOnEditTripClose = () => {
-    Modal.confirm({
+    confirm({
       title: 'Are you sure to cancel?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
+      maskClosable: true,
       onOk () { dispatch(setEditTripState(false)) }
     })
   }
 
   const handleSubmitEditTrip = () => {
-    Modal.confirm({
+    confirm({
       title: 'Are you sure to update?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
@@ -162,6 +165,35 @@ export default function TripDetail() {
     dispatch(
       setViewState(coorsToViewState(coordinates, level))
     )
+  }
+
+  const handleDeleteTrip = () => {
+    confirm({
+      title: 'Are you sure to delete?',
+      icon: <ExclamationCircleFilled />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk () { 
+        const deleteTrip = async (id: string) => {
+          loadingMessage(messageApi, 'delete')
+          const res = await apiCaller(tripApi.deleteTrip(id),
+            (err) => {
+              if (err.ec === messages.NOT_FOUND.ec) {
+                errorMessage(messageApi, 'delete', 'Something went wrong. Try again.')
+              }
+            }
+          )
+
+          if (res !== undefined) {
+            successMessage(messageApi, 'delete', 'Deleted successfully.', 1)
+              .then(() => navigate(ROUTES.TRIPS_HOME))
+          }
+        }
+        
+        params.id && deleteTrip(params.id)
+      }
+    })
   }
 
   const onNavigateToProfile = () => {
@@ -336,7 +368,15 @@ export default function TripDetail() {
         </div>)
       }
       <Drawer
-        title={"Edit trip"}
+        title={<div className="flex justify-between items-center">
+          <div>Edit trip</div>
+          <div 
+            className="font-normal cursor-pointer"
+            onClick={handleDeleteTrip}
+          >
+            <i className="bi bi-trash3 text-lg text-red-700 px-3 rounded-md bg-red-100"/>
+          </div>
+        </div>}
         onClose={handleOnEditTripClose} maskClosable={false}
         open={editTripState} width={500} destroyOnClose
         footer={
@@ -354,10 +394,11 @@ export default function TripDetail() {
           </div>
         }
       >
-        {trip && <EditTripForm form={editTripForm} 
+        {trip && <EditTripForm form={editTripForm} messageApi={messageApi}
           trip={trip} event={handleUpdateTrip}/>
         }
       </Drawer>
+      {contextHolder}
     </div>
   )
 }

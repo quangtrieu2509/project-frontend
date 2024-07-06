@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Modal, Select } from "antd"
+import { Form, Input, InputNumber, message, Modal, Select } from "antd"
 import { useEffect, useState } from "react"
 import { ExclamationCircleFilled } from "@ant-design/icons"
 import { apiCaller, itemApi } from "../../../../api"
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux"
 import { setLoaderState } from "../../../../redux/Loader"
 import { Duration, activityTypes, defaultDuration, durationUnits } from "../../../../constants"
 import TextArea from "antd/es/input/TextArea"
+import { loadingMessage, successMessage } from "../../../../utils/Utils"
 
 interface ActivityProps {
   id: string
@@ -38,6 +39,7 @@ const formItemLayout = {
 const textAreaSz = { minRows: 2, maxRows: 6 }
 
 export default function Activity(props: ActivityProps) {
+  const [messageApi, contextHolder] = message.useMessage()
   const [duration, setDuration] = useState<Duration>(defaultDuration)
   const [priceRange, setPriceRange] = useState<number[]>([0, 0])
   const [ages, setAges] = useState<number[]>([0, 0])
@@ -83,13 +85,14 @@ export default function Activity(props: ActivityProps) {
       onOk () {
         const handleUpdate = async () => {
           dispatch(setLoaderState(true))
+          loadingMessage(messageApi, 'update')
           const res = await apiCaller(
             itemApi.updateItem(props.id, rest)
           )          
           dispatch(setLoaderState(false))
 
           if (res !== undefined) {
-            alert("Update successfully")
+            successMessage(messageApi, 'update', 'Updated successfully.')
           }
         }
         
@@ -280,6 +283,7 @@ export default function Activity(props: ActivityProps) {
           />
         </Form.Item>
       </Form>
+      {contextHolder}
     </div>
   )
 }

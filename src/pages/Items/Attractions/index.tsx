@@ -12,6 +12,7 @@ import { useDocumentTitle } from "../../../hooks";
 
 export default function Attractions() {
   const [bcItems, setBcItems] = useState<BreadcrumbItem[]>([])
+  const [coors, setCoors] = useState<number[]>([105.853333, 21.028333])
   const [has404Error, setHas404Error] = useState<boolean>(false)
   const { slug } = useParams()
 
@@ -30,7 +31,8 @@ export default function Attractions() {
         )
         
         if (res !== undefined) {
-          setBcItems(res.data)
+          setBcItems(res.data.breadcrumb)
+          setCoors(res.data.coordinates)
         }
     }
 
@@ -65,7 +67,7 @@ export default function Attractions() {
         </h1>}
         {
           bcItems.length >= 3
-          ? <Browsing id={bcItems[bcItems.length - 1]?.id}/>
+          ? <Browsing id={bcItems[bcItems.length - 1]?.id} coors={coors}/>
           : <Selecting id={bcItems[bcItems.length - 1]?.id}
               keyType={keyTypes.ATTRACTION}
             />

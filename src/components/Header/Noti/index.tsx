@@ -1,4 +1,4 @@
-import { Badge, Drawer } from "antd";
+import { Badge, Drawer, message } from "antd";
 import NotisList from "../../Drawer/NotisList";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { getLocalStorage, setLocalStorage } from "../../../utils/Auth";
 import { addNoti, getState, readAllNotis, setNotiState, setNotisList } from "../../../redux/Noti";
 import { apiCaller, notiApi } from "../../../api";
 import { useSocket } from "../../../hooks";
+import { loadingMessage, successMessage } from "../../../utils/Utils";
 
 export interface INoti {
   id: string
@@ -18,6 +19,7 @@ export interface INoti {
 }
 
 export default function Noti() {
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useDispatch()
   const socket = useSocket()
   const notisList = useSelector(getState).notisList as INoti[]
@@ -48,11 +50,13 @@ export default function Noti() {
   }, [socket])
 
   const handleReadAll = async () => {
+    loadingMessage(messageApi, 'read-all')
     const res = await apiCaller(notiApi.readAllNotis())
     
     if (res !== undefined) {
       dispatch(readAllNotis())
-      alert("Read all notifications")
+      successMessage(messageApi, 'read-all', 'Read all notifications.')
+      handleOnClose()
     }
   }
 
@@ -63,7 +67,7 @@ export default function Noti() {
 
   const calculateNotisCount = (): number => {
     const latestSeen: number = getLocalStorage("latestSeen")
-    return notisList.filter(e => 
+    return notisList?.filter(e => 
       !e.isSeen && new Date(e.createdAt).getTime() > latestSeen
     ).length
   }
@@ -86,7 +90,7 @@ export default function Noti() {
           <div>
             Notifications
             <span className=" text-sm ml-1">
-              {`(${notisList.filter(e => !e.isSeen).length})`}
+              {`(${notisList?.filter(e => !e.isSeen).length ?? 0})`}
             </span>
           </div>
           <div 
@@ -107,6 +111,7 @@ export default function Noti() {
       >
         <NotisList/>
       </Drawer>
+      {contextHolder}
     </>
   )
 }

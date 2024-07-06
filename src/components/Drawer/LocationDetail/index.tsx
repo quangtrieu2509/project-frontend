@@ -12,6 +12,8 @@ import EditLocForm from "../../Form/EditLocForm"
 
 interface LocationDetailProps extends Location {}
 
+const { confirm } = Modal
+
 export default function LocationDetail(props: LocationDetailProps) {
   const dispatch = useDispatch()
   const [paraExpanded, setParaExpanded] = useState<boolean>(false)
@@ -19,18 +21,19 @@ export default function LocationDetail(props: LocationDetailProps) {
   const [editLocForm] = Form.useForm()
 
   const handleOnEditLocClose = () => {
-    Modal.confirm({
+    confirm({
       title: 'Are you sure to cancel?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
+      maskClosable: true,
       onOk () { dispatch(setEditLocState(false)) }
     })
   }
 
   const handleSubmitEditLoc = () => {
-    Modal.confirm({
+    confirm({
       title: 'Are you sure to update?',
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',

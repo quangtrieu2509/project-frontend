@@ -10,6 +10,7 @@ import { chatSlice } from "./Chat"
 import { mapSlice } from "./Map"
 import { adminSlice } from "./Admin"
 import { itemSlice } from "./Item"
+import { bookingSlice } from "./Booking"
 
 
 export default configureStore({
@@ -24,6 +25,7 @@ export default configureStore({
     chatReducer: chatSlice.reducer,
     mapReducer: mapSlice.reducer,
     adminReducer: adminSlice.reducer,
-    itemReducer: itemSlice.reducer
+    itemReducer: itemSlice.reducer,
+    bookingReducer: bookingSlice.reducer
   }
 })

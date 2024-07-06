@@ -12,11 +12,13 @@ export const defaultMap = {
 interface MapState {
   viewState: ViewState
   popupContent?: MapPopupItem
+  mapState: boolean
 }
 
 // Define the initial state using that type
 const initialState: MapState = {
-  viewState: defaultMap
+  viewState: defaultMap,
+  mapState: false
 }
 
 export const mapSlice = createSlice({
@@ -29,13 +31,17 @@ export const mapSlice = createSlice({
     },
     setPopupContent: (state, action: PayloadAction<any>) => {
       state.popupContent = action.payload
-    }
+    },
+    setMapState: (state, action: PayloadAction<boolean>) => {
+      state.mapState = action.payload
+    },
   }
 })
 
 export const {
   setViewState,
-  setPopupContent
+  setPopupContent,
+  setMapState
 } = mapSlice.actions
 
 // // Other code such as selectors can use the imported `RootState` type
