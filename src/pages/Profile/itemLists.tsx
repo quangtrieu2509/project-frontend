@@ -5,6 +5,8 @@ import Trips from "./Trips"
 import Reviews from "./Reviews"
 import Empty from "./Empty"
 import { Skeleton } from "antd"
+import store from "../../redux/store"
+import { setEditUserState } from "../../redux/Profile"
 
 export const profileTabItems = [
   {
@@ -28,39 +30,6 @@ export const profileTabItems = [
     children: "Comming soon...",
   }
 ]
-
-// export const ownerTabItems = [
-//   {
-//     label: "Activities",
-//     key: "activities",
-//     children: <Activities user/>,
-//   },
-//   {
-//     label: "Trips",
-//     key: "trips",
-//     children: <Trips/>,
-//   },
-//   {
-//     label: "Reviews",
-//     key: "reviews",
-//     children: <Reviews/>,
-//   },
-//   {
-//     label: "Media",
-//     key: "media",
-//     children: <Media/>,
-//   },
-//   {
-//     label: "Saved",
-//     key: "saved",
-//     children: <Saved/>,
-//   },
-//   {
-//     label: "Travel Map",
-//     key: "travel_map",
-//     children: "Content of Travel Map",
-//   }
-// ]
 
 const titleStyle = {
   width: "4rem"
@@ -118,10 +87,12 @@ export const profileActions = [
 export const settingActions = [
   {
     key: "1",
-    label: <Label title="Edit your profile" icon={<UserOutlined/>}/>,
+    label: <Label title="Edit your profile" icon={<UserOutlined/>}
+      event={() => store.dispatch(setEditUserState(true))}
+    />,
   },
   {
     key: "2",
-    label: <Label title="Settings" icon={<SettingOutlined/>}/>,
+    label: <Label title="Settings *" icon={<SettingOutlined/>}/>,
   }
 ]

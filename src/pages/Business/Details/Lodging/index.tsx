@@ -69,7 +69,7 @@ export default function Lodging(props: LodgingProps) {
     rest.contacts = {
       phoneNumber, email, website
     }
-    console.log(rest)
+    // console.log(rest)
     Modal.confirm({
       title: 'Are you sure to update this item?',
       icon: <ExclamationCircleFilled />,

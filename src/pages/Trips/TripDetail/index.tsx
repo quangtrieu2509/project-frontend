@@ -114,7 +114,7 @@ export default function TripDetail() {
       const res = await apiCaller(tripApi.getSavedItems(params.id ?? ""))
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         dispatch(setSavesList(res.data))
       }
     }

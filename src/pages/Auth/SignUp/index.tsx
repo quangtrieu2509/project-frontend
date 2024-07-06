@@ -30,7 +30,7 @@ export default function SingUp() {
     dispatch(setLoaderState(true))
     const res = await apiCaller(authApi.signUpByEmail(values))
     dispatch(setLoaderState(false))
-    console.log(res)
+    // console.log(res)
 
     if (res !== undefined) {
       Modal.info({

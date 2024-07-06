@@ -6,6 +6,9 @@ export const userApi = {
   getUser: (id: string) => (): Promise<AxiosResponse<any, any>> => {
     return axiosClient.get(ENDPOINTS.USER + `/${id}`)
   },
+  updateProfile: (data: any) => (): Promise<AxiosResponse<any, any>> => {
+    return axiosClient.put(ENDPOINTS.USER, data)
+  },
   getActivities: (id: string) => (): Promise<AxiosResponse<any, any>> => {
     return axiosClient.get(ENDPOINTS.USER + `/${id}/activities`)
   },

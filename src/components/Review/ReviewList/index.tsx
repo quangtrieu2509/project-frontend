@@ -35,7 +35,7 @@ export default function ReviewList(props: ReviewListProps) {
       const res = await apiCaller(reviewApi.getReviews(props.id, rateSelection))
       
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         setReviews(res.data)
       }
     }

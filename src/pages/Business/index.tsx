@@ -60,7 +60,7 @@ export default function Business () {
       const res = await apiCaller(itemApi.getBusinessItem(params.id ?? ""))
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         dispatch(setSelectedItem(res.data))
       }
     }

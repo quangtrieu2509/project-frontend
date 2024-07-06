@@ -42,7 +42,6 @@ export const itemApi = {
   getQueriedItems:
     (locId: string, type: string, data: object) => 
       (): Promise<AxiosResponse<any, any>> => {
-        console.log(data)
       return axiosClient.post(ENDPOINTS.ITEM + `/location/${locId}/query?type=${type}`, data)
     },
   getAdminItems:

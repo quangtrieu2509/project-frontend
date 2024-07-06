@@ -98,7 +98,7 @@ export const tripSlice = createSlice({
           const { day, itineraryItem } = payload
           state.itineraryList[day - 1].push(itineraryItem)
         }
-        console.log(state.itineraryList)
+        // console.log(state.itineraryList)
     },
     setEditMode: (state, action: PayloadAction<boolean>) => {
       state.editMode = action.payload

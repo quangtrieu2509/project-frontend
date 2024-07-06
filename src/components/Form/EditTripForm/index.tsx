@@ -19,7 +19,7 @@ export default function EditTripForm(props: EditTripFormProps) {
   const dispatch = useDispatch()
 
   const handleOnFinish = async (value: any) => {
-    console.log(value)
+    // console.log(value)
     value.destination = JSON.parse(value.destination)
     value.image = value.destination.image ?? props.trip.image
     value.locationId = value.destination.id

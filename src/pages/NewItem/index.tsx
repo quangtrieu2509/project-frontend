@@ -92,7 +92,7 @@ export default function NewItem() {
   }
 
   const handleContinue = () => {
-    console.log(form.getFieldsValue())
+    // console.log(form.getFieldsValue())
     setActiveTab(steps.DETAILS)
   }
 

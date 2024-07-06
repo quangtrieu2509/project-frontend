@@ -79,7 +79,7 @@ export default function Tourism() {
       const res = await apiCaller(itemApi.getItemsOfLocation(locId))
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         setItems(res.data)
       }
     }

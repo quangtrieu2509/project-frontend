@@ -42,7 +42,7 @@ export default function NewLocForm(props: NewLocFormProps) {
     const tmpAnc = [...props.ancestors]
     value.ancestors = tmpAnc.reverse()
     value.level = props.ancestors.length + 1
-    console.log(value)
+    // console.log(value)
     
     dispatch(setLoaderState(true))
     let res

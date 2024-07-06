@@ -1,6 +1,6 @@
 import "./index.style.scss"
 
-import { Dropdown, Form, Input, Modal, Skeleton, Tabs } from "antd"
+import { Dropdown, Form, Input, message, Modal, Skeleton, Tabs } from "antd"
 import { IMAGE_PATH, ROUTES } from "../../constants"
 import { BarsOutlined, ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons"
 import { loadingTabItems, profileActions, profileTabItems, settingActions } from "./itemLists"
@@ -10,15 +10,16 @@ import { userApi } from "../../api/user"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { getLocalStorage } from "../../utils/Auth"
 import { useDispatch, useSelector } from "react-redux"
-// import { setLoaderState } from "../../redux/Loader"
 import InteractModal from "../../components/Profile/InteractModal"
-import { getState, setInteractModalState, setIntroInfo } from "../../redux/Profile"
+import { getState, setInteractModalState, setIntroInfo, setUser } from "../../redux/Profile"
 import { messages } from "../../constants/message"
 import NotFound from "../../components/Static/NotFound"
 import { seenConvo, setConvoState, setSelectedConvo } from "../../redux/Chat"
 import { useDocumentTitle } from "../../hooks"
+import EditProfileModal from "../../components/Drawer/EditProfileModal"
+import { setTripCreationState } from "../../redux/Trip"
 
-interface IUserProfile {
+export interface IUserProfile {
   id: string
   profileImage: string
   familyName: string
@@ -43,10 +44,11 @@ export interface UserOverview {
 const { confirm } = Modal
 
 export default function Profile() {
+  const [messageApi, contextHolder] = message.useMessage()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [has404Error, setHas404Error] = useState<boolean>(false)
-  const [user, setUser] = useState<IUserProfile|null>(null)
+  const { user } = useSelector(getState)
   const [isOwner, setIsOwner] = useState<boolean>(false)
   const [isFollowing, setIsFollowing] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>("1")
@@ -93,7 +95,7 @@ export default function Profile() {
         } else {
           setIsOwner(true)
         } 
-        setUser(res.data)
+        dispatch(setUser(res.data))
         dispatch(setIntroInfo(res.data))
       }
     }
@@ -194,6 +196,11 @@ export default function Profile() {
       })
     }
   }
+
+  const handleMakeTrip = () => {
+    navigate(ROUTES.TRIPS_HOME)
+    dispatch(setTripCreationState(true))
+  }
   
   return (
     <div className="tp-page profile-page bg-color-background-primary">
@@ -259,7 +266,7 @@ export default function Profile() {
             ? <div className="profile-action flex items-center">
               <span 
                 className="secondary-button text-sm rounded-md cursor-pointer mr-4"
-                onClick={() => navigate(ROUTES.TRIPS_HOME)}
+                onClick={handleMakeTrip}
               >
                 <PlusOutlined className="mr-1"/> Make a trip
               </span>
@@ -377,6 +384,8 @@ export default function Profile() {
           </Form.Item>
         </Form>
       </Modal>
+      <EditProfileModal messageApi={messageApi}/>
+      {contextHolder}
     </div>
   )
 }

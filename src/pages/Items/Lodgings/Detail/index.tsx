@@ -108,7 +108,7 @@ export default function Detail() {
     )
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         setItem(res.data)
       }
     }

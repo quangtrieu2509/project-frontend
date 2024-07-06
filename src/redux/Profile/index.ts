@@ -1,11 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { UserOverview } from "../../pages/Profile"
+import { IUserProfile, UserOverview } from "../../pages/Profile"
 
 // Define a type for the slice state
 interface ProfileState {
   introInfo: IntroInfo
   interactModalState: boolean
   interactUserList: UserOverview[]
+  user: IUserProfile | null
+  editUserState: boolean
 }
 
 interface IntroInfo {
@@ -17,7 +19,6 @@ interface IntroInfo {
     instagram?: string
     twitter?: string
     youtube?: string
-    tiktok?: string
   }
   
 }
@@ -28,7 +29,9 @@ const initialState: ProfileState = {
     createdAt: new Date()
   },
   interactModalState: false,
-  interactUserList: []
+  interactUserList: [],
+  user: null,
+  editUserState: false
 }
 
 export const profileSlice = createSlice({
@@ -44,14 +47,22 @@ export const profileSlice = createSlice({
     },
     setInteractUserList: (state, action: PayloadAction<UserOverview[]>) => {
       state.interactUserList = action.payload
-    }
+    },
+    setUser: (state, action: PayloadAction<IUserProfile | null>) => {
+      state.user = action.payload
+    },
+    setEditUserState: (state, action: PayloadAction<boolean>) => {
+      state.editUserState = action.payload
+    },
   }
 })
 
 export const { 
   setIntroInfo, 
   setInteractModalState, 
-  setInteractUserList 
+  setInteractUserList,
+  setUser,
+  setEditUserState
 } = profileSlice.actions
 
 // // Other code such as selectors can use the imported `RootState` type

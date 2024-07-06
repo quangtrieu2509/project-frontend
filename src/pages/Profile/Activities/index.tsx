@@ -33,10 +33,10 @@ export default function Activities() {
           {
             results.length === 0
             ? <NoResult/>
-            : results.map(value => {
+            : results.map((value, index) => {
               if (value?.type === "review")
-                return <ReviewOverview {...value}/>
-              else return <TripOverview key={value?.id} trip={value}/>
+                return <ReviewOverview key={index} {...value}/>
+              else return <TripOverview key={index} trip={value}/>
             })
           }
         </div>

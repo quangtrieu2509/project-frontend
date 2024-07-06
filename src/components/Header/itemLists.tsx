@@ -1,5 +1,5 @@
 import Label from "./Label"
-import { roles, ROUTES } from "../../constants"
+import { ROUTES } from "../../constants"
 import { getLocalStorage } from "../../utils/Auth"
 import store from "../../redux/store"
 import { setTripCreationState } from "../../redux/Trip"
@@ -17,13 +17,13 @@ export const featureItems = [
       {
         key: "1",
         label: (
-          <Label url={ROUTES.HOME} title="Extraordinary Places" />
+          <Label url={ROUTES.HOME} title="Extraordinary Places *" />
         ),
       },
       {
         key: "2",
         label: (
-          <Label url={ROUTES.HOME} title="Travel Blogs" />
+          <Label url={ROUTES.HOME} title="Travel Blogs *" />
         ),
       }
     ],
@@ -38,11 +38,11 @@ export const featureItems = [
       },
       {
         key: "2",
-        label: <Label url={ROUTES.HOME} title="Write a review" />,
+        label: <Label url={ROUTES.SEARCH} title="Write a review" />,
       },
       {
         key: "3",
-        label: <Label url={ROUTES.HOME} title="Forum (*)" />,
+        label: <Label url={ROUTES.HOME} title="Forum *" />,
       }
     ],
     route: "community",
@@ -98,7 +98,7 @@ export const userItems = {
     },
     {
       key: "5",
-      label: <Label url={ROUTES.HOME} title="Settings" />,
+      label: <Label url={ROUTES.HOME} title="Settings *" />,
     },
     {
       key: "6",
@@ -121,7 +121,7 @@ export const businessUserItems = {
   items: [
     {
       key: "1",
-      label: <Label url={ROUTES.HOME} title="Trips" />,
+      label: <Label url={ROUTES.TRIPS_HOME} title="Trips" />,
     },
     {
       key: "2",
@@ -129,7 +129,7 @@ export const businessUserItems = {
     },
     {
       key: "3",
-      label: <Label url={ROUTES.HOME} title="Settings" />,
+      label: <Label url={ROUTES.HOME} title="Settings *" />,
     },
     {
       key: "5",
@@ -152,7 +152,7 @@ export const adminItems = {
   items: [
     {
       key: "3",
-      label: <Label url={ROUTES.HOME} title="Settings" />,
+      label: <Label url={ROUTES.HOME} title="Settings *" />,
     },
     {
       key: "5",

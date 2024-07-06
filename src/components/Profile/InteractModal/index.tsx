@@ -32,7 +32,7 @@ export default function InteractModal(props: InteractModalProps) {
     // dispatch(setLoaderState(false))
     const newList = [...userList]
     newList[index].isFollowing = action
-    console.log(newList[index])
+    // console.log(newList[index])
     setUserList(newList)
   }
 

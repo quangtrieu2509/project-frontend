@@ -75,7 +75,7 @@ export default function Activity(props: ActivityProps) {
     rest.contacts = {
       phoneNumber, email, website
     }
-    console.log(rest)
+    // console.log(rest)
     Modal.confirm({
       title: 'Are you sure to update this item?',
       icon: <ExclamationCircleFilled />,

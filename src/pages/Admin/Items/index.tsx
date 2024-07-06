@@ -105,7 +105,7 @@ export default function Items() {
       const res = await apiCaller(itemApi.getAdminItems(state))
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         dispatch(setItemList(res.data))
       }
     }

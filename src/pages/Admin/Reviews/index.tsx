@@ -86,7 +86,7 @@ export default function Reviews() {
       const res = await apiCaller(reviewApi.getAdminReviews(state))
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         dispatch(setReviewList(res.data))
       }
     }

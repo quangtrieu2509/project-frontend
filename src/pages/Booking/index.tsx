@@ -47,7 +47,7 @@ export default function Booking() {
   }, [id])
 
   const onSubmitBooking = async (value: any) => {
-    console.log(value)
+    // console.log(value)
     if (id !== undefined) {
       dispatch(setLoaderState(true))
       const res = await apiCaller(

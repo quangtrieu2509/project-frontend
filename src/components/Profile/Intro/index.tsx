@@ -88,20 +88,6 @@ export default function Intro() {
           </span>
         </div>
       }
-      {
-        links?.tiktok &&
-        <div className="intro-item flex items-center mb-3">
-          <i className="bi bi-tiktok"/>
-                  <span 
-            className="ml-3 min-w-0 hover:underline cursor-pointer break-words"
-            onClick={
-              () => { window.open(`https://tiktok.com/${links.tiktok}`) }
-            }
-          >
-            {links.tiktok}
-          </span>
-        </div>
-      }
     </div>
   )
 }

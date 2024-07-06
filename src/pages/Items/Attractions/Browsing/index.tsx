@@ -69,7 +69,7 @@ export default function Browsing(props: BrowsingProps) {
       )
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         setQueriedList(res.data)
       }
     }
@@ -85,7 +85,7 @@ export default function Browsing(props: BrowsingProps) {
       )
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         setBrowsingList(res.data)
       }
     }

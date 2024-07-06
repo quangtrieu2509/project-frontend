@@ -115,12 +115,12 @@ export default function Overview() {
   }
 
   const onFinish = (value: any) => {
-    console.log(value.coordinates)
+    // console.log(value.coordinates)
     const { images, location, address, extraAddress, ...rest } = value
     rest.ancestors = locationToAncestors(location)
     rest.address = extraAddress ? [address, extraAddress ] : [address]
     const files = compareFileChanges(images)
-    console.log(rest)
+    // console.log(rest)
     Modal.confirm({
       title: 'Are you sure to update this item?',
       icon: <ExclamationCircleFilled />,

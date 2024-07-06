@@ -28,7 +28,7 @@ export default function Selecting(props: SelectingProps) {
       const res = await apiCaller(locationApi.getOverviewLocations(id))
 
       if (res !== undefined) {
-        console.log(res.data)
+        // console.log(res.data)
         setList(res.data)
       }
     }

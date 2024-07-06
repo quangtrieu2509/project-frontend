@@ -50,7 +50,7 @@ export default function Trips() {
       const res = await apiCaller(tripApi.getHomeTrips())
       
       if (res !== undefined) {
-        console.log(res)
+        // console.log(res)
         setTrips(res.data)
       }
     }

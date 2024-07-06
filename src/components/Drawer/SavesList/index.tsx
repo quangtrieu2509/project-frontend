@@ -39,7 +39,7 @@ export default function SavesList (props: SavesListProps) {
       // savesList.forEach((e) => {
       //   if (e.item.type === filter) newList.push(e)
       // })
-      console.log(savesList.filter(e => e.item.type === filter))
+      // console.log(savesList.filter(e => e.item.type === filter))
       setList(savesList.filter(e => e.item.type === filter))
     }
   }, [filter, savesList])

@@ -22,7 +22,7 @@ export default function SignIn() {
       // console.log(GoogleToken)
       dispatch(setGoogleToken(GoogleToken))
       const res = await apiCaller(authApi.signInByGoogle(GoogleToken))
-      console.log(res)
+      // console.log(res)
 
       if (res !== undefined) {
         const apiResponse = res as APIResponse

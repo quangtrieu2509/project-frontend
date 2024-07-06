@@ -42,7 +42,7 @@ export default function TripList (props: TripListProps) {
     const res = await apiCaller(tripApi.getDrawerTrips(props.itemId))
 
     if (res !== undefined) {
-      console.log(res.data)
+      // console.log(res.data)
       const trips: any[] = []
       for (const trip of (res.data as DrawerTrip[])) {
         const isSaved = trip.saves.map(e => e.itemId).includes(props.itemId)

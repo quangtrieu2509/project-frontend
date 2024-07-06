@@ -51,7 +51,7 @@ export default function Bookings() {
         )
   
         if (res !== undefined) {
-          console.log(res.data)
+          // console.log(res.data)
           dispatch(setBookingList(res.data))
         }
       }

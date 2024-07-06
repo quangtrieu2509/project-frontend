@@ -50,7 +50,7 @@ export default function EditLocForm(props: EditLocFormProps) {
   }
 
   const handleOnFinish = async (value: any) => {
-    console.log(value)
+    // console.log(value)
     const files = compareFileChanges(value.images)
     
     dispatch(setLoaderState(true))
