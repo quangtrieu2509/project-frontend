@@ -107,7 +107,7 @@ export default function NewItem() {
       latitude: evt.lngLat.lat
     }
     setCoors(newCoors)
-    form.setFieldValue('coordinates', [coors.latitude, coors.longitude])
+    form.setFieldValue('coordinates', [newCoors.latitude, newCoors.longitude])
   }
 
   const getCoordinates = () => {

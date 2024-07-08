@@ -88,11 +88,8 @@ export default function Overview() {
       latitude: evt.lngLat.lat
     }
     setCoors(newCoors)
+    form.setFieldValue('coordinates', [newCoors.latitude, newCoors.longitude])
   }
-
-  useEffect(() => {
-    coors && form.setFieldValue('coordinates', [coors.latitude, coors.longitude])
-  }, [coors])
 
   const getCoordinates = () => {
     return (

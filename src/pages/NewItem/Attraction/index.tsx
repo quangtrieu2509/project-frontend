@@ -86,9 +86,9 @@ export default function Attraction(props: AttractionProps) {
         </div>
         <Form.Item 
           label="Phone Number" name="phoneNumber"
-          // rules={[{ required: true, message: 'This field cannot be empty' }]}
+          rules={[{ required: true, message: 'This field cannot be empty' }]}
         >
-          <Input placeholder="Enter a phone number (optional)"/>
+          <Input placeholder="Enter a phone number"/>
         </Form.Item>
         <Form.Item 
           label="Email" name="email"

@@ -9,7 +9,7 @@ import { useEffect, useState } from "react"
 import UploadFiles from "../../UploadFiles"
 import { setLoaderState } from "../../../redux/Loader"
 import { apiCaller, locationApi, uploadApi } from "../../../api"
-import { getState, setDetailLoc, setEditLocState, setLocList, setNewLocState, updateLocList } from "../../../redux/Admin"
+import { getState, setDetailLoc, setEditLocState, updateLocList } from "../../../redux/Admin"
 import { Location } from "../../../pages/Admin/Locations"
 import { compareFileChanges } from "../../../utils/Utils"
 
@@ -46,7 +46,7 @@ export default function EditLocForm(props: EditLocFormProps) {
       latitude: evt.lngLat.lat
     }
     setCoors(newCoors)
-    props.form.setFieldValue('coordinates', [coors.latitude, coors.longitude])
+    props.form.setFieldValue('coordinates', [newCoors.latitude, newCoors.longitude])
   }
 
   const handleOnFinish = async (value: any) => {

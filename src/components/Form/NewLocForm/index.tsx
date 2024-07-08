@@ -35,7 +35,7 @@ export default function NewLocForm(props: NewLocFormProps) {
       latitude: evt.lngLat.lat
     }
     setCoors(newCoors)
-    props.form.setFieldValue('coordinates', [coors.latitude, coors.longitude])
+    props.form.setFieldValue('coordinates', [newCoors.latitude, newCoors.longitude])
   }
 
   const handleOnFinish = async (value: any) => {
