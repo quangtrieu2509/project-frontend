@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { apiCaller, authApi } from "../../../api"
+import { Spin } from "antd"
 
 export default function ActivateEmail() {
   const [isActive, setIsActive] = useState<boolean>()
@@ -31,7 +32,7 @@ export default function ActivateEmail() {
         <div className="w-full flex flex-col items-center">
           <div className="mb-4">
           {
-            isActive === undefined ? "Loading..." : isActive === true ?
+            isActive === undefined ? <Spin className="my-1"/> : isActive === true ?
             "Your account has already activated. Go back home and sign in..." :
             "Go back home and try again..."
           }

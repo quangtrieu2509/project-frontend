@@ -68,9 +68,11 @@ axiosClient.interceptors.response.use(
             className: "error-modal",
             okType: "danger",
             centered: true,
+            onOk: () => {
+              window.location.replace("/")
+              localStorage.clear()
+            }
           })
-          window.location.replace("/")
-          localStorage.clear()
           break
         }
         case messages.ACCESS_TOKEN_INVALID.ec: {
