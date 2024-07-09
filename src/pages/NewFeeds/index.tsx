@@ -13,6 +13,7 @@ export default function NewFeeds() {
       const res = await apiCaller(userApi.getNewFeeds())
 
       if (res !== undefined) {
+        console.log(res.data)
         setList(res.data)
       }
     }
@@ -27,10 +28,10 @@ export default function NewFeeds() {
         !list.length ? <NoResult/> :
         list.map((e: any) => {
           if (e?.type === "review")
-            return <div className="max-w-3xl">
+            return <div className="max-w-3xl w-full">
                 <ReviewOverview {...e}/>
               </div>
-          else return <div className="max-w-3xl">
+          else return <div className="max-w-3xl w-full">
               <TripOverview trip={e}/>
             </div>
         })

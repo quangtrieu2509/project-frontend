@@ -1,4 +1,4 @@
-import { Breadcrumb, Drawer, Form, Input, Modal } from "antd";
+import { Breadcrumb, Drawer, Form, Input, Modal, Spin } from "antd";
 import { useEffect, useState } from "react";
 import NoResult from "../../../components/Profile/NoResult";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -34,7 +34,7 @@ export default function Locations() {
   const [breadCrumb, setBreadCrumb] = useState<BreadcrumbItem[]>([])
   const [search, setSearch] = useState<string>("")
   const { newLocState, detailLoc } = useSelector(getState)
-  const locList = useSelector(getState).locList as Location[]
+  const { locList } = useSelector(getState)
   const [newLocForm] = Form.useForm()
 
   useEffect(() => {
@@ -57,6 +57,7 @@ export default function Locations() {
 
     const [location, q] = [queries.get("location"), queries.get("q")]
 
+    dispatch(setLocList(undefined))
     if (q !== null) searchLocationList(q)
     else getLocationList(location ?? undefined)
   }, [queries])
@@ -163,9 +164,9 @@ export default function Locations() {
           items={generateBCItems()}
           className="mb-5"
         />}
-        {!locList.length 
-        ? <NoResult/>
-        : locList.map(e => (
+        {locList === undefined ? <Spin className="flex justify-center my-1"/> :
+        !locList.length ? <NoResult/> :
+        locList.map((e: Location) => (
           <div key={e.id} className="flex box-border w-full justify-between items-center py-3 px-2 hover:bg-color-hover-primary">
             <div className="flex-grow cursor-pointer hover:underline font-medium"
               onClick={() => handleGetNewList(e.id)}

@@ -9,7 +9,7 @@ import { useState } from "react"
 import UploadFiles from "../../UploadFiles"
 import { setLoaderState } from "../../../redux/Loader"
 import { apiCaller, locationApi, uploadApi } from "../../../api"
-import { setLocList, setNewLocState } from "../../../redux/Admin"
+import { addLocList, setLocList, setNewLocState } from "../../../redux/Admin"
 
 interface NewLocFormProps {
   form: any
@@ -61,7 +61,7 @@ export default function NewLocForm(props: NewLocFormProps) {
 
       if (res !== undefined) {
         dispatch(setNewLocState(false))
-        dispatch(setLocList(res.data))
+        dispatch(addLocList(res.data))
         props.event?.(res.data)
       }
     }

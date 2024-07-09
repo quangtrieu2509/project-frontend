@@ -10,7 +10,7 @@ interface AdminState {
   detailLoc?: Location
   detailItem?: Item
   detailReview?: Review
-  locList: Location[]
+  locList?: Location[]
   itemList?: Item[]
   reviewList?: Review[]
 }
@@ -18,8 +18,7 @@ interface AdminState {
 // Define the initial state using that type
 const initialState: AdminState = {
   newLocState: false,
-  editLocState: false,
-  locList: []
+  editLocState: false
 }
 
 export const adminSlice = createSlice({
@@ -42,10 +41,12 @@ export const adminSlice = createSlice({
     setDetailReview: (state, action: PayloadAction<Review | undefined>) => {
       state.detailReview = action.payload
     },
-    setLocList: (state, action: PayloadAction<Location[] | Location>) => {
-      const { payload } = action
-      if (Array.isArray(payload)) state.locList = payload
-      else state.locList = [...state.locList, payload]
+    setLocList: (state, action: PayloadAction<Location[] | undefined>) => {
+      state.locList = action.payload
+    },
+    addLocList: (state, action: PayloadAction<Location>) => {
+      if (state.locList !== undefined)
+        state.locList = [...state.locList, action.payload]
     },
     setItemList: (state, action: PayloadAction<Item[] | undefined>) => {
       state.itemList = action.payload
@@ -54,9 +55,10 @@ export const adminSlice = createSlice({
       state.reviewList = action.payload
     },
     updateLocList: (state, action: PayloadAction<Location>) => {
-      state.locList = state.locList.map(e => 
-        e.id === action.payload.id ? action.payload : e
-      )
+      if (state.locList !== undefined)
+        state.locList = state.locList.map(e => 
+          e.id === action.payload.id ? action.payload : e
+        )
     },
     removeFromItemList: (state, action: PayloadAction<string>) => {
       const id = action.payload
@@ -76,6 +78,7 @@ export const {
   setDetailItem,
   setDetailReview,
   setLocList,
+  addLocList,
   setItemList,
   setReviewList,
   updateLocList,
