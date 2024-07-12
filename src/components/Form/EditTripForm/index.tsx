@@ -38,6 +38,8 @@ export default function EditTripForm(props: EditTripFormProps) {
       props.event?.(res.data)
     }
   }
+
+  console.log(props.trip.startDate)
   return (
     <div>
       <Form layout="vertical" form={props.form} onFinish={handleOnFinish} preserve={false}>
@@ -110,7 +112,9 @@ export default function EditTripForm(props: EditTripFormProps) {
             <Form.Item
               name="startDate"
               label="Start date"
-              initialValue={dayjs(props.trip.startDate)}
+              initialValue={
+                props.trip.startDate ? dayjs(props.trip.startDate) : undefined
+              }
             >
               <DatePicker/>
             </Form.Item>
