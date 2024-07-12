@@ -25,6 +25,7 @@ export default function Home() {
 
   const handleRecommend = () => {
     // alert("handle recommend")
+    navigate(ROUTES.SEARCH)
   }
 
   const handleOnChange = (value: string) => {
